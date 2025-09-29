@@ -88,7 +88,11 @@ export const PortfolioHeroSection: React.FC = () => {
         }} transition={{
           duration: 0.5,
           ease: 'easeOut'
-        }} className="text-balance text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl" data-magicpath-id="13" data-magicpath-path="PortfolioHeroSection.tsx">
+        }} className="text-balance text-4xl font-extrabold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl" data-magicpath-id="13" data-magicpath-path="PortfolioHeroSection.tsx" style={{
+          fontSize: "44px",
+          width: "877px",
+          maxWidth: "877px"
+        }}>
             End-To-End Product design and Branding. Visually stunning apps, softwares and wesbites with functionality at it’s core.
           </motion.h1>
 
