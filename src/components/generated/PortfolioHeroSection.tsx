@@ -1,74 +1,314 @@
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, Mail, Github, Linkedin, Download } from 'lucide-react';
-import { ensureLightMode } from '../../lib/utils';
+"use client";
 
-// @component: PortfolioHeroSection
-export const PortfolioHeroSection: React.FC = () => {
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { motion, AnimatePresence, PanInfo } from 'framer-motion';
+import { X, ArrowUp, Sparkles, Paperclip, Linkedin, Trash2 } from 'lucide-react';
+import { ensureLightMode } from '../../lib/utils';
+interface DraggableCard {
+  id: string;
+  image: string;
+  title: string;
+  subtitle: string;
+  rotation: number;
+}
+interface ChatMessage {
+  id: string;
+  type: 'text' | 'card-with-question' | 'greeting';
+  content?: string;
+  card?: {
+    id: string;
+    image: string;
+    title: string;
+  };
+  sender: 'user' | 'system';
+  timestamp: number;
+}
+interface TabItem {
+  id: string;
+  label: string;
+}
+interface CaseStudy {
+  id: string;
+  image: string;
+  title: string;
+  subtitle: string;
+  backgroundColor?: string;
+  borderColor?: string;
+}
+export interface PortfolioHeroSectionProps {
+  cards?: DraggableCard[];
+}
+const TAB_ITEMS: TabItem[] = [{
+  id: 'my-work',
+  label: 'my work'
+}, {
+  id: 'visuals',
+  label: 'visuals'
+}];
+const CASE_STUDIES: CaseStudy[] = [{
+  id: 'case-1',
+  image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760524296/6_3x_shots_so_y310gt.png',
+  title: 'Process Breakdown: Plasticity Brand & Website',
+  subtitle: 'Process Breakdown',
+  backgroundColor: 'bg-white',
+  borderColor: 'border-black/[0.06]'
+}, {
+  id: 'case-2',
+  image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525138/172_2x_shots_so_plr79y.png',
+  title: 'Website Design and Development for Default.com',
+  subtitle: 'Process Breakdown',
+  backgroundColor: 'bg-white',
+  borderColor: 'border-black/[0.06]'
+}, {
+  id: 'case-3',
+  image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525270/190_2x_shots_so_gytftu.png',
+  title: 'Creamier Branding Process Breakdown',
+  subtitle: 'Process Breakdown',
+  backgroundColor: 'bg-purple-200',
+  borderColor: 'border-purple-300'
+}, {
+  id: 'case-4',
+  image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525328/19_2x_shots_so_lio1is.png',
+  title: 'Brand Strategy & Identity: Wayfinder Ventures',
+  subtitle: 'Process Breakdown',
+  backgroundColor: 'bg-cyan-400',
+  borderColor: 'border-cyan-500'
+}];
+export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
+  cards: customCards
+}) => {
   useEffect(() => {
     ensureLightMode();
   }, []);
-  const navItems = [{
-    label: 'Home',
-    href: '#home'
+  const [inputValue, setInputValue] = useState('');
+  const [messages, setMessages] = useState<ChatMessage[]>([{
+    id: 'greeting',
+    type: 'greeting',
+    content: "Hi! I'm Raksha ! Nice to meet you. What's up ?",
+    sender: 'system',
+    timestamp: Date.now()
+  }]);
+  const [draggedCardId, setDraggedCardId] = useState<string | null>(null);
+  const [activeDragCard, setActiveDragCard] = useState<DraggableCard | null>(null);
+  const [draggedOverChat, setDraggedOverChat] = useState(false);
+  const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<string>('my-work');
+  const [usedCardIds, setUsedCardIds] = useState<Set<string>>(new Set());
+  const [returningCardId, setReturningCardId] = useState<string | null>(null);
+  const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const dragImageRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const defaultCards: DraggableCard[] = [{
+    id: 'card-1',
+    image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760524296/6_3x_shots_so_y310gt.png',
+    title: 'Ova : Period tracking app ',
+    subtitle: '',
+    rotation: -8
   }, {
-    label: 'Features',
-    href: '#features'
+    id: 'card-2',
+    image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525138/172_2x_shots_so_plr79y.png',
+    title: 'Greex : Defi trading crypto platform',
+    subtitle: '',
+    rotation: -4
   }, {
-    label: 'How It Works',
-    href: '#how-it-works'
+    id: 'card-3',
+    image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525270/190_2x_shots_so_gytftu.png',
+    title: 'IOC : Vendor management platform ',
+    subtitle: '',
+    rotation: 2
   }, {
-    label: 'Pricing',
-    href: '#pricing'
-  }, {
-    label: 'About',
-    href: '#about'
-  }] as any[];
-  const social = [{
-    label: 'Email',
-    href: 'mailto:hello@magicpath.ai',
-    icon: Mail
-  }, {
-    label: 'GitHub',
-    href: 'https://github.com/magicpath-ai',
-    icon: Github
-  }, {
-    label: 'LinkedIn',
-    href: 'https://www.linkedin.com/company/magicpath-ai',
-    icon: Linkedin
-  }, {
-    label: 'Demo',
-    href: '#demo',
-    icon: Download
-  }] as any[];
+    id: 'card-4',
+    image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525328/19_2x_shots_so_lio1is.png',
+    title: 'Dealdoc : Deal management platform',
+    subtitle: '',
+    rotation: 6
+  }];
+  const cards = customCards || defaultCards;
 
-  // @return
-  return <section aria-label="Magic Path AI hero" className="relative isolate overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50 text-slate-900">
-      {/* Subtle pixel-like backdrop */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-50" style={{
-      backgroundImage: 'radial-gradient(rgba(24,24,27,0.06) 1px, transparent 1px)',
-      backgroundSize: '24px 24px'
+  // ISSUE #5: Persist messages to localStorage
+  useEffect(() => {
+    const savedMessages = localStorage.getItem('chatMessages');
+    if (savedMessages) {
+      try {
+        setMessages(JSON.parse(savedMessages));
+      } catch (e) {
+        console.error('Failed to load saved messages:', e);
+      }
+    }
+  }, []);
+
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('chatMessages', JSON.stringify(messages));
+  }, [messages]);
+  const scrollToBottom = useCallback(() => {
+    // ISSUE #7: Improve smooth scroll behavior robustness
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end'
+      });
+    }
+  }, []);
+
+  // ISSUE #7: Improved useEffect for scrolling
+  useEffect(() => {
+    if (shouldAutoScroll) {
+      const timeoutId = setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+      setShouldAutoScroll(false);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [messages, scrollToBottom, shouldAutoScroll]);
+  const handleDragEnd = useCallback((cardId: string, info: PanInfo) => {
+    if (!chatContainerRef.current) {
+      setDraggedCardId(null);
+      setActiveDragCard(null);
+      setDraggedOverChat(false);
+      return;
+    }
+    const chatRect = chatContainerRef.current.getBoundingClientRect();
+    const dropX = info.point.x;
+    const dropY = info.point.y;
+    const margin = 50;
+    const isInDropZone = dropX >= chatRect.left - margin && dropX <= chatRect.right + margin && dropY >= chatRect.top - margin && dropY <= chatRect.bottom + margin;
+
+    // Reset drag states immediately
+    setDraggedCardId(null);
+    setActiveDragCard(null);
+    setDraggedOverChat(false);
+    if (isInDropZone) {
+      const card = cards.find(c => c.id === cardId);
+      if (card && !messages.some(m => m.type === 'card-with-question' && m.card?.id === cardId)) {
+        const autoReplyMap: {
+          [key: string]: string;
+        } = {
+          'card-1': 'Tell me more about Ova : Period tracking app. What was your design process?',
+          'card-2': 'What was the biggest challenge you came across while designing Greex?',
+          'card-3': "What is IOC's vendor management platform?",
+          'card-4': 'What did Dealdoc teach you about designing B2B saas?'
+        };
+        const autoReplyText = autoReplyMap[cardId] || '';
+        const newMessage: ChatMessage = {
+          id: `msg-${Date.now()}`,
+          type: 'card-with-question',
+          content: autoReplyText,
+          card: {
+            id: card.id,
+            image: card.image,
+            title: card.title
+          },
+          sender: 'user',
+          timestamp: Date.now()
+        };
+        setMessages(prev => [...prev, newMessage]);
+        setUsedCardIds(prev => new Set([...prev, cardId]));
+        setShouldAutoScroll(true);
+      }
+    }
+  }, [cards, messages]);
+  const handleSendMessage = () => {
+    if (inputValue.trim()) {
+      const newMessage: ChatMessage = {
+        id: `msg-${Date.now()}`,
+        type: 'text',
+        content: inputValue,
+        sender: 'user',
+        timestamp: Date.now()
+      };
+      setMessages(prev => [...prev, newMessage]);
+      setInputValue('');
+      setShouldAutoScroll(true);
+    }
+  };
+
+  // ISSUE #10: Add clear conversation button
+  const handleClearConversation = () => {
+    setMessages([{
+      id: 'greeting',
+      type: 'greeting',
+      content: "Hi! I'm Raksha ! Nice to meet you. What's up ?",
+      sender: 'system',
+      timestamp: Date.now()
+    }]);
+    setUsedCardIds(new Set());
+    localStorage.removeItem('chatMessages');
+  };
+  const isCardInMessages = (cardId: string) => messages.some(m => m.type === 'card-with-question' && m.card?.id === cardId);
+  const shouldShowCard = (cardId: string) => !isCardInMessages(cardId) || returningCardId === cardId;
+  return <section aria-label="Portfolio hero" className="relative isolate overflow-hidden bg-[#F2F2F2] text-zinc-900 min-h-screen pb-32">
+      {/* Premium dot grid background */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0" style={{
+      backgroundImage: 'radial-gradient(rgba(0,0,0,0.03) 1px, transparent 1px)',
+      backgroundSize: '32px 32px'
     }} />
 
-      {/* Top nav pill */}
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl items-start justify-center px-4 pt-6 sm:px-6 lg:px-8">
-        <nav aria-label="Primary" className="mx-0 flex items-center gap-4">
-          <div className="relative flex items-center rounded-[32px] border border-slate-200/70 bg-white/80 backdrop-blur-sm px-6 py-4 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.1)]">
-            {navItems.map(item => <a key={item.label} href={item.href} className="relative mx-6 inline-flex items-center py-1 text-lg font-medium tracking-wide text-slate-600 transition-colors hover:text-slate-900 focus:outline-none">
-                <span className="relative z-10">{item.label}</span>
-                {item.label === 'Home' ? <span aria-hidden className="pointer-events-none absolute left-1/2 top-[calc(100%+8px)] h-1 w-20 -translate-x-1/2 rounded-full bg-blue-500 shadow-[0_0_24px_6px_rgba(59,130,246,0.3)]" /> : null}
-              </a>)}
-          </div>
-          <a href="#demo" className="relative inline-flex items-center justify-center rounded-[28px] border border-blue-500 bg-blue-600 px-8 py-4 text-xl font-semibold text-white shadow-[0_10px_30px_-6px_rgba(59,130,246,0.4)] transition-colors hover:bg-blue-700 focus:outline-none">
-            <span>Get Started</span>
-            <span aria-hidden className="absolute inset-0 rounded-[28px] ring-2 ring-inset ring-blue-500/40" />
-          </a>
-        </nav>
-      </div>
+      {/* Left Floating Buttons */}
+      <motion.div initial={{
+      opacity: 0,
+      x: -20
+    }} animate={{
+      opacity: 1,
+      x: 0
+    }} transition={{
+      duration: 0.6,
+      delay: 0.2
+    }} className="fixed left-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4">
+        <motion.button whileHover={{
+        scale: 1.05,
+        y: -2
+      }} whileTap={{
+        scale: 0.95
+      }} className="flex items-center justify-center w-14 h-14 rounded-full bg-white border border-black/[0.08] shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] transition-all backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D3BF1]" aria-label="Say Hi">
+          <span className="text-sm font-semibold text-zinc-900">Hi</span>
+        </motion.button>
+        <motion.button whileHover={{
+        scale: 1.05,
+        y: -2
+      }} whileTap={{
+        scale: 0.95
+      }} className="flex items-center justify-center w-14 h-14 rounded-full bg-white border border-black/[0.08] shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] transition-all backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D3BF1]" aria-label="About Me">
+          <span className="text-xs font-semibold text-zinc-900">About</span>
+        </motion.button>
+      </motion.div>
 
-      {/* Main content */}
-      <div className="relative z-10 mx-auto max-w-6xl px-4 pb-20 pt-14 sm:px-6 lg:px-8 lg:pb-28 lg:pt-20">
-        <div className="mx-auto max-w-3xl text-center">
+      {/* Right Floating Social Icons */}
+      <motion.div initial={{
+      opacity: 0,
+      x: 20
+    }} animate={{
+      opacity: 1,
+      x: 0
+    }} transition={{
+      duration: 0.6,
+      delay: 0.2
+    }} className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4">
+        <motion.a href="https://twitter.com" target="_blank" rel="noopener noreferrer" whileHover={{
+        scale: 1.05,
+        y: -2
+      }} whileTap={{
+        scale: 0.95
+      }} className="flex items-center justify-center w-14 h-14 rounded-full bg-white border border-black/[0.08] shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] transition-all text-zinc-900 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D3BF1]" aria-label="Twitter">
+          <X className="w-5 h-5" />
+        </motion.a>
+        <motion.a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" whileHover={{
+        scale: 1.05,
+        y: -2
+      }} whileTap={{
+        scale: 0.95
+      }} className="flex items-center justify-center w-14 h-14 rounded-full bg-white border border-black/[0.08] shadow-[0_8px_24px_rgba(0,0,0,0.08)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] transition-all text-zinc-900 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D3BF1]" aria-label="LinkedIn">
+          <Linkedin className="w-5 h-5" />
+        </motion.a>
+      </motion.div>
+
+      {/* Main Content Container */}
+      <div className="relative z-10 mx-auto max-w-[877px] px-4 pb-20 sm:px-6 lg:px-0" style={{
+      marginTop: '68px'
+    }}>
+        <div className="mx-auto flex flex-col items-center">
+          {/* Hero Headline */}
           <motion.h1 initial={{
           opacity: 0,
           y: 12
@@ -78,129 +318,450 @@ export const PortfolioHeroSection: React.FC = () => {
         }} transition={{
           duration: 0.5,
           ease: 'easeOut'
-        }} className="text-balance text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent" style={{
-          fontSize: "44px",
-          width: "877px",
-          maxWidth: "877px"
+        }} className="font-extrabold tracking-tight leading-tight w-full text-center" style={{
+          fontSize: '40px',
+          lineHeight: 1.15,
+          letterSpacing: '-0.01em',
+          textAlign: "left",
+          justifyContent: "flex-start"
         }}>
-            Magic Path AI: Your Intelligent Design Companion
+            <span className="text-[#1D3BF1]" style={{
+            fontSize: '44px',
+            textAlign: "left",
+            justifyContent: "flex-start"
+          }}>
+              End-To-End Product design and Branding.
+            </span>
           </motion.h1>
 
-          <motion.p initial={{
+          {/* Hero Subheading */}
+          <h2 className="mt-2 font-extrabold text-zinc-900 w-full text-center" style={{
+          lineHeight: 1.15,
+          fontSize: '44px',
+          textAlign: "left",
+          justifyContent: "flex-start"
+        }}>
+            <span>Visually stunning apps, softwares and</span>
+            <span> websites with functionality at it's core.</span>
+          </h2>
+
+          {/* Hero Description */}
+          <p className="mt-6 text-[14px] leading-6 text-zinc-700 w-full text-center" style={{
+          fontSize: '20px',
+          textAlign: "left",
+          justifyContent: "flex-start"
+        }}>
+            <span style={{
+            textAlign: "left",
+            justifyContent: "flex-start"
+          }}>
+              Raksha leads Product and Brand Design for startups, big thinkers and game changers. 6+ years of industry
+              experience and 55+ clients so far
+            </span>
+          </p>
+
+          {/* Chat Container */}
+          <div ref={chatContainerRef} className="mt-8 w-full rounded-[14px] border border-black/[0.08] bg-white p-2 shadow-[0_8px_32px_rgba(0,0,0,0.06)] transition-all" style={{
+          backgroundColor: draggedOverChat ? '#f8f9ff' : 'white',
+          borderColor: draggedOverChat ? '#1D3BF1' : 'rgba(0,0,0,0.08)'
+        }}>
+            {/* Messages Area */}
+            <div className="messages-scroll-area rounded-[12px] border border-black/[0.08] bg-white px-4 py-4 max-h-[400px] overflow-y-auto space-y-3" aria-live="polite" aria-atomic="true" role="list">
+              <AnimatePresence mode="popLayout">
+                {messages.map(message => <motion.div key={message.id} initial={{
           opacity: 0,
-          y: 12
+                y: 10,
+                scale: 0.95
+        }} animate={{
+          opacity: 1,
+                y: 0,
+                scale: 1
+              }} exit={{
+                opacity: 0,
+                y: -10,
+                scale: 0.95
+        }} transition={{
+                duration: 0.3,
+                ease: 'easeOut'
+              }} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`} role="listitem">
+                    {message.sender === 'system' && <div className="flex items-start gap-3 max-w-xs">
+                        <img src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg" alt="Raksha avatar" className="w-8 h-8 rounded-full object-cover flex-shrink-0" style={{
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)'
+                  }} />
+                        {(message.type === 'greeting' || message.type === 'text') && <div className="bg-zinc-50 rounded-[12px] px-4 py-3 border border-black/[0.06]">
+                            <p className="text-[13px] text-zinc-700 leading-relaxed">
+                              <span>{message.content}</span>
+                            </p>
+                          </div>}
+                      </div>}
+
+                    {message.sender === 'user' && <div className="max-w-xs">
+                        {message.type === 'text' && <div className="bg-[#1D3BF1] rounded-[12px] px-4 py-3">
+                            <p className="text-[13px] text-white leading-relaxed">
+                              <span>{message.content}</span>
+                            </p>
+                          </div>}
+
+                        {message.type === 'card-with-question' && message.card && <div className="space-y-2">
+                            {/* Card Image */}
+                            <div className="bg-white rounded-[14px] border border-black/[0.08] overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                              <div className="relative w-full overflow-hidden bg-zinc-100" style={{
+                        height: '140px'
+                      }}>
+                                <img src={message.card.image} alt={message.card.title} className="w-full h-full object-cover" />
+                              </div>
+                              <div className="p-3">
+                                <p className="text-[12px] text-zinc-900 italic leading-tight">
+                                  <span>{message.card.title}</span>
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Question Bubble */}
+                            <div className="bg-[#1D3BF1] rounded-[20px] px-5 py-4 shadow-md">
+                              <p className="text-[14px] text-white leading-relaxed">
+                                <span>{message.content}</span>
+                              </p>
+                            </div>
+                          </div>}
+                      </div>}
+                  </motion.div>)}
+              </AnimatePresence>
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Chat Input Section */}
+            <motion.div initial={{
+          opacity: 0,
+            y: 10
         }} animate={{
           opacity: 1,
           y: 0
         }} transition={{
-          duration: 0.6,
-          ease: 'easeOut',
-          delay: 0.05
-        }} className="mt-4 text-pretty text-xl text-slate-700 sm:text-2xl">
-            Transform your design ideas into stunning, functional products with AI-powered
-            design assistance. From concept to deployment, we make design magic happen.
-          </motion.p>
+            duration: 0.4,
+            delay: 0.2
+          }} className="mt-3 rounded-[20px] border border-black/[0.08] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all" style={{
+            borderColor: draggedCardId ? '#1D3BF1' : 'rgba(0,0,0,0.08)',
+            backgroundColor: draggedCardId ? '#f8f9ff' : 'white'
+          }}>
+              <div className="space-y-3">
+                {/* Input Area */}
+                <div className="flex items-center gap-4">
+                  <Sparkles className="h-5 w-5 text-zinc-400 flex-shrink-0" strokeWidth={2} />
+                  <input type="text" value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSendMessage()} placeholder="Ask me about myself, my case studies, or my process." className="flex-1 bg-transparent text-[15px] text-zinc-900 placeholder:text-zinc-400 focus:outline-none" aria-label="Chat input" />
 
-          <motion.p initial={{
-          opacity: 0,
-          y: 12
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 0.6,
-          ease: 'easeOut',
-          delay: 0.1
-        }} className="mt-6 max-w-2xl mx-auto text-slate-600">
-            Join thousands of designers and developers who trust Magic Path AI to accelerate
-            their creative process and bring their visions to life.
-          </motion.p>
+                  {/* Send Button */}
+                  <button onClick={handleSendMessage} className="inline-flex items-center gap-2 rounded-[16px] bg-[#0A0D1F] px-5 py-2.5 text-[14px] font-semibold text-white shadow-[0_4px_16px_rgba(10,13,31,0.2)] transition-all hover:bg-[#151829] hover:shadow-[0_6px_20px_rgba(10,13,31,0.3)] focus:outline-none focus:ring-2 focus:ring-[#0A0D1F] focus:ring-offset-2" aria-label="Send message">
+                    <ArrowUp className="h-4 w-4" strokeWidth={2.5} />
+                    <span>Send</span>
+                  </button>
+                </div>
 
-          {/* Center orb */}
-          <motion.div initial={{
-          opacity: 0,
-          scale: 0.9
-        }} animate={{
-          opacity: 1,
-          scale: 1
-        }} transition={{
-          duration: 0.6,
-          ease: 'easeOut',
-          delay: 0.15
-        }} className="relative mx-auto mt-10 h-16 w-16 sm:h-20 sm:w-20" aria-hidden>
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400 via-purple-400 to-blue-600 blur-lg opacity-70" />
-            <div className="absolute inset-[3px] rounded-full bg-gradient-to-br from-blue-300 via-purple-300 to-blue-500 shadow-inner" />
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-blue-700/20 animate-pulse" />
-          </motion.div>
+                {/* Action Buttons Row */}
+                <div className="flex items-center gap-2 justify-end">
+                  {/* ISSUE #10: Add clear conversation button */}
+                  <button onClick={handleClearConversation} className="inline-flex items-center gap-2 rounded-[16px] bg-zinc-100 px-5 py-2.5 text-[14px] font-medium text-zinc-600 transition-all hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-400" aria-label="Clear conversation">
+                    <Trash2 className="h-4 w-4" />
+                    <span>Clear</span>
+                  </button>
+                </div>
 
-          {/* Greeting bubble */}
-          <motion.div initial={{
-          opacity: 0,
-          y: 12
+                {/* Drop Zone Indicator */}
+                {draggedCardId && <motion.div initial={{
+                opacity: 0
         }} animate={{
-          opacity: 1,
-          y: 0
+                opacity: 1
+              }} exit={{
+                opacity: 0
         }} transition={{
-          duration: 0.6,
-          ease: 'easeOut',
-          delay: 0.2
-        }} className="mt-10 mx-auto max-w-md rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-lg backdrop-blur-sm">
-            <div className="flex items-center justify-center gap-3">
-              <div className="relative">
-                <img src="https://i.pravatar.cc/80?img=13" alt="Magic Path AI avatar" className="size-9 rounded-full border border-slate-200 object-cover" />
-                <span className="absolute -right-0 -bottom-0 inline-block size-3 rounded-full bg-blue-500 ring-2 ring-white" />
+                duration: 0.2
+              }} className="flex items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-[#1D3BF1]/30 bg-[#1D3BF1]/5 py-3 text-[13px] font-medium text-[#1D3BF1]">
+                    <Paperclip className="h-4 w-4" />
+                    <span>Drop cards here to ask me anything about this case study.</span>
+                  </motion.div>}
               </div>
-              <p className="text-sm text-slate-700">
-                Hi, I'm <span className="font-semibold">Magic Path AI</span>. Ready
-                to transform your design ideas into reality?
-              </p>
+          </motion.div>
+          </div>
+
+          {/* Draggable Cards Section */}
+          <motion.div initial={{
+          opacity: 0,
+          y: 20
+        }} animate={{
+          opacity: 1,
+          y: 0
+        }} transition={{
+          duration: 0.6,
+          delay: 0.4
+        }} className="relative mt-16 mx-auto w-full" style={{
+          minHeight: '360px'
+        }}>
+            <p className="text-center text-sm text-zinc-500 mb-8">
+              <span>Explore my creative journey across diverse projects and platforms</span>
+            </p>
+
+            <div className="relative w-full flex items-center justify-center flex-wrap gap-8 px-4">
+              {cards.map((card, index) => {
+              const isInMessages = isCardInMessages(card.id);
+              return isInMessages ? null : <motion.div key={`card-${card.id}`} drag={!isInMessages} dragMomentum={false} dragElastic={0.1} dragConstraints={{
+                left: -2000,
+                right: 2000,
+                top: -2000,
+                bottom: 2000
+              }} onDragStart={() => {
+                setDraggedCardId(card.id);
+                setActiveDragCard(card);
+              }} onDragEnd={(event, info) => handleDragEnd(card.id, info)} onDrag={(event, info) => {
+                if (chatContainerRef.current) {
+                  const chatRect = chatContainerRef.current.getBoundingClientRect();
+                  const isOver = info.point.x >= chatRect.left - 100 && info.point.x <= chatRect.right + 100 && info.point.y >= chatRect.top - 100 && info.point.y <= chatRect.bottom + 100;
+                  setDraggedOverChat(isOver);
+                }
+              }} whileHover={!isInMessages ? {
+                scale: 1.05,
+                zIndex: 50,
+                y: -4
+              } : {}} whileDrag={{
+                scale: 1.12,
+                zIndex: 100,
+                cursor: 'grabbing',
+                boxShadow: '0 20px 50px rgba(0,0,0,0.2)'
+              }} onHoverStart={() => !isInMessages && setHoveredCardId(card.id)} onHoverEnd={() => setHoveredCardId(null)} className={`${isInMessages ? 'cursor-not-allowed opacity-50' : 'cursor-grab active:cursor-grabbing'}`} style={{
+                rotate: card.rotation
+              }} initial={{
+                opacity: 0,
+                scale: 0.8,
+                y: 20
+              }} animate={{
+                opacity: usedCardIds.has(card.id) ? 1 : 1,
+                scale: 1,
+                y: 0
+              }} transition={{
+                duration: 0.5,
+                delay: 0.5 + index * 0.08,
+                type: 'spring',
+                stiffness: 200,
+                damping: 20
+              }}>
+                    <div className="bg-white rounded-[16px] p-3 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-black/[0.06] transition-shadow hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)]" style={{
+                  width: '180px',
+                  minHeight: '200px',
+                  userSelect: 'none'
+                }}>
+                      <div className="relative w-full h-[140px] rounded-[10px] overflow-hidden bg-zinc-100 mb-3">
+                        <img src={card.image} alt={card.title} className="w-full h-full object-cover pointer-events-none select-none" draggable={false} />
+              </div>
+                      <div className="px-1">
+                        {card.subtitle && <p className="text-[11px] text-zinc-500 mb-1">
+                            <span>{card.subtitle}</span>
+                          </p>}
+                        <p className="text-[13px] text-zinc-900 italic leading-tight">
+                          <span>{card.title}</span>
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>;
+            })}
             </div>
           </motion.div>
 
-          {/* CTA and social */}
+          {/* Premium Tab Navigation */}
           <motion.div initial={{
           opacity: 0,
-          y: 12
+          y: 20
         }} animate={{
           opacity: 1,
           y: 0
         }} transition={{
           duration: 0.6,
-          ease: 'easeOut',
-          delay: 0.25
-        }} className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <a href="#demo" className="inline-flex items-center gap-2 rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
-              Try Magic Path AI
-              <ArrowRight className="size-4" aria-hidden />
-            </a>
-            <a href="#pricing" className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-sm transition hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
-              View Pricing
-            </a>
-
-            <div className="mx-1 hidden h-5 w-px bg-slate-200 sm:block" aria-hidden />
-
-            <ul className="flex items-center justify-center gap-2">
-              {social.map(s => <li key={s.label}>
-                  <a href={s.href} aria-label={s.label} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-2 text-xs font-medium text-slate-700 shadow-sm transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400">
-                    <s.icon className="size-4" aria-hidden />
-                    <span className="hidden sm:inline">{s.label}</span>
-                  </a>
+          delay: 0.6
+        }} className="mt-20 mx-auto w-full">
+            <nav aria-label="Portfolio categories" className="flex items-center justify-center" style={{
+            borderBottom: '1px solid rgba(0, 0, 0, 0.06)'
+          }}>
+              <ul className="flex items-center justify-center gap-8 list-none p-0 m-0">
+                {TAB_ITEMS.map(tab => <li key={tab.id} className="m-0 p-0">
+                    <motion.button onClick={e => {
+                  e.preventDefault();
+                  setActiveTab(tab.id);
+                }} className="relative inline-block px-0 py-4 text-base font-normal transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D3BF1]" style={{
+                  color: activeTab === tab.id ? '#1D3BF1' : '#9E9E9E',
+                  fontSize: '16px',
+                  letterSpacing: '0.01em'
+                }} whileHover={{
+                  color: '#1D3BF1'
+                }} whileTap={{
+                  scale: 0.98
+                }}>
+                      <span>{tab.label}</span>
+                      {activeTab === tab.id && <motion.span layoutId="tabUnderline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1D3BF1]" style={{
+                    borderRadius: '1px'
+                  }} initial={false} transition={{
+                    type: 'spring',
+                    stiffness: 380,
+                    damping: 30
+                  }} />}
+                    </motion.button>
                 </li>)}
             </ul>
+            </nav>
+
+            {/* Tab Content */}
+            <AnimatePresence mode="wait">
+              <motion.div key={activeTab} initial={{
+              opacity: 0,
+              y: 10
+            }} animate={{
+              opacity: 1,
+              y: 0
+            }} exit={{
+              opacity: 0,
+              y: -10
+            }} transition={{
+              duration: 0.3,
+              ease: 'easeInOut'
+            }} className="mt-12 mb-8">
+                <div className="text-center">
+                  <p className="text-zinc-700" style={{
+                  fontSize: '16px',
+                  lineHeight: 1.6
+                }}>
+                    <span style={{
+                    display: 'none'
+                  }}>
+                      Exploring my expertise in <strong>{TAB_ITEMS.find(t => t.id === activeTab)?.label}</strong>.
+                    </span>
+                  </p>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Case Studies Section */}
+            {activeTab === 'my-work' && <motion.div initial={{
+            opacity: 0,
+            y: 20
+          }} animate={{
+            opacity: 1,
+            y: 0
+          }} exit={{
+            opacity: 0
+          }} transition={{
+            duration: 0.4,
+            ease: 'easeInOut'
+          }} className="mt-16 space-y-6 mx-auto w-full">
+                {CASE_STUDIES.map(caseStudy => <motion.div key={caseStudy.id} initial={{
+              opacity: 0,
+              y: 16
+            }} animate={{
+              opacity: 1,
+              y: 0
+            }} transition={{
+              duration: 0.4,
+              ease: 'easeOut'
+            }} className={`group rounded-[18px] overflow-hidden border transition-all hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] cursor-pointer ${caseStudy.backgroundColor} ${caseStudy.borderColor} shadow-[0_8px_30px_rgba(0,0,0,0.06)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#1D3BF1]`} tabIndex={0} role="button" aria-label={`View case study: ${caseStudy.title}`}>
+                    {/* Image Container */}
+                    <div className="relative w-full overflow-hidden bg-zinc-100" style={{
+                aspectRatio: '180 / 140'
+              }}>
+                      <img src={caseStudy.image} alt={caseStudy.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    </div>
+                    {/* Content Container */}
+                    <div className="p-8">
+                      <h3 className="text-xl font-bold text-zinc-900 leading-tight mb-2">
+                        <span>{caseStudy.title}</span>
+                      </h3>
+                      <p className="text-sm font-medium text-zinc-600">
+                        <span>{caseStudy.subtitle}</span>
+                      </p>
+
+                      {/* ISSUE #4: Add "Ask about this" button for keyboard users */}
+                      <button className="mt-4 px-4 py-2 bg-[#1D3BF1] text-white text-[12px] font-semibold rounded-[8px] hover:bg-[#1629D1] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D3BF1]" aria-label={`Ask about ${caseStudy.title}`}>
+                        Ask about this
+                      </button>
+                    </div>
+                  </motion.div>)}
+              </motion.div>}
+
+            {/* Visuals Tab */}
+            {activeTab === 'visuals' && <motion.div initial={{
+            opacity: 0,
+            y: 20
+          }} animate={{
+            opacity: 1,
+            y: 0
+          }} exit={{
+            opacity: 0
+          }} transition={{
+            duration: 0.4,
+            ease: 'easeInOut'
+          }} className="mt-16 mx-auto w-full">
+                <motion.div initial={{
+              opacity: 0,
+              y: 16
+            }} animate={{
+              opacity: 1,
+              y: 0
+            }} transition={{
+              duration: 0.4,
+              ease: 'easeOut'
+            }} className="group rounded-[18px] overflow-hidden border border-black/[0.06] transition-all hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] cursor-pointer bg-white shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+                  {/* Video Container */}
+                  <div className="relative w-full overflow-hidden bg-black" style={{
+                height: '658px'
+              }}>
+                    <video src="https://res.cloudinary.com/dky01erho/video/upload/v1760696149/Scene_1_1_ctx9pr.mp4" autoPlay muted loop playsInline className="w-full h-full object-cover" />
+                  </div>
+                  {/* Content Container */}
+                  <div className="p-8">
+                    <h3 className="text-xl font-bold text-zinc-900 leading-tight mb-2">
+                      <span>Visual Motion Showcase</span>
+                    </h3>
+                    <p className="text-sm font-medium text-zinc-600">
+                      <span>Cinematic visualization of design in motion</span>
+                    </p>
+                  </div>
+                </motion.div>
+              </motion.div>}
           </motion.div>
         </div>
       </div>
 
-      {/* Decorative side initials */}
-      <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 hidden w-1/3 select-none items-center justify-center opacity-5 lg:flex">
-        <span className="text-[18vw] font-black leading-none tracking-tighter text-slate-900">
-          MAG
+      {/* Decorative Background Words */}
+      <div aria-hidden="true" className="absolute inset-0 z-[1] hidden w-full overflow-visible select-none lg:block pointer-events-none">
+        {/* Row 1 */}
+        <div className="absolute top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex" style={{
+        gap: '12vw'
+      }}>
+          <span className="text-white/80 text-[18vw] font-black leading-none tracking-[0.18em]" style={{
+          color: '#ffffff3d'
+        }}>
+            {' '}
+            Raksha{' '}
+          </span>
+          <span className="text-white/80 text-[18vw] font-black leading-none tracking-[0.18em]" style={{
+          color: '#ffffff3d'
+        }}>
+            {' '}
+            Raksha{' '}
         </span>
       </div>
-      <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 hidden w-1/3 select-none items-center justify-center opacity-5 lg:flex">
-        <span className="text-[18vw] font-black leading-none tracking-tighter text-slate-900">
-          AI
+        {/* Row 2 */}
+        <div className="absolute top-[78%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex" style={{
+        gap: '14vw'
+      }}>
+          <span className="text-white/80 text-[18vw] font-black leading-none tracking-[0.18em]" style={{
+          color: '#ffffff3d'
+        }}>
+            {' '}
+            Raksha{' '}
+          </span>
+          <span className="text-white/80 text-[18vw] font-black leading-none tracking-[0.18em]" style={{
+          color: '#ffffff3d'
+        }}>
+            {' '}
+            Raksha{' '}
         </span>
+        </div>
       </div>
     </section>;
 };
