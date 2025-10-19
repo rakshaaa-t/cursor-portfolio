@@ -87,7 +87,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
   const [messages, setMessages] = useState<ChatMessage[]>([{
     id: 'greeting',
     type: 'greeting',
-    content: "Hi! I'm Raksha ! Nice to meet you. What's up ?",
+    content: "Hey there.",
     sender: 'system',
     timestamp: Date.now()
   }]);
@@ -314,7 +314,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
     setMessages([{
       id: 'greeting',
       type: 'greeting',
-      content: "Hi! I'm Raksha ! Nice to meet you. What's up ?",
+      content: "Hey there.",
       sender: 'system',
       timestamp: Date.now()
     }]);
@@ -559,7 +559,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                 {/* Input Area */}
                 <div className="flex items-center gap-2 sm:gap-4">
                   <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-zinc-400 flex-shrink-0" strokeWidth={2} />
-                  <input type="text" value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSendMessage()} placeholder="Ask me about myself, my case studies, or my process." className="flex-1 bg-transparent text-sm sm:text-[15px] text-zinc-900 placeholder:text-zinc-400 focus:outline-none" aria-label="Chat input" />
+                  <input type="text" value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSendMessage()} placeholder="Say something..." className="flex-1 bg-transparent text-sm sm:text-[15px] text-zinc-900 placeholder:text-zinc-400 focus:outline-none" aria-label="Chat input" />
 
                   {/* Send Button */}
                   <button onClick={handleSendMessage} className="inline-flex items-center gap-1 sm:gap-2 rounded-[16px] bg-[#0A0D1F] px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-[14px] font-semibold text-white shadow-[0_4px_16px_rgba(10,13,31,0.2)] transition-all hover:bg-[#151829] hover:shadow-[0_6px_20px_rgba(10,13,31,0.3)] focus:outline-none focus:ring-2 focus:ring-[#0A0D1F] focus:ring-offset-2" aria-label="Send message">
