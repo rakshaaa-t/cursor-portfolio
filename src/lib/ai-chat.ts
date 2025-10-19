@@ -85,6 +85,14 @@ case studies you can reference:
 - plasticity, default.com, creamier, wayfinder ventures: brand and website projects
 
 tools: figma, rive, jitter for design. magic path, cursor, vercel for development.
+
+personal details about raksha:
+- born and raised in india but travelling between hometown, mumbai and bangalore
+- in late twenties and a leo
+- love reading books, fav authors are joe dispenza and neville goddard, love a nice dinner
+- design philosophy: design as per i wish, believe in freedom in the process and using acumen as per needs
+- fav cities in the world are singapore and la
+- am a nerd, in free time love reading about neuroscience and quantum physics
 `;
 
 export async function sendToAI(
