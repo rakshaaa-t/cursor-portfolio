@@ -340,7 +340,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
     }} transition={{
       duration: 0.6,
       delay: 0.2
-    }} className="fixed left-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4">
+    }} className="fixed left-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4 hidden md:flex">
         <motion.button whileHover={{
         scale: 1.05,
         y: -2
@@ -389,7 +389,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
       </motion.div>
 
       {/* Main Content Container */}
-      <div className="relative z-10 mx-auto max-w-[877px] px-4 pb-20 sm:px-6 lg:px-0" style={{
+      <div className="relative z-10 mx-auto max-w-[877px] px-4 pb-20 sm:px-6 lg:px-0 mt-16 md:mt-20" style={{
       marginTop: '68px'
     }}>
         <div className="mx-auto flex flex-col items-center">
@@ -403,15 +403,13 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
         }} transition={{
           duration: 0.5,
           ease: 'easeOut'
-        }} className="font-extrabold tracking-tight leading-tight w-full text-center" style={{
-          fontSize: '40px',
+        }} className="font-extrabold tracking-tight leading-tight w-full text-center text-2xl sm:text-3xl md:text-4xl lg:text-[40px]" style={{
           lineHeight: 1.15,
           letterSpacing: '-0.01em',
           textAlign: "left",
           justifyContent: "flex-start"
         }}>
-            <span className="text-[#1D3BF1]" style={{
-            fontSize: '44px',
+            <span className="text-[#1D3BF1] text-2xl sm:text-3xl md:text-4xl lg:text-[44px]" style={{
             textAlign: "left",
             justifyContent: "flex-start"
           }}>
@@ -420,9 +418,8 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
           </motion.h1>
 
           {/* Hero Subheading */}
-          <h2 className="mt-2 font-extrabold text-zinc-900 w-full text-center" style={{
+          <h2 className="mt-2 font-extrabold text-zinc-900 w-full text-center text-xl sm:text-2xl md:text-3xl lg:text-[44px]" style={{
           lineHeight: 1.15,
-          fontSize: '44px',
           textAlign: "left",
           justifyContent: "flex-start"
         }}>
@@ -431,8 +428,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
           </h2>
 
           {/* Hero Description */}
-          <p className="mt-6 text-[14px] leading-6 text-zinc-700 w-full text-center" style={{
-          fontSize: '20px',
+          <p className="mt-6 text-sm sm:text-base md:text-lg lg:text-[20px] leading-6 text-zinc-700 w-full text-center" style={{
           textAlign: "left",
           justifyContent: "flex-start"
         }}>
@@ -451,7 +447,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
           borderColor: draggedOverChat ? '#1D3BF1' : 'rgba(0,0,0,0.08)'
         }}>
             {/* Messages Area */}
-            <div className="messages-scroll-area rounded-[12px] border border-black/[0.08] bg-white px-4 py-4 max-h-[400px] overflow-y-auto space-y-3" aria-live="polite" aria-atomic="true" role="list">
+            <div className="messages-scroll-area rounded-[12px] border border-black/[0.08] bg-white px-3 sm:px-4 py-4 max-h-[300px] sm:max-h-[400px] overflow-y-auto space-y-3" aria-live="polite" aria-atomic="true" role="list">
               <AnimatePresence mode="popLayout">
                 {messages.map(message => <motion.div key={message.id} initial={{
           opacity: 0,
@@ -469,7 +465,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                 duration: 0.3,
                 ease: 'easeOut'
               }} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`} role="listitem">
-                    {(message.sender === 'system' || message.sender === 'ai') && <div className="flex items-start gap-3 max-w-xs">
+                    {(message.sender === 'system' || message.sender === 'ai') && <div className="flex items-start gap-2 sm:gap-3 max-w-[85%] sm:max-w-xs">
                         <img src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg" alt="Raksha avatar" className="w-8 h-8 rounded-full object-cover flex-shrink-0" style={{
                     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)'
                   }} />
@@ -480,7 +476,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                           </div>}
                       </div>}
 
-                    {message.sender === 'user' && <div className="max-w-xs">
+                    {message.sender === 'user' && <div className="max-w-[85%] sm:max-w-xs">
                         {message.type === 'text' && <div className="bg-[#1D3BF1] rounded-[12px] px-4 py-3">
                             <p className="text-[13px] text-white leading-relaxed">
                               <span>{message.content}</span>
@@ -555,20 +551,20 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
         }} transition={{
             duration: 0.4,
             delay: 0.2
-          }} className="mt-3 rounded-[20px] border border-black/[0.08] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all" style={{
+          }} className="mt-3 rounded-[20px] border border-black/[0.08] bg-white p-3 sm:p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all" style={{
             borderColor: draggedCardId ? '#1D3BF1' : 'rgba(0,0,0,0.08)',
             backgroundColor: draggedCardId ? '#f8f9ff' : 'white'
           }}>
               <div className="space-y-3">
                 {/* Input Area */}
-                <div className="flex items-center gap-4">
-                  <Sparkles className="h-5 w-5 text-zinc-400 flex-shrink-0" strokeWidth={2} />
-                  <input type="text" value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSendMessage()} placeholder="Ask me about myself, my case studies, or my process." className="flex-1 bg-transparent text-[15px] text-zinc-900 placeholder:text-zinc-400 focus:outline-none" aria-label="Chat input" />
+                <div className="flex items-center gap-2 sm:gap-4">
+                  <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-zinc-400 flex-shrink-0" strokeWidth={2} />
+                  <input type="text" value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSendMessage()} placeholder="Ask me about myself, my case studies, or my process." className="flex-1 bg-transparent text-sm sm:text-[15px] text-zinc-900 placeholder:text-zinc-400 focus:outline-none" aria-label="Chat input" />
 
                   {/* Send Button */}
-                  <button onClick={handleSendMessage} className="inline-flex items-center gap-2 rounded-[16px] bg-[#0A0D1F] px-5 py-2.5 text-[14px] font-semibold text-white shadow-[0_4px_16px_rgba(10,13,31,0.2)] transition-all hover:bg-[#151829] hover:shadow-[0_6px_20px_rgba(10,13,31,0.3)] focus:outline-none focus:ring-2 focus:ring-[#0A0D1F] focus:ring-offset-2" aria-label="Send message">
-                    <ArrowUp className="h-4 w-4" strokeWidth={2.5} />
-                    <span>Send</span>
+                  <button onClick={handleSendMessage} className="inline-flex items-center gap-1 sm:gap-2 rounded-[16px] bg-[#0A0D1F] px-3 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-[14px] font-semibold text-white shadow-[0_4px_16px_rgba(10,13,31,0.2)] transition-all hover:bg-[#151829] hover:shadow-[0_6px_20px_rgba(10,13,31,0.3)] focus:outline-none focus:ring-2 focus:ring-[#0A0D1F] focus:ring-offset-2" aria-label="Send message">
+                    <ArrowUp className="h-3 w-3 sm:h-4 sm:w-4" strokeWidth={2.5} />
+                    <span className="hidden sm:inline">Send</span>
                   </button>
                 </div>
 
@@ -615,7 +611,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
               <span>Explore my creative journey across diverse projects and platforms</span>
             </p>
 
-            <div className="relative w-full flex items-center justify-center flex-wrap gap-8 px-4">
+            <div className="relative w-full flex items-center justify-center flex-wrap gap-4 sm:gap-6 md:gap-8 px-2 sm:px-4">
               {cards.map((card, index) => {
               const isInMessages = isCardInMessages(card.id);
               return isInMessages ? null : <motion.div key={`card-${card.id}`} drag={!isInMessages} dragMomentum={false} dragElastic={0.1} dragConstraints={{
@@ -658,19 +654,19 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                 stiffness: 200,
                 damping: 20
               }}>
-                    <div className="bg-white rounded-[16px] p-3 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-black/[0.06] transition-shadow hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)]" style={{
-                  width: '180px',
-                  minHeight: '200px',
+                    <div className="bg-white rounded-[16px] p-2 sm:p-3 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-black/[0.06] transition-shadow hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)]" style={{
+                  width: '150px',
+                  minHeight: '180px',
                   userSelect: 'none'
                 }}>
-                      <div className="relative w-full h-[140px] rounded-[10px] overflow-hidden bg-zinc-100 mb-3">
+                      <div className="relative w-full h-[120px] sm:h-[140px] rounded-[10px] overflow-hidden bg-zinc-100 mb-2 sm:mb-3">
                         <img src={card.image} alt={card.title} className="w-full h-full object-cover pointer-events-none select-none" draggable={false} />
               </div>
                       <div className="px-1">
-                        {card.subtitle && <p className="text-[11px] text-zinc-500 mb-1">
+                        {card.subtitle && <p className="text-[10px] sm:text-[11px] text-zinc-500 mb-1">
                             <span>{card.subtitle}</span>
                           </p>}
-                        <p className="text-[13px] text-zinc-900 italic leading-tight">
+                        <p className="text-[12px] sm:text-[13px] text-zinc-900 italic leading-tight">
                           <span>{card.title}</span>
                         </p>
                       </div>
@@ -763,7 +759,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
           }} transition={{
             duration: 0.4,
             ease: 'easeInOut'
-          }} className="mt-16 space-y-6 mx-auto w-full">
+          }} className="mt-8 sm:mt-16 space-y-4 sm:space-y-6 mx-auto w-full">
                 {CASE_STUDIES.map(caseStudy => <motion.div key={caseStudy.id} initial={{
               opacity: 0,
               y: 16
@@ -781,16 +777,16 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                       <img src={caseStudy.image} alt={caseStudy.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     </div>
                     {/* Content Container */}
-                    <div className="p-8">
-                      <h3 className="text-xl font-bold text-zinc-900 leading-tight mb-2">
+                    <div className="p-4 sm:p-6 md:p-8">
+                      <h3 className="text-lg sm:text-xl font-bold text-zinc-900 leading-tight mb-2">
                         <span>{caseStudy.title}</span>
                       </h3>
-                      <p className="text-sm font-medium text-zinc-600">
+                      <p className="text-xs sm:text-sm font-medium text-zinc-600">
                         <span>{caseStudy.subtitle}</span>
                       </p>
 
                       {/* ISSUE #4: Add "Ask about this" button for keyboard users */}
-                      <button className="mt-4 px-4 py-2 bg-[#1D3BF1] text-white text-[12px] font-semibold rounded-[8px] hover:bg-[#1629D1] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D3BF1]" aria-label={`Ask about ${caseStudy.title}`}>
+                      <button className="mt-3 sm:mt-4 px-3 sm:px-4 py-2 bg-[#1D3BF1] text-white text-[11px] sm:text-[12px] font-semibold rounded-[8px] hover:bg-[#1629D1] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D3BF1]" aria-label={`Ask about ${caseStudy.title}`}>
                         Ask about this
                       </button>
                     </div>
