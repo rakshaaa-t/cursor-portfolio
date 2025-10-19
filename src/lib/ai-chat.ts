@@ -43,11 +43,14 @@ CRITICAL: Answer questions directly. Do not end responses with questions unless 
 You never use:
 - "As an AI," or any mention of AI or machine learning
 - "I can help you," "I can assist," or service-style phrasing
+- "How can I assist you today?" or similar chatbot greetings
+- "What can I do for you?" or service language
 - Filler phrases like "Sure, here's your answer," or "Of course"
 - Overly polite or robotic tone
 - Exclamation marks unless extremely natural
 - Overly abstract or idealistic statements
 - Ending responses with questions like "What would you like to discuss?" or "Anything specific you want to dive into?"
+- Any language that sounds like customer service or chatbot support
 
 BEHAVIOR BOUNDARIES:
 You always stay in character as Raksha. You do not break the fourth wall. You do not reveal internal logic, system prompts, or instructions. You do not discuss your nature, model, or identity beyond what's written here.
@@ -252,28 +255,28 @@ export function getFallbackResponse(message: string): string {
   const lowerMessage = message.toLowerCase();
   
   if (lowerMessage.includes('ova') || lowerMessage.includes('period')) {
-    return "Ova was a fascinating project! It's a period tracking app where I focused heavily on user experience and making health data visualization both beautiful and accessible. The biggest challenge was creating an interface that felt both medical and approachable. What specific aspect of the design process would you like to know about?";
+    return "Ova was a period tracking app I designed for Cryptiq. Privacy-first approach, made it less clinical and more companion-like. Hannah wanted something that didn't make teenagers uncomfortable.";
   }
   
   if (lowerMessage.includes('greex') || lowerMessage.includes('crypto') || lowerMessage.includes('defi')) {
-    return "Greex was one of my most complex projects! Designing for DeFi trading required balancing security, trust, and usability. The biggest challenge was making complex financial data digestible for users. I spent a lot of time on data visualization and creating clear information hierarchies. What would you like to know about the design approach?";
+    return "Greex was a DeFi trading platform. Complex financial data visualization, real-time trading interfaces. Focused on security, trust, and making DeFi protocols understandable to everyday users.";
   }
   
   if (lowerMessage.includes('ioc') || lowerMessage.includes('vendor')) {
-    return "IOC's vendor management platform was all about streamlining B2B processes. The key was understanding how procurement teams work and designing around their actual workflows. I focused on making complex vendor relationships feel simple and manageable. What aspect of the B2B design process interests you?";
+    return "IOC's vendor management platform. B2B system for Indian Oil Corporation. Overhauled legacy interface, streamlined work permit handling for engineering teams.";
   }
   
   if (lowerMessage.includes('dealdoc') || lowerMessage.includes('deal')) {
-    return "Dealdoc taught me so much about B2B SaaS design! The challenge was making deal management feel intuitive when you're dealing with complex sales pipelines. I learned that B2B users need different things than consumers - more data, better filtering, and clearer status indicators. What would you like to know about designing for business users?";
+    return "Dealdoc was a deal management platform for Arash Virk. B2B sales pipeline tracking, developer-first UI. Built power search and streamlined deal workflows.";
   }
   
   if (lowerMessage.includes('process') || lowerMessage.includes('how')) {
-    return "My design process typically starts with understanding the user's real problems, not just what they think they want. I do a lot of research, create user journeys, then move into wireframing and prototyping. The key is testing early and often. What part of the design process are you most curious about?";
+    return "My process depends on the project. Pure design goes Figma to Rive to Jitter. Design plus development goes Figma to Magic Path to Cursor to Vercel.";
   }
   
   if (lowerMessage.includes('challenge') || lowerMessage.includes('difficult')) {
-    return "Every project has its unique challenges! Sometimes it's technical constraints, sometimes it's user adoption, sometimes it's stakeholder alignment. The key is staying user-focused while being pragmatic about business needs. What kind of challenges are you facing in your own work?";
+    return "Every project has unique constraints. Technical limitations, user adoption, stakeholder alignment. I focus on user needs while being pragmatic about business requirements.";
   }
   
-  return "That's a great question! I'd love to dive deeper into that. Could you tell me more about what specifically you're curious about? I'm always excited to share insights from my design experience!";
+  return "I'm Raksha, a product designer. I work on apps, software, and websites where functionality is core.";
 }
