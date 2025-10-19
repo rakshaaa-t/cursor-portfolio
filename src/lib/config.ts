@@ -3,7 +3,7 @@
 
 export const AI_CONFIG = {
   // Replace this with your actual OpenAI API key
-  API_KEY: 'sk-proj-your-openai-key-here',
+  API_KEY: import.meta.env.VITE_OPENAI_API_KEY || 'sk-proj-your-openai-key-here',
   
   // AI is always enabled for users
   ENABLED: true,
