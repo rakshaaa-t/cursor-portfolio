@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
-import { X, ArrowUp, Sparkles, Paperclip, Linkedin, Trash2 } from 'lucide-react';
+import { X, ArrowUp, Sparkles, Paperclip, Linkedin, Trash2, Bot } from 'lucide-react';
 import { ensureLightMode } from '../../lib/utils';
+import { sendToAI, getFallbackResponse, type ChatMessage as AIChatMessage } from '../../lib/ai-chat';
 interface DraggableCard {
   id: string;
   image: string;
@@ -20,8 +21,9 @@ interface ChatMessage {
     image: string;
     title: string;
   };
-  sender: 'user' | 'system';
+  sender: 'user' | 'system' | 'ai';
   timestamp: number;
+  isTyping?: boolean;
 }
 interface TabItem {
   id: string;
@@ -96,6 +98,9 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
   const [usedCardIds, setUsedCardIds] = useState<Set<string>>(new Set());
   const [returningCardId, setReturningCardId] = useState<string | null>(null);
   const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
+  const [isAITyping, setIsAITyping] = useState(false);
+  const [aiEnabled, setAiEnabled] = useState(false);
+  const [apiKey, setApiKey] = useState<string>('');
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const dragImageRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -209,18 +214,63 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
       }
     }
   }, [cards, messages]);
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (inputValue.trim()) {
-      const newMessage: ChatMessage = {
+      const userMessage: ChatMessage = {
         id: `msg-${Date.now()}`,
         type: 'text',
         content: inputValue,
         sender: 'user',
         timestamp: Date.now()
       };
-      setMessages(prev => [...prev, newMessage]);
+      
+      setMessages(prev => [...prev, userMessage]);
       setInputValue('');
       setShouldAutoScroll(true);
+      
+      // Handle AI response
+      if (aiEnabled && apiKey) {
+        setIsAITyping(true);
+        
+        try {
+          const aiResponse = await sendToAI(inputValue, messages, apiKey);
+          
+          const aiMessage: ChatMessage = {
+            id: `ai-${Date.now()}`,
+            type: 'text',
+            content: aiResponse.message,
+            sender: 'ai',
+            timestamp: Date.now()
+          };
+          
+          setMessages(prev => [...prev, aiMessage]);
+        } catch (error) {
+          console.error('AI Error:', error);
+          // Fallback to static response
+          const fallbackMessage: ChatMessage = {
+            id: `ai-${Date.now()}`,
+            type: 'text',
+            content: getFallbackResponse(inputValue),
+            sender: 'ai',
+            timestamp: Date.now()
+          };
+          setMessages(prev => [...prev, fallbackMessage]);
+        } finally {
+          setIsAITyping(false);
+          setShouldAutoScroll(true);
+        }
+      } else {
+        // Fallback response when AI is not enabled
+        const fallbackMessage: ChatMessage = {
+          id: `ai-${Date.now()}`,
+          type: 'text',
+          content: getFallbackResponse(inputValue),
+          sender: 'ai',
+          timestamp: Date.now()
+        };
+        setMessages(prev => [...prev, fallbackMessage]);
+        setShouldAutoScroll(true);
+      }
     }
   };
 
@@ -384,14 +434,18 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                 duration: 0.3,
                 ease: 'easeOut'
               }} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`} role="listitem">
-                    {message.sender === 'system' && <div className="flex items-start gap-3 max-w-xs">
+                    {(message.sender === 'system' || message.sender === 'ai') && <div className="flex items-start gap-3 max-w-xs">
                         <img src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg" alt="Raksha avatar" className="w-8 h-8 rounded-full object-cover flex-shrink-0" style={{
                     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)'
                   }} />
-                        {(message.type === 'greeting' || message.type === 'text') && <div className="bg-zinc-50 rounded-[12px] px-4 py-3 border border-black/[0.06]">
+                        {(message.type === 'greeting' || message.type === 'text') && <div className={`rounded-[12px] px-4 py-3 border ${message.sender === 'ai' ? 'bg-blue-50 border-blue-200' : 'bg-zinc-50 border-black/[0.06]'}`}>
                             <p className="text-[13px] text-zinc-700 leading-relaxed">
                               <span>{message.content}</span>
                             </p>
+                            {message.sender === 'ai' && <div className="flex items-center gap-1 mt-2">
+                                <Bot className="w-3 h-3 text-blue-500" />
+                                <span className="text-[10px] text-blue-600 font-medium">AI Raksha</span>
+                              </div>}
                           </div>}
                       </div>}
 
@@ -427,6 +481,36 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                       </div>}
                   </motion.div>)}
               </AnimatePresence>
+              
+              {/* AI Typing Indicator */}
+              {isAITyping && <motion.div initial={{
+              opacity: 0,
+              y: 10
+            }} animate={{
+              opacity: 1,
+              y: 0
+            }} className="flex items-start gap-3 max-w-xs">
+                <img src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg" alt="Raksha avatar" className="w-8 h-8 rounded-full object-cover flex-shrink-0" style={{
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.12)'
+            }} />
+                <div className="bg-blue-50 rounded-[12px] px-4 py-3 border border-blue-200">
+                  <div className="flex items-center gap-2">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{
+                    animationDelay: '0ms'
+                  }} />
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{
+                    animationDelay: '150ms'
+                  }} />
+                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{
+                    animationDelay: '300ms'
+                  }} />
+                    </div>
+                    <span className="text-[12px] text-blue-600 font-medium">AI Raksha is typing...</span>
+                  </div>
+                </div>
+              </motion.div>}
+              
               <div ref={messagesEndRef} />
             </div>
 
@@ -457,11 +541,29 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                   </button>
                 </div>
 
-                {/* Action Buttons Row */}
-                <div className="flex items-center gap-2 justify-end">
-                  {/* ISSUE #10: Add clear conversation button */}
-                  <button onClick={handleClearConversation} className="inline-flex items-center gap-2 rounded-[16px] bg-zinc-100 px-5 py-2.5 text-[14px] font-medium text-zinc-600 transition-all hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-400" aria-label="Clear conversation">
-                    <Trash2 className="h-4 w-4" />
+                {/* AI Configuration */}
+                <div className="flex items-center gap-2 justify-between">
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => setAiEnabled(!aiEnabled)} className={`inline-flex items-center gap-2 rounded-[16px] px-4 py-2.5 text-[12px] font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 ${aiEnabled ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'}`} aria-label="Toggle AI">
+                      <Bot className="h-3 w-3" />
+                      <span>{aiEnabled ? 'AI On' : 'AI Off'}</span>
+                    </button>
+                    
+                    {aiEnabled && (
+                      <input
+                        type="password"
+                        placeholder="OpenAI API Key"
+                        value={apiKey}
+                        onChange={(e) => setApiKey(e.target.value)}
+                        className="flex-1 bg-transparent text-[12px] text-zinc-600 placeholder:text-zinc-400 focus:outline-none border border-zinc-200 rounded-[12px] px-3 py-2"
+                        style={{ maxWidth: '200px' }}
+                      />
+                    )}
+                  </div>
+                  
+                  {/* Clear conversation button */}
+                  <button onClick={handleClearConversation} className="inline-flex items-center gap-2 rounded-[16px] bg-zinc-100 px-4 py-2.5 text-[12px] font-medium text-zinc-600 transition-all hover:bg-zinc-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-400" aria-label="Clear conversation">
+                    <Trash2 className="h-3 w-3" />
                     <span>Clear</span>
                   </button>
                 </div>
