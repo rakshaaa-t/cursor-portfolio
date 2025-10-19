@@ -37,6 +37,9 @@ CASE STUDIES AND PROJECTS:
 - Designed intuitive interfaces for sensitive health data
 - Key challenge: Making medical data feel approachable and trustworthy
 - Used data visualization techniques to make health patterns clear and actionable
+- Received positive feedback for making health tracking feel less clinical and more empowering
+- Designed custom icons and color schemes that felt warm and approachable
+- Worked closely with medical professionals to ensure accuracy while maintaining user-friendliness
 
 2. GREEX - DeFi Trading Crypto Platform
 - DeFi (Decentralized Finance) trading platform for cryptocurrency

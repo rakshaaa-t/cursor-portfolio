@@ -98,7 +98,6 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
   const [activeTab, setActiveTab] = useState<string>('my-work');
   const [usedCardIds, setUsedCardIds] = useState<Set<string>>(new Set());
   const [returningCardId, setReturningCardId] = useState<string | null>(null);
-  const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
   const [isAITyping, setIsAITyping] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const dragImageRef = useRef<HTMLDivElement>(null);
@@ -156,16 +155,13 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
     }
   }, []);
 
-  // ISSUE #7: Improved useEffect for scrolling
+  // Auto-scroll to bottom whenever messages change
   useEffect(() => {
-    if (shouldAutoScroll) {
-      const timeoutId = setTimeout(() => {
-        scrollToBottom();
-      }, 100);
-      setShouldAutoScroll(false);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [messages, scrollToBottom, shouldAutoScroll]);
+    const timeoutId = setTimeout(() => {
+      scrollToBottom();
+    }, 100);
+    return () => clearTimeout(timeoutId);
+  }, [messages, scrollToBottom]);
   const handleDragEnd = useCallback((cardId: string, info: PanInfo) => {
     if (!chatContainerRef.current) {
       setDraggedCardId(null);
@@ -209,7 +205,50 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
         };
         setMessages(prev => [...prev, newMessage]);
         setUsedCardIds(prev => new Set([...prev, cardId]));
-        setShouldAutoScroll(true);
+        
+        // Auto-reply to the card question
+        setTimeout(async () => {
+          if (AI_CONFIG.ENABLED && AI_CONFIG.API_KEY && AI_CONFIG.API_KEY !== 'sk-proj-your-openai-key-here') {
+            setIsAITyping(true);
+            
+            try {
+              const aiResponse = await sendToAI(autoReplyText, messages, AI_CONFIG.API_KEY);
+              
+              const aiMessage: ChatMessage = {
+                id: `ai-${Date.now()}`,
+                type: 'text',
+                content: aiResponse.message,
+                sender: 'ai',
+                timestamp: Date.now()
+              };
+              
+              setMessages(prev => [...prev, aiMessage]);
+            } catch (error) {
+              console.error('AI Error:', error);
+              // Fallback to static response
+              const fallbackMessage: ChatMessage = {
+                id: `ai-${Date.now()}`,
+                type: 'text',
+                content: getFallbackResponse(autoReplyText),
+                sender: 'ai',
+                timestamp: Date.now()
+              };
+              setMessages(prev => [...prev, fallbackMessage]);
+            } finally {
+              setIsAITyping(false);
+            }
+          } else {
+            // Fallback response when API key is not set
+            const fallbackMessage: ChatMessage = {
+              id: `ai-${Date.now()}`,
+              type: 'text',
+              content: getFallbackResponse(autoReplyText),
+              sender: 'ai',
+              timestamp: Date.now()
+            };
+            setMessages(prev => [...prev, fallbackMessage]);
+          }
+        }, 1000); // 1 second delay to make it feel natural
       }
     }
   }, [cards, messages]);
@@ -225,7 +264,6 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
       
       setMessages(prev => [...prev, userMessage]);
       setInputValue('');
-      setShouldAutoScroll(true);
       
       // Handle AI response (always enabled, hidden from users)
       if (AI_CONFIG.ENABLED && AI_CONFIG.API_KEY && AI_CONFIG.API_KEY !== 'sk-proj-your-openai-key-here') {
@@ -256,7 +294,6 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
           setMessages(prev => [...prev, fallbackMessage]);
         } finally {
           setIsAITyping(false);
-          setShouldAutoScroll(true);
         }
       } else {
         // Fallback response when API key is not set
@@ -268,7 +305,6 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
           timestamp: Date.now()
         };
         setMessages(prev => [...prev, fallbackMessage]);
-        setShouldAutoScroll(true);
       }
     }
   };
