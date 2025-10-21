@@ -655,11 +655,11 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                 damping: 20
               }}>
                     <div className="bg-white rounded-[16px] p-2 sm:p-3 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-black/[0.06] transition-shadow hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)]" style={{
-                  width: '150px',
-                  minHeight: '180px',
+                  width: '210px',
+                  minHeight: '240px',
                   userSelect: 'none'
                 }}>
-                      <div className="relative w-full h-[120px] sm:h-[140px] rounded-[10px] overflow-hidden bg-zinc-100 mb-2 sm:mb-3">
+                      <div className="relative w-full h-[160px] sm:h-[180px] rounded-[10px] overflow-hidden bg-zinc-100 mb-2 sm:mb-3">
                         <img src={card.image} alt={card.title} className="w-full h-full object-cover pointer-events-none select-none" draggable={false} />
               </div>
                       <div className="px-1">
