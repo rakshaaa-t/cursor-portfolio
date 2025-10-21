@@ -611,7 +611,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
               <span>Explore my creative journey across diverse projects and platforms</span>
             </p>
 
-            <div className="relative w-full flex items-center justify-center flex-wrap gap-4 sm:gap-6 md:gap-8 px-2 sm:px-4">
+            <div className="relative w-full flex items-center justify-center flex-wrap gap-4 sm:gap-6 md:gap-8">
               {cards.map((card, index) => {
               const isInMessages = isCardInMessages(card.id);
               return isInMessages ? null : <motion.div key={`card-${card.id}`} drag={!isInMessages} dragMomentum={false} dragElastic={0.1} dragConstraints={{
