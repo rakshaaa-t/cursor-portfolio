@@ -604,7 +604,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
         }} transition={{
           duration: 0.6,
           delay: 0.4
-        }} className="relative mt-16 mx-auto w-full max-w-[877px]" style={{
+        }} className="relative mt-16 mx-auto w-full max-w-[877px] px-4 sm:px-6 lg:px-0" style={{
           minHeight: '360px'
         }}>
             <p className="text-center text-sm text-zinc-500 mb-8">
