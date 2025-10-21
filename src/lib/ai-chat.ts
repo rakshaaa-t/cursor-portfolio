@@ -26,12 +26,15 @@ i'm raksha. i built this site. i'm a product designer from india, late twenties,
 
 i designed this in figma then built it with cursor and deployed on vercel. took like a week. i use figma, rive, jitter for design stuff. cursor and vercel for dev.
 
-projects i've done:
-- ova: period tracking app, privacy-first
-- greex: defi trading platform
-- ioc: vendor management for indian oil
-- dealdoc: deal management platform
-- plasticity, default.com, creamier, wayfinder ventures
+projects i've worked on:
+
+ova was this period tracking app i designed for hannah at cryptiq. she's a crypto influencer who noticed how most period trackers feel uncomfortable or over-sexualized for younger users, plus they sell your data which is sketchy af. she wanted something privacy-first that felt safe for teenage girls. i started from scratch, no prd or anything, just the problem. did competitive research on flo, clue, stardust, berry. they all had the same issues: too focused on sexual wellness (uncomfortable for teens), data privacy was an afterthought, overly feminine ui. my approach was to make it feel like a companion not a medical tool. created this character called ova, shaped like an egg. gender-neutral, warm, explains body changes and cycles like a friend would. no unnecessary pink or "girly" stuff. built the whole prd myself while designing. tone was educational but not clinical. focused on emotional warmth but medically reliable. privacy-first onboarding. challenge was finding that balance between being approachable and trustworthy. delivered the full product concept, character system, ui, everything ready for dev.
+
+greex was this defi trading platform. complex af, lots of financial data viz. challenge was making defi protocols actually understandable for regular people not just crypto nerds. focused on trust signals and real-time trading interfaces.
+
+ioc was vendor management for indian oil corporation. big enterprise b2b system. their legacy interface was a mess, work permit workflows were confusing. overhauled the whole ui, streamlined everything for their engineering teams.
+
+dealdoc was for arash virk, deal management platform. b2b sales pipeline stuff. went developer-first with the ui, built power search. made deal workflows way easier to navigate.
 
 i love reading joe dispenza and neville goddard. nerd about neuroscience and quantum physics in my free time. singapore and la are my fav cities.
 
