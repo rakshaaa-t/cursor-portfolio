@@ -654,19 +654,21 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                 stiffness: 200,
                 damping: 20
               }}>
-                    <div className="bg-white rounded-[16px] p-2 sm:p-3 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-black/[0.06] transition-shadow hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)]" style={{
-                  width: '190px',
-                  minHeight: '220px',
+                    <div className="bg-white rounded-[12px] sm:rounded-[16px] p-2 sm:p-3 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-black/[0.06] transition-shadow hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)]" style={{
+                  width: '180px',
+                  minHeight: '200px',
                   userSelect: 'none'
                 }}>
-                      <div className="relative w-full h-[150px] sm:h-[160px] rounded-[10px] overflow-hidden bg-zinc-100 mb-2 sm:mb-3">
+                      <div className="relative w-full rounded-[10px] overflow-hidden bg-zinc-100 mb-2 sm:mb-3" style={{
+                    height: '140px'
+                  }}>
                         <img src={card.image} alt={card.title} className="w-full h-full object-cover pointer-events-none select-none" draggable={false} />
-              </div>
-                      <div className="px-1">
+                      </div>
+                      <div className="px-0 sm:px-1">
                         {card.subtitle && <p className="text-[10px] sm:text-[11px] text-zinc-500 mb-1">
                             <span>{card.subtitle}</span>
                           </p>}
-                        <p className="text-[12px] sm:text-[13px] text-zinc-900 italic leading-tight">
+                        <p className="text-[11px] sm:text-[13px] text-zinc-900 italic leading-tight">
                           <span>{card.title}</span>
                         </p>
                       </div>
