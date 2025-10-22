@@ -197,10 +197,10 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
       const card = projectCards.find(c => c.id === cardId);
       if (card && !usedCardIds.has(cardId)) {
         const autoReplyMap: { [key: string]: string } = {
-          'card-1': 'Tell me more about Ova : Period tracking app. What was your design process?',
-          'card-2': 'What was the biggest challenge you came across while designing Greex?',
-          'card-3': "What is IOC's vendor management platform?",
-          'card-4': 'What did Dealdoc teach you about designing B2B saas?'
+          'card-1': 'tell me more about ova',
+          'card-2': 'tell me more about greex',
+          'card-3': 'tell me more about ioc',
+          'card-4': 'tell me more about dealdoc'
         };
 
         const autoReplyText = autoReplyMap[cardId] || '';
@@ -369,7 +369,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
               </div>
             </motion.div>
           ))}
-        </div>
+          </div>
       </div>
 
       {/* Right Side - Chat Interface */}
@@ -438,38 +438,39 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                         )}
 
                         {message.type === 'card-with-question' && message.card && (
-                          <div className="relative">
-                            {/* Card Image - Tilted and positioned */}
+                          <div className="flex flex-col items-end gap-[12px]">
+                            {/* Compact Card Thumbnail with Bounce */}
                             <motion.div
-                              initial={{ rotate: 0, opacity: 0 }}
-                              animate={{ rotate: 3, opacity: 1 }}
-                              transition={{ duration: 0.3, ease: 'easeOut' }}
-                              className="bg-white rounded-[14px] border border-black/[0.08] overflow-hidden shadow-lg hover:shadow-xl transition-shadow mb-3 ml-auto max-w-[85%]"
-                              style={{ transformOrigin: 'center center' }}
+                              initial={{ scale: 0.8, opacity: 0, y: 20 }}
+                              animate={{ scale: 1, opacity: 1, y: 0 }}
+                              transition={{ 
+                                type: 'spring',
+                                stiffness: 300,
+                                damping: 20,
+                                duration: 0.4
+                              }}
+                              className="bg-white rounded-[16px] border border-white/50 overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.12)] w-[200px]"
                             >
-                              <div
-                                className="relative w-full overflow-hidden bg-zinc-100"
-                                style={{ height: '140px' }}
-                              >
+                              <div className="relative w-full overflow-hidden bg-[#f5f4f8]" style={{ height: '120px' }}>
                                 <img
                                   src={message.card.image}
                                   alt={message.card.title}
                                   className="w-full h-full object-cover"
                                 />
                               </div>
-                              <div className="p-3">
-                                <p className="text-[12px] text-zinc-900 italic leading-tight">
+                              <div className="px-[12px] py-[10px]">
+                                <p className="text-[11px] text-[#6b6883] leading-tight font-light">
                                   <span>{message.card.title}</span>
                                 </p>
                               </div>
                             </motion.div>
 
-                            {/* Question Bubble - Slightly offset */}
+                            {/* Question Bubble */}
                             <motion.div
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 0.3, delay: 0.1 }}
-                              className="bg-gradient-to-r from-[#4a4ae8] to-[#4a4ae8] rounded-[20px] px-[20px] py-[16px] shadow-[0_4px_16px_rgba(74,74,232,0.25)] max-w-[90%] ml-auto"
+                              transition={{ duration: 0.3, delay: 0.15 }}
+                              className="bg-gradient-to-r from-[#4a4ae8] to-[#4a4ae8] rounded-[20px] px-[20px] py-[16px] shadow-[0_4px_16px_rgba(74,74,232,0.25)]"
                             >
                               <p className="text-[14px] text-white leading-[1.6]">
                                 <span>{message.content}</span>
@@ -591,6 +592,6 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
           background: rgba(74, 74, 232, 0.25);
         }
       `}</style>
-    </div>
+      </div>
   );
 };
