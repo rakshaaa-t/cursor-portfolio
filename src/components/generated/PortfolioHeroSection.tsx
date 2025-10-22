@@ -483,9 +483,17 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                             </p>
                           </div>}
 
-                        {message.type === 'card-with-question' && message.card && <div className="space-y-2">
-                            {/* Card Image */}
-                            <div className="bg-white rounded-[14px] border border-black/[0.08] overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                        {message.type === 'card-with-question' && message.card && <div className="relative">
+                            {/* Card Image - Tilted and positioned */}
+                            <motion.div 
+                              initial={{ rotate: 0, opacity: 0 }}
+                              animate={{ rotate: 3, opacity: 1 }}
+                              transition={{ duration: 0.3, ease: "easeOut" }}
+                              className="bg-white rounded-[14px] border border-black/[0.08] overflow-hidden shadow-lg hover:shadow-xl transition-shadow mb-3 ml-auto max-w-[85%]"
+                              style={{
+                                transformOrigin: 'center center'
+                              }}
+                            >
                               <div className="relative w-full overflow-hidden bg-zinc-100" style={{
                         height: '140px'
                       }}>
@@ -496,14 +504,19 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                                   <span>{message.card.title}</span>
                                 </p>
                               </div>
-                            </div>
+                            </motion.div>
 
-                            {/* Question Bubble */}
-                            <div className="bg-[#1D3BF1] rounded-[20px] px-5 py-4 shadow-md">
+                            {/* Question Bubble - Slightly offset */}
+                            <motion.div 
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.3, delay: 0.1 }}
+                              className="bg-[#1D3BF1] rounded-[20px] px-5 py-4 shadow-md max-w-[90%] ml-auto"
+                            >
                               <p className="text-[14px] text-white leading-relaxed">
                                 <span>{message.content}</span>
                               </p>
-                            </div>
+                            </motion.div>
                           </div>}
                       </div>}
                   </motion.div>)}
@@ -663,7 +676,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                     height: '140px'
                   }}>
                         <img src={card.image} alt={card.title} className="w-full h-full object-cover pointer-events-none select-none" draggable={false} />
-                      </div>
+              </div>
                       <div className="px-0 sm:px-1">
                         {card.subtitle && <p className="text-[10px] sm:text-[11px] text-zinc-500 mb-1">
                             <span>{card.subtitle}</span>
