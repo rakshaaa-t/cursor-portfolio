@@ -27,6 +27,7 @@ interface ChatMessage {
   sender: 'user' | 'system' | 'ai';
   timestamp: number;
   isTyping?: boolean;
+  attachedProject?: ProjectCard;
 }
 
 export interface PortfolioHeroSectionProps {
@@ -83,12 +84,12 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isAITyping, setIsAITyping] = useState(false);
-  const [draggedCardId, setDraggedCardId] = useState<string | null>(null);
-  const [draggedOverChat, setDraggedOverChat] = useState(false);
+  const [draggedProject, setDraggedProject] = useState<ProjectCard | null>(null);
+  const [isDraggingOverChat, setIsDraggingOverChat] = useState(false);
   const [usedCardIds, setUsedCardIds] = useState<Set<string>>(new Set());
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const chatDropZoneRef = useRef<HTMLDivElement>(null);
+  const chatAreaRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -173,86 +174,104 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
     localStorage.removeItem('chatMessages');
   };
 
-  const handleCardDragStart = (cardId: string) => {
-    setDraggedCardId(cardId);
+  const handleDragStart = (e: React.DragEvent, project: ProjectCard) => {
+    setDraggedProject(project);
+    e.dataTransfer.effectAllowed = 'copy';
+
+    const thumbnail = document.createElement('div');
+    thumbnail.style.cssText = `
+      position: absolute; top: -9999px; left: -9999px; width: 200px;
+      background: linear-gradient(135deg, rgba(235, 233, 243, 0.95), rgba(232, 231, 241, 0.98));
+      backdrop-filter: blur(20px); border-radius: 16px; padding: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 8px 32px rgba(74, 74, 232, 0.2), 0 2px 8px rgba(0, 0, 0, 0.1);
+    `;
+    
+    const imgWrapper = document.createElement('div');
+    imgWrapper.style.cssText = `width: 100%; height: 110px; border-radius: 12px; overflow: hidden; background: #f5f4f8;`;
+    
+    const img = document.createElement('img');
+    img.src = project.image;
+    img.style.cssText = `width: 100%; height: 100%; object-fit: cover;`;
+    
+    imgWrapper.appendChild(img);
+    thumbnail.appendChild(imgWrapper);
+    document.body.appendChild(thumbnail);
+    
+    e.dataTransfer.setDragImage(thumbnail, 100, 65);
+    
+    setTimeout(() => document.body.removeChild(thumbnail), 0);
   };
 
-  const handleCardDragEnd = (cardId: string, info: PanInfo) => {
-    const dropZone = chatDropZoneRef.current;
-    if (!dropZone) return;
+  const handleDragEnd = () => {
+    setDraggedProject(null);
+    setIsDraggingOverChat(false);
+  };
 
-    const dropZoneRect = dropZone.getBoundingClientRect();
-    const { x, y } = info.point;
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+    setIsDraggingOverChat(true);
+  };
 
-    const isInDropZone =
-      x >= dropZoneRect.left &&
-      x <= dropZoneRect.right &&
-      y >= dropZoneRect.top &&
-      y <= dropZoneRect.bottom;
+  const handleDragLeave = (e: React.DragEvent) => {
+    const rect = chatAreaRef.current?.getBoundingClientRect();
+    if (rect && (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom)) {
+      setIsDraggingOverChat(false);
+    }
+  };
 
-    setDraggedCardId(null);
-    setDraggedOverChat(false);
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingOverChat(false);
+    
+    if (draggedProject && !usedCardIds.has(draggedProject.id)) {
+      const projectName = draggedProject.title.split(':')[0].trim();
+      const newMessage: ChatMessage = {
+        id: `msg-${Date.now()}`,
+        type: 'card-with-question',
+        content: `tell me more about ${projectName}, what were the design challenges with it?`,
+        sender: 'user',
+        timestamp: Date.now(),
+        attachedProject: draggedProject
+      };
+      
+      setMessages(prev => [...prev, newMessage]);
+      setUsedCardIds(prev => new Set([...prev, draggedProject.id]));
+      setDraggedProject(null);
 
-    if (isInDropZone) {
-      const card = projectCards.find(c => c.id === cardId);
-      if (card && !usedCardIds.has(cardId)) {
-        const autoReplyMap: { [key: string]: string } = {
-          'card-1': 'tell me more about ova',
-          'card-2': 'tell me more about greex',
-          'card-3': 'tell me more about ioc',
-          'card-4': 'tell me more about dealdoc'
-        };
+      // Auto-reply to card question
+      setTimeout(async () => {
+        if (AI_CONFIG.ENABLED && AI_CONFIG.API_KEY && AI_CONFIG.API_KEY.startsWith('sk-proj-')) {
+          setIsAITyping(true);
 
-        const autoReplyText = autoReplyMap[cardId] || '';
-        const newMessage: ChatMessage = {
-          id: `msg-${Date.now()}`,
-          type: 'card-with-question',
-          content: autoReplyText,
-          card: {
-            id: card.id,
-            image: card.image,
-            title: card.title
-          },
-          sender: 'user',
-          timestamp: Date.now()
-        };
+          try {
+            const aiResponse = await sendToAI(newMessage.content!, messages, AI_CONFIG.API_KEY);
 
-        setMessages(prev => [...prev, newMessage]);
-        setUsedCardIds(prev => new Set([...prev, cardId]));
+            const aiMessage: ChatMessage = {
+              id: `ai-${Date.now()}`,
+              type: 'text',
+              content: aiResponse.message,
+              sender: 'ai',
+              timestamp: Date.now()
+            };
 
-        // Auto-reply to card question
-        setTimeout(async () => {
-          if (AI_CONFIG.ENABLED && AI_CONFIG.API_KEY && AI_CONFIG.API_KEY.startsWith('sk-proj-')) {
-            setIsAITyping(true);
-
-            try {
-              const aiResponse = await sendToAI(autoReplyText, messages, AI_CONFIG.API_KEY);
-
-              const aiMessage: ChatMessage = {
-                id: `ai-${Date.now()}`,
-                type: 'text',
-                content: aiResponse.message,
-                sender: 'ai',
-                timestamp: Date.now()
-              };
-
-              setMessages(prev => [...prev, aiMessage]);
-            } catch (error) {
-              console.error('AI Error:', error);
-              const fallbackMessage: ChatMessage = {
-                id: `ai-${Date.now()}`,
-                type: 'text',
-                content: getFallbackResponse(autoReplyText),
-                sender: 'ai',
-                timestamp: Date.now()
-              };
-              setMessages(prev => [...prev, fallbackMessage]);
-            } finally {
-              setIsAITyping(false);
-            }
+            setMessages(prev => [...prev, aiMessage]);
+          } catch (error) {
+            console.error('AI Error:', error);
+            const fallbackMessage: ChatMessage = {
+              id: `ai-${Date.now()}`,
+              type: 'text',
+              content: getFallbackResponse(newMessage.content!),
+              sender: 'ai',
+              timestamp: Date.now()
+            };
+            setMessages(prev => [...prev, fallbackMessage]);
+          } finally {
+            setIsAITyping(false);
           }
-        }, 800);
-      }
+        }
+      }, 800);
     }
   };
 
@@ -328,26 +347,19 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
           {projectCards.map((project, index) => (
             <motion.div
               key={project.id}
-              drag
-              dragMomentum={false}
-              dragElastic={0.1}
-              dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-              onDragStart={() => handleCardDragStart(project.id)}
-              onDragEnd={(_, info) => handleCardDragEnd(project.id, info)}
-              whileDrag={{ scale: 0.95, rotate: 5, opacity: 0.8 }}
+              draggable
+              onDragStart={(e) => handleDragStart(e as any, project)}
+              onDragEnd={handleDragEnd}
               initial={{ opacity: 0, y: 20 }}
               animate={{ 
-                opacity: usedCardIds.has(project.id) ? 0.3 : 1, 
+                opacity: draggedProject?.id === project.id ? 0.4 : usedCardIds.has(project.id) ? 0.3 : 1,
+                scale: draggedProject?.id === project.id ? 0.95 : 1,
                 y: 0
               }}
               transition={{ delay: index * 0.1 }}
               className={`group cursor-grab active:cursor-grabbing ${
                 usedCardIds.has(project.id) ? 'pointer-events-none' : ''
               }`}
-              style={{ 
-                zIndex: draggedCardId === project.id ? 9999 : 1,
-                position: draggedCardId === project.id ? 'relative' : 'relative'
-              }}
             >
               <div className="bg-[#ebe9f3]/60 backdrop-blur-sm rounded-[28px] p-[20px] border border-white/40 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
                 <h3 className="text-[14px] font-normal text-[#2d2a3f] mb-[16px] tracking-[-0.01em]">
@@ -378,27 +390,16 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
 
       {/* Right Side - Chat Interface */}
       <div 
-        ref={chatDropZoneRef}
-        className={`flex-1 flex flex-col overflow-hidden pt-[32px] pr-[32px] pb-[32px] transition-all relative ${
-          draggedCardId ? 'ring-4 ring-[#4a4ae8]/40 ring-inset' : ''
-        }`}
-        style={{ zIndex: 10 }}
+        ref={chatAreaRef}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        className="flex-1 flex flex-col overflow-hidden pt-[32px] pr-[32px] pb-[32px] transition-all relative"
       >
-        {/* Drop Zone Indicator */}
-        {draggedCardId && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="absolute inset-0 bg-[#4a4ae8]/5 backdrop-blur-[2px] pointer-events-none flex items-center justify-center"
-            style={{ zIndex: 1 }}
-          >
-            <div className="text-[#4a4ae8] text-[16px] font-medium bg-white/90 px-6 py-3 rounded-[20px] shadow-lg">
-              Drop card here to attach
-            </div>
-          </motion.div>
-        )}
         {/* Large Rounded Container Wrapper */}
-        <div className="flex-1 bg-[#e8e7f1]/50 backdrop-blur-sm rounded-[40px] border border-white/60 shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col overflow-hidden">
+        <div className={`flex-1 bg-[#e8e7f1]/50 backdrop-blur-sm rounded-[40px] border border-white/60 shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col overflow-hidden transition-all ${
+          isDraggingOverChat ? 'ring-4 ring-[#4a4ae8] ring-opacity-50 scale-[0.99]' : ''
+        }`}>
           {/* Chat Header */}
           <div className="px-[48px] pt-[48px] pb-[24px]">
             <div className="flex items-start justify-between mb-[32px]">
@@ -419,6 +420,24 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
           {/* Chat Messages Area */}
           <div className="flex-1 overflow-y-auto px-[48px] pb-[24px] custom-scrollbar">
             <div className="max-w-[720px] space-y-[20px]">
+              {/* Drop Indicator */}
+              {isDraggingOverChat && draggedProject && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  className="flex items-center gap-[12px] bg-[#4a4ae8]/10 backdrop-blur-sm rounded-[16px] px-[20px] py-[12px] border-2 border-dashed border-[#4a4ae8]/40 mb-[20px]"
+                >
+                  <img 
+                    src={draggedProject.image} 
+                    alt={draggedProject.title}
+                    className="w-[32px] h-[32px] rounded-[8px] object-cover" 
+                  />
+                  <span className="text-[13px] text-[#4a4ae8] font-medium">
+                    Drop to ask about {draggedProject.title.split(':')[0].trim()}
+                  </span>
+                </motion.div>
+              )}
+              
               <AnimatePresence mode="popLayout">
                 {messages.map((message) => (
                   <motion.div
@@ -455,38 +474,28 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                           </div>
                         )}
 
-                        {message.type === 'card-with-question' && message.card && (
-                          <div className="flex flex-col items-end gap-[8px] w-full">
-                            {/* Compact Card Thumbnail with Bounce */}
+                        {message.type === 'card-with-question' && message.attachedProject && (
+                          <div className="flex flex-col items-end gap-[12px] w-full">
+                            {/* Attached Project Card */}
                             <motion.div
-                              initial={{ scale: 0.7, opacity: 0, x: 50, y: -20 }}
-                              animate={{ scale: 1, opacity: 1, x: 0, y: 0 }}
-                              transition={{ 
-                                type: 'spring',
-                                stiffness: 260,
-                                damping: 20
-                              }}
-                              className="bg-white rounded-[16px] border border-white/60 overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.15)] w-[180px]"
+                              initial={{ opacity: 0, scale: 0.7, rotate: 0 }}
+                              animate={{ opacity: 1, scale: 1, rotate: 4 }}
+                              transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.1 }}
+                              className="relative w-[180px] h-[112px] rounded-[14px] overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.2)] border-[3px] border-white/90"
+                              style={{ transformOrigin: 'bottom right' }}
                             >
-                              <div className="relative w-full overflow-hidden bg-[#f5f4f8]" style={{ height: '110px' }}>
-                                <img
-                                  src={message.card.image}
-                                  alt={message.card.title}
-                                  className="w-full h-full object-cover"
-                                />
-                              </div>
-                              <div className="px-[10px] py-[8px] bg-white">
-                                <p className="text-[10px] text-[#6b6883] leading-tight font-normal">
-                                  <span>{message.card.title}</span>
-                                </p>
-            </div>
-          </motion.div>
+                              <img 
+                                src={message.attachedProject.image} 
+                                alt={message.attachedProject.title}
+                                className="w-full h-full object-cover"
+                              />
+                            </motion.div>
 
                             {/* Question Bubble */}
                             <motion.div
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 0.3, delay: 0.2 }}
+                              transition={{ duration: 0.3, delay: 0.25 }}
                               className="bg-gradient-to-r from-[#4a4ae8] to-[#4a4ae8] rounded-[20px] px-[20px] py-[16px] shadow-[0_4px_16px_rgba(74,74,232,0.25)] max-w-[85%]"
                             >
                               <p className="text-[14px] text-white leading-[1.6]">
