@@ -257,7 +257,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
   };
 
   return (
-    <div className="h-screen w-screen bg-[#d9d7e4] flex overflow-hidden font-['Nexa',_system-ui,_sans-serif]">
+    <div className="h-screen w-screen bg-[#d9d7e4] flex overflow-hidden font-['Geist',_system-ui,_sans-serif]">
       {/* Left Icon Sidebar */}
       <div className="w-[88px] bg-transparent flex flex-col items-center pt-[340px] gap-[18px]">
         <motion.button
@@ -331,19 +331,23 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
               drag
               dragMomentum={false}
               dragElastic={0.1}
+              dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
               onDragStart={() => handleCardDragStart(project.id)}
               onDragEnd={(_, info) => handleCardDragEnd(project.id, info)}
+              whileDrag={{ scale: 0.95, rotate: 5, opacity: 0.8 }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ 
                 opacity: usedCardIds.has(project.id) ? 0.3 : 1, 
-                y: 0,
-                scale: draggedCardId === project.id ? 1.05 : 1
+                y: 0
               }}
               transition={{ delay: index * 0.1 }}
               className={`group cursor-grab active:cursor-grabbing ${
                 usedCardIds.has(project.id) ? 'pointer-events-none' : ''
               }`}
-              style={{ zIndex: draggedCardId === project.id ? 50 : 1 }}
+              style={{ 
+                zIndex: draggedCardId === project.id ? 9999 : 1,
+                position: draggedCardId === project.id ? 'relative' : 'relative'
+              }}
             >
               <div className="bg-[#ebe9f3]/60 backdrop-blur-sm rounded-[28px] p-[20px] border border-white/40 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
                 <h3 className="text-[14px] font-normal text-[#2d2a3f] mb-[16px] tracking-[-0.01em]">
@@ -375,10 +379,24 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
       {/* Right Side - Chat Interface */}
       <div 
         ref={chatDropZoneRef}
-        className={`flex-1 flex flex-col overflow-hidden pt-[32px] pr-[32px] pb-[32px] transition-all ${
-          draggedCardId ? 'ring-2 ring-[#4a4ae8]/30 ring-offset-4' : ''
+        className={`flex-1 flex flex-col overflow-hidden pt-[32px] pr-[32px] pb-[32px] transition-all relative ${
+          draggedCardId ? 'ring-4 ring-[#4a4ae8]/40 ring-inset' : ''
         }`}
+        style={{ zIndex: 10 }}
       >
+        {/* Drop Zone Indicator */}
+        {draggedCardId && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="absolute inset-0 bg-[#4a4ae8]/5 backdrop-blur-[2px] pointer-events-none flex items-center justify-center"
+            style={{ zIndex: 1 }}
+          >
+            <div className="text-[#4a4ae8] text-[16px] font-medium bg-white/90 px-6 py-3 rounded-[20px] shadow-lg">
+              Drop card here to attach
+            </div>
+          </motion.div>
+        )}
         {/* Large Rounded Container Wrapper */}
         <div className="flex-1 bg-[#e8e7f1]/50 backdrop-blur-sm rounded-[40px] border border-white/60 shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col overflow-hidden">
           {/* Chat Header */}
@@ -438,39 +456,38 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                         )}
 
                         {message.type === 'card-with-question' && message.card && (
-                          <div className="flex flex-col items-end gap-[12px]">
+                          <div className="flex flex-col items-end gap-[8px] w-full">
                             {/* Compact Card Thumbnail with Bounce */}
                             <motion.div
-                              initial={{ scale: 0.8, opacity: 0, y: 20 }}
-                              animate={{ scale: 1, opacity: 1, y: 0 }}
+                              initial={{ scale: 0.7, opacity: 0, x: 50, y: -20 }}
+                              animate={{ scale: 1, opacity: 1, x: 0, y: 0 }}
                               transition={{ 
                                 type: 'spring',
-                                stiffness: 300,
-                                damping: 20,
-                                duration: 0.4
+                                stiffness: 260,
+                                damping: 20
                               }}
-                              className="bg-white rounded-[16px] border border-white/50 overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.12)] w-[200px]"
+                              className="bg-white rounded-[16px] border border-white/60 overflow-hidden shadow-[0_6px_20px_rgba(0,0,0,0.15)] w-[180px]"
                             >
-                              <div className="relative w-full overflow-hidden bg-[#f5f4f8]" style={{ height: '120px' }}>
+                              <div className="relative w-full overflow-hidden bg-[#f5f4f8]" style={{ height: '110px' }}>
                                 <img
                                   src={message.card.image}
                                   alt={message.card.title}
                                   className="w-full h-full object-cover"
                                 />
                               </div>
-                              <div className="px-[12px] py-[10px]">
-                                <p className="text-[11px] text-[#6b6883] leading-tight font-light">
+                              <div className="px-[10px] py-[8px] bg-white">
+                                <p className="text-[10px] text-[#6b6883] leading-tight font-normal">
                                   <span>{message.card.title}</span>
                                 </p>
-                              </div>
-                            </motion.div>
+            </div>
+          </motion.div>
 
                             {/* Question Bubble */}
                             <motion.div
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 0.3, delay: 0.15 }}
-                              className="bg-gradient-to-r from-[#4a4ae8] to-[#4a4ae8] rounded-[20px] px-[20px] py-[16px] shadow-[0_4px_16px_rgba(74,74,232,0.25)]"
+                              transition={{ duration: 0.3, delay: 0.2 }}
+                              className="bg-gradient-to-r from-[#4a4ae8] to-[#4a4ae8] rounded-[20px] px-[20px] py-[16px] shadow-[0_4px_16px_rgba(74,74,232,0.25)] max-w-[85%]"
                             >
                               <p className="text-[14px] text-white leading-[1.6]">
                                 <span>{message.content}</span>
@@ -519,7 +536,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
                       </div>
                     </div>
                   </div>
-                </motion.div>
+          </motion.div>
               )}
 
               <div ref={messagesEndRef} />
@@ -572,10 +589,11 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
       </div>
 
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@100;200;300;400;500;600;700;800;900&display=swap');
         @import url('https://fonts.cdnfonts.com/css/nexa-bold');
         
-        .font-nexa {
-          font-family: 'Nexa', system-ui, -apple-system, sans-serif;
+        body, * {
+          font-family: 'Geist', system-ui, -apple-system, sans-serif;
         }
         
         .custom-scrollbar::-webkit-scrollbar {
