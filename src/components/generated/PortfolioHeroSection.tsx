@@ -557,7 +557,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
             <div className="max-w-[720px]">
               {/* Input Area */}
               <div className="relative">
-                <div className="flex items-center gap-[12px] bg-[#ebe9f3]/70 backdrop-blur-sm rounded-[20px] px-[20px] py-[14px] border border-white/50 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+                <div className="flex items-center gap-[12px] bg-white/40 backdrop-blur-[20px] rounded-[20px] px-[20px] py-[14px] border border-white/60 shadow-[0_4px_16px_rgba(0,0,0,0.06),_0_1px_3px_rgba(0,0,0,0.04)]">
                   <Sparkles className="w-[20px] h-[20px] text-[#6b6883] flex-shrink-0" strokeWidth={2} />
                   <input
                     type="text"
