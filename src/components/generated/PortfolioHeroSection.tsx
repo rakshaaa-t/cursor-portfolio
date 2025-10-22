@@ -352,7 +352,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
               onDragEnd={handleDragEnd}
               initial={{ opacity: 0, y: 20 }}
               animate={{ 
-                opacity: draggedProject?.id === project.id ? 0.4 : usedCardIds.has(project.id) ? 0.3 : 1,
+                opacity: draggedProject?.id === project.id ? 0.4 : 1,
                 scale: draggedProject?.id === project.id ? 0.95 : 1,
                 y: 0
               }}
