@@ -6,6 +6,7 @@ import { MessageCircle, Archive, Calendar, ArrowUpRight, Sparkles, ArrowUp, Tras
 import { ensureLightMode } from '../../lib/utils';
 import { sendToAI, getFallbackResponse, type ChatMessage as AIChatMessage } from '../../lib/ai-chat';
 import { AI_CONFIG } from '../../lib/config';
+import Navigation from '../Navigation';
 
 interface ProjectCard {
   id: string;
@@ -87,6 +88,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
   const [draggedProject, setDraggedProject] = useState<ProjectCard | null>(null);
   const [isDraggingOverChat, setIsDraggingOverChat] = useState(false);
   const [usedCardIds, setUsedCardIds] = useState<Set<string>>(new Set());
+  const [activeNav, setActiveNav] = useState<"chat" | "inbox" | "calendar">("chat");
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatAreaRef = useRef<HTMLDivElement>(null);
@@ -276,9 +278,14 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
   };
 
   return (
-    <div className="h-screen w-screen bg-[#d9d7e4] flex overflow-hidden font-['Geist',_system-ui,_sans-serif]">
-      {/* Left Icon Sidebar */}
-      <div className="w-[88px] bg-transparent flex flex-col items-center justify-center gap-[31px]">
+    <div className="h-screen w-screen bg-[#d9d7e4] flex flex-col overflow-hidden font-['Geist',_system-ui,_sans-serif]">
+      {/* Top Navigation */}
+      <Navigation activeNav={activeNav} onNavClick={setActiveNav} />
+      
+      {/* Main Content */}
+      <div className="flex-1 flex overflow-hidden pt-20">
+      {/* Left Icon Sidebar - Hidden for now, keeping layout structure */}
+      <div className="w-0 bg-transparent flex flex-col items-center justify-center gap-[31px] hidden">
         {/* Active Button - Chat */}
         <motion.button
           whileHover={{ scale: 1.05 }}
@@ -759,6 +766,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
           background: rgba(74, 74, 232, 0.25);
         }
       `}</style>
+      </div>
       </div>
   );
 };
