@@ -278,7 +278,7 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
   return (
     <div className="h-screen w-screen bg-[#d9d7e4] flex overflow-hidden font-['Geist',_system-ui,_sans-serif]">
       {/* Left Icon Sidebar */}
-      <div className="w-[88px] bg-transparent flex flex-col items-center pt-[438px] gap-[31px]">
+      <div className="w-[88px] bg-transparent flex flex-col items-center justify-center gap-[31px]">
         {/* Active Button - Chat */}
         <motion.button
           whileHover={{ scale: 1.05 }}
