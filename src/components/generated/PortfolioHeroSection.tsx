@@ -259,9 +259,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
             {/* First Chat Bubble - White - Left aligned within 640px container */}
             <div className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[90px]">
-              <svg width="560" height="120" viewBox="0 0 560 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute left-0">
+              <svg width="560" height="500" viewBox="0 0 560 500" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute left-0">
                 <defs>
-                  <filter id="whiteBubbleFilter" x="0" y="0" width="770" height="486" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                  <filter id="whiteBubbleFilter" x="-100%" y="-100%" width="300%" height="500%" filterUnits="objectBoundingBox" colorInterpolationFilters="sRGB">
                     <feFlood floodOpacity="0" result="BackgroundImageFix" />
                     <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
                     <feOffset dy="15" />
@@ -311,9 +311,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
             {/* Second Chat Bubble - Dark - Right aligned within 640px container */}
             <div className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[215px]">
-              <svg width="480" height="75" viewBox="0 0 480 75" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-0">
+              <svg width="480" height="500" viewBox="0 0 480 500" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-0">
                 <defs>
-                  <filter id="darkBubbleFilter" x="0" y="0" width="690" height="436" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                  <filter id="darkBubbleFilter" x="-100%" y="-100%" width="300%" height="600%" filterUnits="objectBoundingBox" colorInterpolationFilters="sRGB">
                     <feFlood floodOpacity="0" result="BackgroundImageFix" />
                     <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
                     <feOffset dy="15" />
