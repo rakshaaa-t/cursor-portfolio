@@ -263,26 +263,37 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 <defs>
                   <filter id="whiteBubbleFilter" x="-100%" y="-100%" width="300%" height="500%" filterUnits="objectBoundingBox" colorInterpolationFilters="sRGB">
                     <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                    <feOffset dy="15" />
-                    <feGaussianBlur stdDeviation="17" />
+                    
+                    {/* Layer 1 - Close soft shadow with spread */}
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha1" />
+                    <feMorphology radius="2" operator="dilate" in="hardAlpha1" result="spread1" />
+                    <feOffset dy="15" in="spread1" />
+                    <feGaussianBlur stdDeviation="20" />
                     <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.04 0" />
                     <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                    <feOffset dy="62" />
-                    <feGaussianBlur stdDeviation="31" />
+                    
+                    {/* Layer 2 - Medium shadow with spread */}
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha2" />
+                    <feMorphology radius="1" operator="dilate" in="hardAlpha2" result="spread2" />
+                    <feOffset dy="62" in="spread2" />
+                    <feGaussianBlur stdDeviation="35" />
                     <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.03 0" />
                     <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                    <feOffset dy="139" />
-                    <feGaussianBlur stdDeviation="42" />
+                    
+                    {/* Layer 3 - Far soft shadow */}
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha3" />
+                    <feOffset dy="139" in="hardAlpha3" />
+                    <feGaussianBlur stdDeviation="50" />
                     <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.02 0" />
                     <feBlend mode="normal" in2="effect2_dropShadow" result="effect3_dropShadow" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                    <feOffset dy="248" />
-                    <feGaussianBlur stdDeviation="49.5" />
+                    
+                    {/* Layer 4 - Ambient shadow */}
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha4" />
+                    <feOffset dy="248" in="hardAlpha4" />
+                    <feGaussianBlur stdDeviation="60" />
                     <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.01 0" />
                     <feBlend mode="normal" in2="effect3_dropShadow" result="effect4_dropShadow" />
+                    
                     <feBlend mode="normal" in="SourceGraphic" in2="effect4_dropShadow" result="shape" />
                   </filter>
                 </defs>
@@ -315,26 +326,37 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 <defs>
                   <filter id="darkBubbleFilter" x="-100%" y="-100%" width="300%" height="600%" filterUnits="objectBoundingBox" colorInterpolationFilters="sRGB">
                     <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                    <feOffset dy="15" />
-                    <feGaussianBlur stdDeviation="17" />
+                    
+                    {/* Layer 1 - Close soft shadow with spread */}
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha1" />
+                    <feMorphology radius="2" operator="dilate" in="hardAlpha1" result="spread1" />
+                    <feOffset dy="15" in="spread1" />
+                    <feGaussianBlur stdDeviation="20" />
                     <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.04 0" />
                     <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                    <feOffset dy="62" />
-                    <feGaussianBlur stdDeviation="31" />
+                    
+                    {/* Layer 2 - Medium shadow with spread */}
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha2" />
+                    <feMorphology radius="1" operator="dilate" in="hardAlpha2" result="spread2" />
+                    <feOffset dy="62" in="spread2" />
+                    <feGaussianBlur stdDeviation="35" />
                     <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.03 0" />
                     <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                    <feOffset dy="139" />
-                    <feGaussianBlur stdDeviation="42" />
+                    
+                    {/* Layer 3 - Far soft shadow */}
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha3" />
+                    <feOffset dy="139" in="hardAlpha3" />
+                    <feGaussianBlur stdDeviation="50" />
                     <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.02 0" />
                     <feBlend mode="normal" in2="effect2_dropShadow" result="effect3_dropShadow" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                    <feOffset dy="248" />
-                    <feGaussianBlur stdDeviation="49.5" />
+                    
+                    {/* Layer 4 - Ambient shadow */}
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha4" />
+                    <feOffset dy="248" in="hardAlpha4" />
+                    <feGaussianBlur stdDeviation="60" />
                     <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.01 0" />
                     <feBlend mode="normal" in2="effect3_dropShadow" result="effect4_dropShadow" />
+                    
                     <feBlend mode="normal" in="SourceGraphic" in2="effect4_dropShadow" result="shape" />
                   </filter>
                 </defs>
