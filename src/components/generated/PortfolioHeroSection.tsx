@@ -723,8 +723,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyPress={handleKeyPress}
                         disabled={isLoading}
-                        className="w-full h-full bg-transparent border-none outline-none text-[16px] leading-[24px] font-normal text-black disabled:opacity-50"
-                        style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
+                        className="w-full h-full bg-transparent border-none outline-none text-[16px] font-normal text-black disabled:opacity-50"
+                        style={{ 
+                          fontFamily: 'Nexa, system-ui, sans-serif',
+                          lineHeight: '24px',
+                          padding: 0
+                        }}
                       />
                       {!inputValue && (
                         <div className="absolute inset-0 pointer-events-none flex items-center justify-start whitespace-nowrap">
