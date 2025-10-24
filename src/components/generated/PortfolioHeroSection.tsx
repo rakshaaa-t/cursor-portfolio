@@ -71,17 +71,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [inputValue, setInputValue] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
-  const [isPlaceholderHovered, setIsPlaceholderHovered] = React.useState(false);
-  const [showAlternateText, setShowAlternateText] = React.useState(false);
-  const [startTypewriter, setStartTypewriter] = React.useState(false);
-  const typewriterTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const [animatingPillId, setAnimatingPillId] = React.useState<number | null>(null);
   const [latestMessageId, setLatestMessageId] = React.useState<string | null>(null);
-  const [currentSuggestionIndex, setCurrentSuggestionIndex] = React.useState(0);
-  const [visibleSuggestions, setVisibleSuggestions] = React.useState<string[]>(() => {
-    return ALL_SUGGESTIONS.slice(0, 3);
-  });
-  const [isNavigating, setIsNavigating] = React.useState(false);
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -143,26 +134,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     }
   };
 
-  const handleNavigateSuggestions = (direction: 'left' | 'right') => {
-    if (isNavigating || animatingPillId !== null) return;
-    
-    setIsNavigating(true);
-    
-    // Calculate new index
-    let newIndex = currentSuggestionIndex;
-    if (direction === 'right') {
-      newIndex = (currentSuggestionIndex + 1) % (ALL_SUGGESTIONS.length - 2);
-    } else {
-      newIndex = currentSuggestionIndex === 0 ? ALL_SUGGESTIONS.length - 3 : currentSuggestionIndex - 1;
-    }
-    
-    setCurrentSuggestionIndex(newIndex);
-    setVisibleSuggestions(ALL_SUGGESTIONS.slice(newIndex, newIndex + 3));
-    
-    // Reset navigating state after animation completes
-    setTimeout(() => setIsNavigating(false), 300);
-  };
-
   const handlePillClick = async (pillText: string, pillId: number, event: React.MouseEvent<HTMLButtonElement>) => {
     if (animatingPillId !== null || isLoading) return;
     
@@ -171,15 +142,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     
     // Wait for pill to fade out
     setTimeout(async () => {
-      // Get next suggestion from the ALL_SUGGESTIONS array
-      const nextIndex = currentSuggestionIndex + 3 + pillId;
-      const nextSuggestion = ALL_SUGGESTIONS[nextIndex % ALL_SUGGESTIONS.length];
-      
-      // Replace the clicked pill with next suggestion
-      const newSuggestions = [...visibleSuggestions];
-      newSuggestions[pillId] = nextSuggestion;
-      setVisibleSuggestions(newSuggestions);
-      
       setAnimatingPillId(null);
       
       // Add message to chat
@@ -423,10 +385,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           <div className="absolute w-[421px] h-[336px] left-1/2 bottom-[-99px] -translate-x-1/2 translate-x-[236px] bg-[rgba(101,73,255,0.14)] rounded-[4444px] blur-[100px] pointer-events-none" />
           <div className="absolute w-[605px] h-[313px] left-1/2 bottom-[267px] -translate-x-1/2 -translate-x-[172px] bg-gradient-to-r from-[rgba(255,255,255,0.88)] to-[rgba(255,255,255,0.1936)] rounded-[4444px] blur-[100px] pointer-events-none" />
 
-          <div className="relative h-full px-[32px] py-[20px]">
+          <div className="relative h-full">
             {/* Chat Messages Container - Scrollable */}
             <div 
-              className="absolute left-[80px] w-[640px] top-[20px] h-[300px] flex flex-col"
+              className="absolute left-[80px] w-[640px] top-[40px] h-[320px] flex flex-col"
             >
               <div 
                 ref={chatContainerRef}
@@ -478,8 +440,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       >
                         <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
                           {msg.content}
-                        </p>
-                      </div>
+              </p>
+            </div>
                     </div>
                   )}
                   {msg.sender === 'user' && (
@@ -554,7 +516,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       </div>
 
             {/* Bottom Section - Suggestions + Input */}
-            <div className="absolute w-[640px] left-[80px] bottom-[20px] flex flex-col items-center gap-[12px]">
+            <div className="absolute w-[640px] left-[80px] bottom-[40px] flex flex-col items-center gap-[12px]">
               {/* Suggestion Pills - Horizontally Scrollable */}
               <div 
                 className="w-full overflow-x-auto flex items-center gap-2 pb-2"
@@ -668,34 +630,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       </defs>
                     </svg>
 
-                    <div 
-                      className="relative flex-1 min-w-0 h-[24px] flex items-center"
-                      onMouseEnter={() => {
-                        // Clear any existing timeout
-                        if (typewriterTimeoutRef.current) {
-                          clearTimeout(typewriterTimeoutRef.current);
-                        }
-                        
-                        setIsPlaceholderHovered(true);
-                        setShowAlternateText(true);
-                        
-                        // Start typewriter after fade out completes + small delay (8% faster: 300 * 0.92 = 276)
-                        typewriterTimeoutRef.current = setTimeout(() => {
-                          setStartTypewriter(true);
-                        }, 276);
-                      }}
-                      onMouseLeave={() => {
-                        // Clear timeout on mouse leave
-                        if (typewriterTimeoutRef.current) {
-                          clearTimeout(typewriterTimeoutRef.current);
-                          typewriterTimeoutRef.current = null;
-                        }
-                        
-                        setIsPlaceholderHovered(false);
-                        setShowAlternateText(false);
-                        setStartTypewriter(false);
-                      }}
-                    >
+                    <div className="relative flex-1 min-w-0 h-[24px] flex items-center">
                       <input
                         type="text"
                         value={inputValue}
@@ -709,44 +644,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         <div
                           className="absolute inset-0 pointer-events-none flex items-center whitespace-nowrap"
                         >
-                          <div className="relative overflow-hidden whitespace-nowrap h-[24px] flex items-center">
-                            <motion.span
-                              className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap block"
-                              style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
-                              animate={{ opacity: showAlternateText ? 0 : 1 }}
-                              transition={{ duration: 0.276, ease: [0.4, 0, 0.2, 1] }}
-                            >
-                              talk 2 me
-                            </motion.span>
-                            
-                            {isPlaceholderHovered && !showAlternateText && (
-                              <motion.div
-                                className="absolute inset-0"
-                                initial={{ x: '-100%' }}
-                                animate={{ x: '200%' }}
-                                transition={{ 
-                                  duration: 0.368, 
-                                  ease: [0.4, 0, 0.2, 1]
-                                }}
-                                style={{
-                                  background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.25) 50%, transparent 100%)',
-                                  pointerEvents: 'none'
-                                }}
-                              />
-                            )}
-                          </div>
-                          
-                          {startTypewriter && (
-                            <motion.div
-                              className="absolute text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap flex items-center h-[24px] overflow-hidden"
-                              style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
-                              initial={{ width: 0 }}
-                              animate={{ width: 'auto' }}
-                              transition={{ duration: 0.644, ease: [0.4, 0, 0.2, 1] }}
-                            >
-                              raksha can see all our messages
-                            </motion.div>
-                          )}
+                          <span
+                            className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap"
+                            style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
+                          >
+                            talk 2 me
+                          </span>
                         </div>
                       )}
                     </div>
