@@ -93,17 +93,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const typeIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
 
-  // Auto-scroll to bottom when messages change
+  // Auto-scroll to bottom - disabled during typing to prevent glitches
   React.useEffect(() => {
-    if (chatContainerRef.current) {
-      // Use setTimeout to ensure DOM has updated
-      setTimeout(() => {
-        if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-        }
-      }, 0);
+    if (!typingMessageId && chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  }, [messages.length]);
+  }, [messages.length, typingMessageId]);
 
   // Smooth velocity transition based on hover
   useAnimationFrame((time, delta) => {
@@ -189,7 +184,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     
     // Use requestAnimationFrame for smoother updates
     let lastUpdate = 0;
-    const updateInterval = 4; // 4ms per character
+    const updateInterval = 1; // 1ms per character (super fast!)
     
     const updateTyping = (timestamp: number) => {
       if (!lastUpdate) lastUpdate = timestamp;
@@ -593,7 +588,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       className="flex items-start gap-3 max-w-[560px]"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      transition={{ duration: 0.1, ease: "easeOut" }}
                     >
                       <div className="relative w-[48px] h-[48px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
                         <img
