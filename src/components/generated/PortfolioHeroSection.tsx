@@ -74,6 +74,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [visiblePills, setVisiblePills] = React.useState<string[]>(ALL_SUGGESTIONS);
   const [latestMessageId, setLatestMessageId] = React.useState<string | null>(null);
   const [isHoveringPills, setIsHoveringPills] = React.useState(false);
+  const [isFocused, setIsFocused] = React.useState(false);
   
   // Super fast typing effect (almost instant but visible)
   const [typingMessageId, setTypingMessageId] = React.useState<string | null>(null);
@@ -86,7 +87,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const slowVelocityRef = React.useRef(-640 / 78); // pixels per second (slow speed)
   const currentVelocityRef = React.useRef(baseVelocityRef.current);
   
-  // Removed placeholder animation for performance - using simple CSS instead
+  // Input ref for instant typing response
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -99,19 +101,22 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     }
   }, [messages.length]);
 
-  // Smooth velocity transition based on hover
+  // Smooth velocity transition based on hover - OPTIMIZED
   useAnimationFrame((time, delta) => {
+    if (isFocused) return; // Pause pills while typing in input
+    
     const targetVelocity = isHoveringPills ? slowVelocityRef.current : baseVelocityRef.current;
     
-    // Smoothly interpolate velocity (ease into new speed)
+    // Cap delta to prevent jumps on slow frames
+    const cappedDelta = Math.min(delta, 32); // Cap at 2 frames max
+    
+    // Faster interpolation for quicker response
     const velocityDiff = targetVelocity - currentVelocityRef.current;
-    currentVelocityRef.current += velocityDiff * 0.05; // 5% interpolation for smoothness
+    currentVelocityRef.current += velocityDiff * 0.15; // 15% = faster response
     
     // Move based on current velocity
-    const movement = currentVelocityRef.current * (delta / 1000);
-    const newX = x.get() + movement;
-    
-    x.set(newX);
+    const movement = currentVelocityRef.current * (cappedDelta / 1000);
+    x.set(x.get() + movement);
   });
 
   // Removed placeholder animation - will add simple CSS shine effect instead
@@ -156,7 +161,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     };
 
     setMessages(prev => [...prev, userMessage]);
+    setLatestMessageId(userMessage.id);
     setInputValue("");
+    // Clear input field directly for instant visual feedback
+    if (inputRef.current) inputRef.current.value = "";
     setIsLoading(true);
 
     try {
@@ -254,7 +262,14 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-[#D8D4E8] overflow-hidden">
+    <div 
+      className="relative w-full min-h-screen bg-[#D8D4E8] overflow-hidden"
+      style={{
+        willChange: 'scroll-position',
+        transform: 'translate3d(0,0,0)',
+        WebkitOverflowScrolling: 'touch'
+      }}
+    >
       {/* Background Blurs */}
       <div className="absolute w-[1472px] h-[761px] -left-[227px] top-[281px] bg-[rgba(0,132,255,0.1)] rounded-[4444px] blur-[200px] pointer-events-none" />
       <div className="absolute w-[1629px] h-[842px] left-[474px] top-[617px] bg-white rounded-[4444px] blur-[200px] pointer-events-none" />
@@ -471,7 +486,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               <div 
                 ref={chatContainerRef}
                 className="overflow-y-auto flex flex-col gap-3 pr-3 pb-20 custom-scrollbar flex-1"
-                style={{ scrollPaddingBottom: '20px' }}
+                style={{ 
+                  scrollPaddingBottom: '20px',
+                  willChange: 'scroll-position',
+                  transform: 'translate3d(0,0,0)',
+                  WebkitOverflowScrolling: 'touch'
+                }}
               >
               {/* Initial Welcome Message - Always show */}
               <div className="w-full flex-shrink-0 mb-2">
@@ -527,18 +547,18 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           {typingMessageId === msg.id ? (msg.content || '').substring(0, typedChars) : (msg.content || '')}
               </p>
             </div>
-                    </motion.div>
+          </motion.div>
                   )}
                   {msg.sender === 'user' && (
                     <motion.div 
                       className="max-w-[560px]"
                       initial={latestMessageId === msg.id ? { 
-                        opacity: 0,
+          opacity: 0,
                         y: 4
                       } : false}
                       animate={{
-                        opacity: 1,
-                        y: 0
+          opacity: 1,
+          y: 0
                       }}
                       transition={{
                         duration: 0.15,
@@ -658,10 +678,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       className="relative flex-1 min-w-0 h-[24px] flex items-center"
                     >
                       <input
+                        ref={inputRef}
                         type="text"
-                        value={inputValue}
+                        defaultValue=""
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyPress={handleKeyPress}
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
                         disabled={isLoading}
                         className="w-full h-full bg-transparent border-none outline-none text-[16px] font-normal text-black disabled:opacity-50"
                         style={{ 
