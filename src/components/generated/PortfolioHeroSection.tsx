@@ -93,12 +93,15 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const typeIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
 
-  // Auto-scroll to bottom when messages change
+  // Auto-scroll to bottom when messages change or during typing
   React.useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
     }
-  }, [messages, isLoading]);
+  }, [messages, isLoading, typedChars]);
 
   // Smooth velocity transition based on hover
   useAnimationFrame((time, delta) => {
