@@ -597,15 +597,18 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                             )}
                           </div>
                           
-                          <motion.div
-                            className="absolute text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap flex items-center h-[24px] overflow-hidden"
-                            style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
-                            initial={{ width: 0 }}
-                            animate={{ width: showAlternateText ? 'auto' : 0 }}
-                            transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-                          >
-                            raksha can see all our messages
-                          </motion.div>
+                          {showAlternateText && (
+                            <motion.div
+                              className="absolute text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap flex items-center h-[24px] overflow-hidden"
+                              style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
+                              initial={{ width: 0 }}
+                              animate={{ width: 'auto' }}
+                              exit={{ width: 0 }}
+                              transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+                            >
+                              raksha can see all our messages
+                            </motion.div>
+                          )}
                         </div>
                       )}
                     </div>
