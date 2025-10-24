@@ -121,6 +121,22 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   
   // Input ref for instant typing response
   const inputRef = React.useRef<HTMLInputElement>(null);
+  
+  // Abort controller ref for cleanup
+  const abortControllerRef = React.useRef<AbortController | null>(null);
+
+  // Limit message history to prevent memory leak
+  const MAX_MESSAGES = 20;
+  const addMessage = React.useCallback((newMessage: ChatMessage) => {
+    setMessages(prev => {
+      const updated = [...prev, newMessage];
+      // Keep only last MAX_MESSAGES messages
+      if (updated.length > MAX_MESSAGES) {
+        return updated.slice(-MAX_MESSAGES);
+      }
+      return updated;
+    });
+  }, []);
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -128,10 +144,25 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages.length]);
+  
+  // Cleanup on unmount
+  React.useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   const handleSendMessage = async (messageText?: string) => {
     const textToSend = messageText || inputValue.trim();
     if (!textToSend || isLoading) return;
+
+    // Cancel any pending API call
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
 
     // Add user message
     const userMessage: ChatMessage = {
@@ -142,7 +173,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       timestamp: Date.now()
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    addMessage(userMessage);
     setInputValue("");
     // Clear input field directly for instant visual feedback
     if (inputRef.current) inputRef.current.value = "";
@@ -161,19 +192,22 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         timestamp: Date.now()
       };
 
-      setMessages(prev => [...prev, aiMessage]);
-    } catch (error) {
-      // Fallback response
-      const fallbackMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        type: 'text',
-        content: getFallbackResponse(textToSend),
-        sender: 'ai',
-        timestamp: Date.now()
-      };
-      setMessages(prev => [...prev, fallbackMessage]);
+      addMessage(aiMessage);
+    } catch (error: any) {
+      // Only add fallback if not aborted
+      if (error?.name !== 'AbortError') {
+        const fallbackMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          type: 'text',
+          content: getFallbackResponse(textToSend),
+          sender: 'ai',
+          timestamp: Date.now()
+        };
+        addMessage(fallbackMessage);
+      }
     } finally {
       setIsLoading(false);
+      abortControllerRef.current = null;
     }
   };
 
@@ -186,6 +220,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
   const handlePillClick = async (pillText: string) => {
     if (isLoading) return;
+    
+    // Cancel any pending API call
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
     
     // Cycle pill to end for infinite loop
     setVisiblePills(prev => {
@@ -202,7 +242,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       timestamp: Date.now()
     };
     
-    setMessages(prev => [...prev, userMessage]);
+    addMessage(userMessage);
     setIsLoading(true);
     
     try {
@@ -215,18 +255,22 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         timestamp: Date.now()
       };
       
-      setMessages(prev => [...prev, aiMessage]);
-    } catch (error) {
-      const fallbackMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        type: 'text',
-        content: getFallbackResponse(pillText),
-        sender: 'ai',
-        timestamp: Date.now()
-      };
-      setMessages(prev => [...prev, fallbackMessage]);
+      addMessage(aiMessage);
+    } catch (error: any) {
+      // Only add fallback if not aborted
+      if (error?.name !== 'AbortError') {
+        const fallbackMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          type: 'text',
+          content: getFallbackResponse(pillText),
+          sender: 'ai',
+          timestamp: Date.now()
+        };
+        addMessage(fallbackMessage);
+      }
     } finally {
       setIsLoading(false);
+      abortControllerRef.current = null;
     }
   };
 
