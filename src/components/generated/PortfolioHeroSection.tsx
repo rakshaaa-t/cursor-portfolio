@@ -548,7 +548,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       onKeyPress={handleKeyPress}
                       disabled={isLoading}
                       placeholder="Talk 2 me"
-                      className="flex-1 bg-transparent border-none outline-none text-[16px] leading-[24px] font-normal text-black placeholder:text-black/[0.44] disabled:opacity-50"
+                      className="flex-1 bg-transparent border-none outline-none text-[16px] leading-[24px] font-normal text-black placeholder:text-black/[0.44] disabled:opacity-50 ml-2"
                       style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                     />
                   </div>
