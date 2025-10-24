@@ -619,12 +619,15 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         .custom-scrollbar::-webkit-scrollbar-track {
           background: transparent;
           border-radius: 10px;
+          margin-top: 20px;
+          margin-bottom: 20px;
         }
         
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: rgba(139, 127, 186, 0.3);
           border-radius: 10px;
           transition: background 0.3s ease;
+          min-height: 40px;
         }
         
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
