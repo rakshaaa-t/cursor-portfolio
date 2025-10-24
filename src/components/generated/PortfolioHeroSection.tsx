@@ -73,6 +73,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
   const [animatingPillId, setAnimatingPillId] = React.useState<number | null>(null);
   const [latestMessageId, setLatestMessageId] = React.useState<string | null>(null);
+  const [isHoveringPills, setIsHoveringPills] = React.useState(false);
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -619,45 +620,60 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 </div>
               </div>
 
-              {/* Suggestion Pills - Horizontally Scrollable */}
-              <motion.div 
-                className="w-full overflow-x-auto flex items-center gap-3"
-                style={{
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none',
-                  WebkitOverflowScrolling: 'touch'
-                }}
-                animate={{
-                  x: [0, -8, 0]
-                }}
-                transition={{
-                  duration: 2,
-                  ease: "easeInOut",
-                  repeat: Infinity,
-                  repeatDelay: 1
-                }}
+              {/* Suggestion Pills - Infinite Horizontal Scroll */}
+              <div 
+                className="w-full overflow-hidden relative"
+                style={{ cursor: 'grab' }}
+                onMouseEnter={() => setIsHoveringPills(true)}
+                onMouseLeave={() => setIsHoveringPills(false)}
               >
-                  {ALL_SUGGESTIONS.map((suggestion, index) => {
-                    const isAnimating = animatingPillId === index;
+                <motion.div
+                  className="flex items-center gap-3"
+                  drag="x"
+                  dragConstraints={{ left: -1000, right: 0 }}
+                  dragElastic={0.1}
+                  animate={{
+                    x: isHoveringPills ? undefined : [-640, 0]
+                  }}
+                  transition={{
+                    x: {
+                      duration: isHoveringPills ? 30 : 15,
+                      repeat: Infinity,
+                      ease: "linear",
+                      repeatType: "loop"
+                    }
+                  }}
+                  style={{ willChange: 'transform' }}
+                >
+                  {/* Render pills twice for seamless loop */}
+                  {[...ALL_SUGGESTIONS, ...ALL_SUGGESTIONS].map((suggestion, index) => {
+                    const actualIndex = index % ALL_SUGGESTIONS.length;
+                    const isAnimating = animatingPillId === actualIndex && index < ALL_SUGGESTIONS.length;
                     return (
                       <motion.button 
-                        key={suggestion}
-                        onClick={(e) => handlePillClick(suggestion, index, e)}
+                        key={`${suggestion}-${index}`}
+                        onClick={(e) => {
+                          if (index < ALL_SUGGESTIONS.length) {
+                            handlePillClick(suggestion, actualIndex, e);
+                          }
+                        }}
                         disabled={isLoading || animatingPillId !== null}
                         className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer flex-shrink-0"
                         style={{
-                          background: 'transparent',
-                          border: '1px solid rgba(0, 0, 0, 0.12)'
+                          background: 'rgba(255, 255, 255, 0.2)',
+                          backdropFilter: 'blur(20px)',
+                          WebkitBackdropFilter: 'blur(20px)',
+                          border: '1px solid rgba(255, 255, 255, 0.3)',
+                          boxShadow: '0 4px 16px 0 rgba(31, 38, 135, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
                         }}
                         whileHover={{
                           scale: 1.05,
-                          backgroundColor: 'rgba(0, 0, 0, 0.02)'
+                          backgroundColor: 'rgba(255, 255, 255, 0.3)'
                         }}
                         initial={{ opacity: 1 }}
                         animate={{
                           opacity: isAnimating ? 0 : 1
                         }}
-                        exit={{ opacity: 0 }}
                         transition={{
                           duration: 0.2,
                           ease: [0.4, 0, 0.2, 1]
@@ -672,7 +688,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       </motion.button>
                     );
                   })}
-              </motion.div>
+                </motion.div>
+              </div>
             </div>
           </div>
         </motion.div>
