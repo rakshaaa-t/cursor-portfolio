@@ -687,11 +687,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   boxShadow: '0px 297px 119px rgba(0, 0, 0, 0.01), 0px 167px 100px rgba(0, 0, 0, 0.02), 0px 74px 74px rgba(0, 0, 0, 0.03), 0px 19px 41px rgba(0, 0, 0, 0.04)'
                 }}
               >
-                <div className="w-full flex items-center justify-between gap-3">
+                <div className="w-full h-full flex items-center justify-between gap-3">
                   {/* Left: Sparkle Icon + Input */}
-                  <div className="flex items-center gap-3 flex-1" style={{ alignItems: 'center' }}>
-                    {/* Sparkle Icon SVG */}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <div className="flex items-center gap-3 flex-1 h-full">
+                    {/* Sparkle Icon Wrapper */}
+                    <div className="flex items-center justify-center flex-shrink-0" style={{ height: '44px' }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                       <g clipPath="url(#clip0_371_175)">
                         <mask id="mask0_371_175" style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
                           <path d="M24 0H0V24H24V0Z" fill="white"/>
@@ -738,9 +739,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         </clipPath>
                       </defs>
                     </svg>
+                    </div>
 
                     <div 
-                      className="relative flex-1 min-w-0 h-[24px] flex items-center"
+                      className="relative flex-1 min-w-0 flex items-center"
+                      style={{ height: '44px' }}
                       onMouseEnter={() => setIsHoveringInput(true)}
                       onMouseLeave={() => setIsHoveringInput(false)}
                     >
@@ -753,8 +756,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         className="w-full h-full bg-transparent border-none outline-none text-[16px] font-normal text-black disabled:opacity-50"
                         style={{ 
                           fontFamily: 'Nexa, system-ui, sans-serif',
-                          lineHeight: '24px',
-                          padding: 0
+                          lineHeight: '1',
+                          padding: 0,
+                          transform: 'translateY(-1px)'
                         }}
                       />
                       {!inputValue && (
@@ -765,8 +769,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                               style={{ 
                                 fontFamily: 'Nexa, system-ui, sans-serif',
                                 opacity: isHoveringInput ? 0 : 1,
-                                lineHeight: '24px',
-                                display: 'inline-block'
+                                lineHeight: '1',
+                                transform: 'translateY(-1px)'
                               }}
                             >
                               talk 2 me
@@ -777,8 +781,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                               className="text-[16px] font-normal text-black/[0.44] whitespace-nowrap"
                               style={{ 
                                 fontFamily: 'Nexa, system-ui, sans-serif',
-                                lineHeight: '24px',
-                                display: 'inline-block'
+                                lineHeight: '1',
+                                transform: 'translateY(-1px)'
                               }}
                             >
                               {"raksha can see all our messages".substring(0, revealedChars)}
