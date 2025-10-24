@@ -424,27 +424,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           <div className="absolute w-[605px] h-[313px] left-1/2 bottom-[267px] -translate-x-1/2 -translate-x-[172px] bg-gradient-to-r from-[rgba(255,255,255,0.88)] to-[rgba(255,255,255,0.1936)] rounded-[4444px] blur-[100px] pointer-events-none" />
 
           <div className="relative h-full px-[32px] py-[20px]">
-            {/* Header - "hey i'm raks" | "email : contact@rakshaaa.com" */}
-            <div className="absolute w-[640px] h-[24px] left-[80px] top-[20px] flex items-end justify-between">
-              <div className="flex items-end gap-3">
-                <span
-                  className="text-[16px] leading-[24px] font-light text-black"
-                  style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
-                >
-                  <span>hey i'm raks</span>
-                </span>
-              </div>
-              <span
-                className="text-[16px] leading-[24px] font-normal text-black"
-                style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
-              >
-                <span className="text-black/[0.22]">email : </span><span>contact@rakshaaa.com</span>
-              </span>
-            </div>
-
             {/* Chat Messages Container - Scrollable */}
             <div 
-              className="absolute left-[80px] w-[640px] top-[64px] h-[256px] flex flex-col"
+              className="absolute left-[80px] w-[640px] top-[20px] h-[300px] flex flex-col"
             >
               <div 
                 ref={chatContainerRef}
@@ -573,17 +555,23 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
             {/* Bottom Section - Suggestions + Input */}
             <div className="absolute w-[640px] left-[80px] bottom-[20px] flex flex-col items-center gap-[12px]">
-              {/* Suggestion Pills - With Glass Effect + Refresh Button */}
-              <div className="w-full flex items-center justify-center gap-2">
-                <AnimatePresence mode="wait">
-                  {visibleSuggestions.map((suggestion, index) => {
+              {/* Suggestion Pills - Horizontally Scrollable */}
+              <div 
+                className="w-full overflow-x-auto flex items-center gap-2 pb-2"
+                style={{
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none',
+                  WebkitOverflowScrolling: 'touch'
+                }}
+              >
+                  {ALL_SUGGESTIONS.map((suggestion, index) => {
                     const isAnimating = animatingPillId === index;
                     return (
                       <motion.button 
                         key={suggestion}
                         onClick={(e) => handlePillClick(suggestion, index, e)}
-                        disabled={isLoading || animatingPillId !== null || isNavigating}
-                        className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group"
+                        disabled={isLoading || animatingPillId !== null}
+                        className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group flex-shrink-0"
                         style={{
                           background: 'rgba(255, 255, 255, 0.15)',
                           backdropFilter: 'blur(20px)',
@@ -591,11 +579,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           border: '1px solid rgba(255, 255, 255, 0.2)',
                           boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
                         }}
-                        initial={{ opacity: 0, scale: 0.95, x: 0 }}
+                        initial={{ opacity: 1, scale: 1 }}
                         animate={{
                           opacity: isAnimating ? 0 : 1,
-                          scale: isAnimating ? 0.95 : 1,
-                          x: isNavigating ? (index === 0 ? -20 : index === 1 ? -10 : 0) : 0
+                          scale: isAnimating ? 0.95 : 1
                         }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{
@@ -619,41 +606,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       </motion.button>
                     );
                   })}
-                </AnimatePresence>
-                
-                {/* Right Arrow Navigation */}
-                <motion.button
-                  onClick={() => handleNavigateSuggestions('right')}
-                  disabled={isNavigating || animatingPillId !== null}
-                  className="relative w-[37px] h-[37px] min-w-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group flex-shrink-0"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.15)',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-                    padding: '0'
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{
-                    duration: 0.15,
-                    ease: [0.4, 0, 0.2, 1]
-                  }}
-                >
-                  {/* Right Arrow Icon */}
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
-                    <path d="M6 12L10 8L6 4" stroke="rgba(0, 0, 0, 0.64)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:stroke-[rgba(0,0,0,0.8)] transition-colors duration-200"/>
-                  </svg>
-                  
-                  {/* Subtle hover glow */}
-                  <div 
-                    className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
-                    style={{
-                      boxShadow: '0 0 20px rgba(79, 92, 255, 0.15), 0 0 40px rgba(79, 92, 255, 0.08)'
-                    }}
-                  />
-                </motion.button>
               </div>
 
               {/* Input Bar - Smaller */}
@@ -716,7 +668,34 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       </defs>
                     </svg>
 
-                    <div className="relative flex-1 min-w-0 h-[24px] flex items-center">
+                    <div 
+                      className="relative flex-1 min-w-0 h-[24px] flex items-center"
+                      onMouseEnter={() => {
+                        // Clear any existing timeout
+                        if (typewriterTimeoutRef.current) {
+                          clearTimeout(typewriterTimeoutRef.current);
+                        }
+                        
+                        setIsPlaceholderHovered(true);
+                        setShowAlternateText(true);
+                        
+                        // Start typewriter after fade out completes + small delay (8% faster: 300 * 0.92 = 276)
+                        typewriterTimeoutRef.current = setTimeout(() => {
+                          setStartTypewriter(true);
+                        }, 276);
+                      }}
+                      onMouseLeave={() => {
+                        // Clear timeout on mouse leave
+                        if (typewriterTimeoutRef.current) {
+                          clearTimeout(typewriterTimeoutRef.current);
+                          typewriterTimeoutRef.current = null;
+                        }
+                        
+                        setIsPlaceholderHovered(false);
+                        setShowAlternateText(false);
+                        setStartTypewriter(false);
+                      }}
+                    >
                       <input
                         type="text"
                         value={inputValue}
@@ -729,32 +708,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       {!inputValue && (
                         <div
                           className="absolute inset-0 pointer-events-none flex items-center whitespace-nowrap"
-                          onMouseEnter={() => {
-                            // Clear any existing timeout
-                            if (typewriterTimeoutRef.current) {
-                              clearTimeout(typewriterTimeoutRef.current);
-                            }
-                            
-                            setIsPlaceholderHovered(true);
-                            setShowAlternateText(true);
-                            
-                            // Start typewriter after fade out completes + small delay (8% faster: 300 * 0.92 = 276)
-                            typewriterTimeoutRef.current = setTimeout(() => {
-                              setStartTypewriter(true);
-                            }, 276);
-                          }}
-                          onMouseLeave={() => {
-                            // Clear timeout on mouse leave
-                            if (typewriterTimeoutRef.current) {
-                              clearTimeout(typewriterTimeoutRef.current);
-                              typewriterTimeoutRef.current = null;
-                            }
-                            
-                            setIsPlaceholderHovered(false);
-                            setShowAlternateText(false);
-                            setStartTypewriter(false);
-                          }}
-                          style={{ pointerEvents: 'auto' }}
                         >
                           <div className="relative overflow-hidden whitespace-nowrap h-[24px] flex items-center">
                             <motion.span
