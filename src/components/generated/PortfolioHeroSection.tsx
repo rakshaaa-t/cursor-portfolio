@@ -632,12 +632,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   dragConstraints={{ left: -2000, right: 100 }}
                   dragElastic={0.05}
                   dragTransition={{ bounceStiffness: 300, bounceDamping: 40 }}
-                  animate={!isHoveringPills ? {
-                    x: [-640, 0]
-                  } : undefined}
+                  animate={{
+                    x: [0, -640]
+                  }}
                   transition={{
                     x: {
-                      duration: isHoveringPills ? 39 : 19.5,
+                      duration: isHoveringPills ? 31.2 : 19.5,
                       repeat: Infinity,
                       ease: "linear",
                       repeatType: "loop"
