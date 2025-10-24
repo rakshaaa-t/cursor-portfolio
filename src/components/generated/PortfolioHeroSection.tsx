@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, AnimatePresence, useMotionValue, useAnimationFrame } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { sendToAI, getFallbackResponse, type ChatMessage } from "../../lib/ai-chat";
 import { AI_CONFIG } from "../../lib/config";
@@ -72,19 +72,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [isLoading, setIsLoading] = React.useState(false);
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
   const [visiblePills, setVisiblePills] = React.useState<string[]>(ALL_SUGGESTIONS);
-  const [latestMessageId, setLatestMessageId] = React.useState<string | null>(null);
-  const [isHoveringPills, setIsHoveringPills] = React.useState(false);
-  
-  // Super fast typing effect (almost instant but visible)
-  const [typingMessageId, setTypingMessageId] = React.useState<string | null>(null);
-  const [typedChars, setTypedChars] = React.useState(0);
-  const typingIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
-  
-  // Motion values for smooth continuous animation
-  const x = useMotionValue(0);
-  const baseVelocityRef = React.useRef(-640 / 48.75); // pixels per second (normal speed)
-  const slowVelocityRef = React.useRef(-640 / 78); // pixels per second (slow speed)
-  const currentVelocityRef = React.useRef(baseVelocityRef.current);
   
   // Input ref for instant typing response
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -92,57 +79,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
     if (chatContainerRef.current) {
-      requestAnimationFrame(() => {
-        if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-        }
-      });
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages.length]);
-
-  // Smooth velocity transition based on hover - OPTIMIZED
-  useAnimationFrame((time, delta) => {
-    const targetVelocity = isHoveringPills ? slowVelocityRef.current : baseVelocityRef.current;
-    
-    // Cap delta to prevent jumps on slow frames
-    const cappedDelta = Math.min(delta, 32); // Cap at 2 frames max
-    
-    // Balanced interpolation for smooth response
-    const velocityDiff = targetVelocity - currentVelocityRef.current;
-    currentVelocityRef.current += velocityDiff * 0.08; // Balanced: smooth but responsive
-    
-    // Move based on current velocity
-    const movement = currentVelocityRef.current * (cappedDelta / 1000);
-    x.set(x.get() + movement);
-  });
-
-  // Removed placeholder animation - will add simple CSS shine effect instead
-
-  // Ultra-fast typing effect (1ms per char - almost instant but visible)
-  React.useEffect(() => {
-    if (!typingMessageId) return;
-    
-    const typingMessage = messages.find(m => m.id === typingMessageId);
-    if (!typingMessage?.content) return;
-    
-    const fullText = typingMessage.content;
-    let charIndex = 0;
-    
-    const interval = setInterval(() => {
-      charIndex++;
-      setTypedChars(charIndex);
-      
-      if (charIndex >= fullText.length) {
-        clearInterval(interval);
-        setTimeout(() => {
-          setTypingMessageId(null);
-          setTypedChars(0);
-        }, 50);
-      }
-    }, 10); // 10ms per character - super fast and smooth!
-    
-    return () => clearInterval(interval);
-  }, [typingMessageId]);
 
   const handleSendMessage = async (messageText?: string) => {
     const textToSend = messageText || inputValue.trim();
@@ -158,7 +97,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     };
 
     setMessages(prev => [...prev, userMessage]);
-    setLatestMessageId(userMessage.id);
     setInputValue("");
     // Clear input field directly for instant visual feedback
     if (inputRef.current) inputRef.current.value = "";
@@ -178,8 +116,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       };
 
       setMessages(prev => [...prev, aiMessage]);
-      setTypingMessageId(aiMessage.id);
-      setTypedChars(0);
     } catch (error) {
       // Fallback response
       const fallbackMessage: ChatMessage = {
@@ -190,8 +126,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         timestamp: Date.now()
       };
       setMessages(prev => [...prev, fallbackMessage]);
-      setTypingMessageId(fallbackMessage.id);
-      setTypedChars(0);
     } finally {
       setIsLoading(false);
     }
@@ -238,8 +172,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       };
       
       setMessages(prev => [...prev, aiMessage]);
-      setTypingMessageId(aiMessage.id);
-      setTypedChars(0);
     } catch (error) {
       const fallbackMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -249,12 +181,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         timestamp: Date.now()
       };
       setMessages(prev => [...prev, fallbackMessage]);
-      setTypingMessageId(fallbackMessage.id);
-      setTypedChars(0);
     } finally {
       setIsLoading(false);
-      // Clear latest message ID immediately
-      setLatestMessageId(null);
     }
   };
 
@@ -541,40 +469,25 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         }}
                       >
                         <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
-                          {typingMessageId === msg.id ? (msg.content || '').substring(0, typedChars) : (msg.content || '')}
+                          {msg.content || ''}
               </p>
             </div>
           </motion.div>
                   )}
                   {msg.sender === 'user' && (
-                    <motion.div 
-                      className="max-w-[560px]"
-                      initial={latestMessageId === msg.id ? { 
-          opacity: 0,
-                        y: 4
-                      } : false}
-                      animate={{
-          opacity: 1,
-          y: 0
-                      }}
-                      transition={{
-                        duration: 0.15,
-                        ease: "easeOut"
-                      }}
-                    >
+                    <div className="max-w-[560px]">
                       <div
                         className="px-[22px] py-[20px] bg-black/[0.79] text-white"
                         style={{
                           borderRadius: '30px 30px 0px 30px',
-                          filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))',
-                          transform: 'translate3d(0,0,0)'
+                          filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
                         }}
                       >
                         <p className="text-[14px] leading-[21px] font-light" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
                           {msg.content}
-              </p>
-            </div>
-          </motion.div>
+                        </p>
+                      </div>
+                    </div>
                   )}
                 </div>
               ))}
@@ -720,46 +633,21 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 </div>
               </div>
 
-              {/* Suggestion Pills - Infinite Horizontal Scroll */}
-              <div 
-                className="w-full overflow-hidden relative"
-                onMouseEnter={() => setIsHoveringPills(true)}
-                onMouseLeave={() => setIsHoveringPills(false)}
-              >
-                <motion.div
-                  className="flex items-center gap-3"
-                  style={{ x, willChange: 'transform', cursor: 'grab' }}
-                  drag="x"
-                  dragConstraints={{ left: -2000, right: 100 }}
-                  dragElastic={0.05}
-                  dragTransition={{ bounceStiffness: 300, bounceDamping: 40 }}
-                  whileDrag={{ cursor: 'grabbing' }}
-                >
-                  {/* Render pills twice for seamless loop */}
-                  {[...visiblePills, ...visiblePills].map((suggestion, index) => {
+              {/* Suggestion Pills - Static (no animations) */}
+              <div className="w-full overflow-x-auto">
+                <div className="flex items-center gap-3">
+                  {visiblePills.map((suggestion, index) => {
                     return (
-                      <motion.button 
+                      <button 
                         key={`${suggestion}-${index}`}
-                        onClick={() => {
-                          if (index < visiblePills.length) {
-                            handlePillClick(suggestion);
-                          }
-                        }}
+                        onClick={() => handlePillClick(suggestion)}
                         disabled={isLoading}
-                        className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer flex-shrink-0"
+                        className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer flex-shrink-0 hover:opacity-80 transition-opacity"
                         style={{
                           background: 'rgba(255, 255, 255, 0.2)',
                           backdropFilter: 'blur(20px)',
                           WebkitBackdropFilter: 'blur(20px)',
                           border: '1px solid rgba(255, 255, 255, 0.3)'
-                        }}
-                        whileHover={{
-                          scale: 1.05,
-                          backgroundColor: 'rgba(255, 255, 255, 0.3)'
-                        }}
-                        transition={{
-                          duration: 0.15,
-                          ease: "easeOut"
                         }}
                       >
                         <span
@@ -767,11 +655,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
                         >
                           {suggestion}
-        </span>
-                      </motion.button>
+                        </span>
+                      </button>
                     );
                   })}
-                </motion.div>
+                </div>
               </div>
             </div>
           </div>
