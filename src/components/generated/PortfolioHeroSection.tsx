@@ -138,10 +138,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           if (charIndex >= fullText.length) {
             clearInterval(typeInterval);
           }
-        }, 28); // 28ms per character (8% faster than 30ms)
+        }, 17); // 17ms per character (40% faster: 28 * 0.6)
         
         return () => clearInterval(typeInterval);
-      }, 138); // 138ms pause (8% faster than 150ms)
+      }, 83); // 83ms pause (40% faster: 138 * 0.6)
     } else {
       // Clear any existing timeout
       if (timeoutRef.current) {
@@ -686,7 +686,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         <div className="absolute inset-0 pointer-events-none flex items-center whitespace-nowrap">
                           {showOriginalText ? (
                             <span
-                              className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap transition-opacity duration-150"
+                              className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap transition-opacity duration-75"
                               style={{ 
                                 fontFamily: 'Nexa, system-ui, sans-serif',
                                 opacity: isHoveringInput ? 0 : 1
