@@ -601,8 +601,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         }}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{
-                          opacity: isAnimating ? 0 : 1,
-                          scale: isAnimating ? 0.95 : 1
+                          opacity: isRefreshing ? 0 : (isAnimating ? 0 : 1),
+                          scale: isRefreshing ? 0.95 : (isAnimating ? 0.95 : 1)
                         }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{
