@@ -358,15 +358,22 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               <div className="w-full flex items-center justify-center gap-2">
                 {SUGGESTION_PILLS.map((pill) => {
                   return (
-                    <button key={pill.id} className="relative hover:opacity-80 transition-opacity">
-                      <svg width="202" height="37" viewBox="0 0 202 37" fill="none" xmlns="http://www.w3.org/2000/svg" className="backdrop-blur-sm">
-                        <rect width="202" height="37" rx="18.5" fill="white" fillOpacity="0.1" />
-                      </svg>
+                    <button 
+                      key={pill.id} 
+                      className="relative px-6 py-2 h-[37px] rounded-full hover:bg-white/15 transition-all"
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.1)',
+                        backdropFilter: 'blur(20px)',
+                        WebkitBackdropFilter: 'blur(20px)',
+                        border: '1px solid rgba(255, 255, 255, 0.18)',
+                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
+                      }}
+                    >
                       <span
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[13px] leading-[20px] font-normal text-black/[0.64] text-center whitespace-nowrap"
+                        className="text-[13px] leading-[20px] font-normal text-black/[0.64] whitespace-nowrap"
                         style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
                       >
-                        <span>{pill.text}</span>
+                        {pill.text}
                       </span>
                     </button>
                   );
