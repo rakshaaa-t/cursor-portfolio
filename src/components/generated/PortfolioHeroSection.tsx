@@ -10,21 +10,27 @@ export interface RakshaPortfolioProps {}
 
 // Helper function to convert URLs in text to clickable links
 const linkifyText = (text: string) => {
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const urlRegex = /(https?:\/\/[^\s<>()]+)/g;
   const parts = text.split(urlRegex);
   
   return parts.map((part, index) => {
     if (part.match(urlRegex)) {
+      // Remove trailing punctuation that's not part of the URL
+      const cleanUrl = part.replace(/[.,;:!?)]+$/, '');
+      const trailingPunct = part.slice(cleanUrl.length);
+      
       return (
-        <a
-          key={index}
-          href={part}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[#283FE4] underline hover:text-[#4F5CFF] transition-colors"
-        >
-          {part}
-        </a>
+        <React.Fragment key={index}>
+          <a
+            href={cleanUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#283FE4] underline hover:text-[#4F5CFF] transition-colors"
+          >
+            {cleanUrl}
+          </a>
+          {trailingPunct}
+        </React.Fragment>
       );
     }
     return part;
