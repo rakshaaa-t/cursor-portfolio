@@ -73,17 +73,20 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       <div className="absolute w-[1629px] h-[842px] left-[474px] top-[617px] bg-white rounded-[4444px] blur-[200px] pointer-events-none" />
 
       {/* Navigation */}
-      <nav className="fixed left-1/2 -translate-x-1/2 top-10 z-50 w-full max-w-[1542px] px-8">
-        <div className="flex items-center justify-between gap-14 px-0 py-0 bg-white/[0.03] backdrop-blur-[22px] rounded-full border border-white/10">
-          {/* Logo */}
-          <div className="flex items-center justify-center px-8 py-2">
-            <svg width="85" height="27" viewBox="0 0 85 27" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[85px] h-[27px]">
-              <path d="M1.17123e-05 25.9199L2.95201 10.9799C2.01601 10.4039 1.44001 9.35992 1.44001 8.24392C1.44001 6.65992 2.52001 5.57992 4.17601 5.57992C5.83201 5.57992 6.91201 6.62392 7.02001 8.06392L18.972 9.43192V10.4039C16.848 13.4279 15.66 16.1279 15.66 18.3959C15.66 20.6999 16.884 22.0319 18.936 22.0319H19.656V25.9199H18.576C14.004 25.9199 11.52 23.2559 11.52 18.8639C11.52 16.9199 12.132 14.8319 13.248 12.7079L6.62401 11.8439L3.96001 25.9199H1.17123e-05ZM30.4144 26.3519C25.2304 26.3519 21.3784 22.2119 21.3784 16.7399C21.3784 11.2679 25.2304 7.12792 30.4144 7.12792C33.1144 7.12792 35.3464 8.27992 36.8584 10.1879V7.55992H40.8904V20.3399C40.8904 21.3839 41.5024 22.0319 42.5824 22.0319H42.9064V25.9199H41.7544C39.2344 25.9199 37.6504 24.9119 37.1104 23.0039C35.5624 25.0919 33.2224 26.3519 30.4144 26.3519ZM31.2064 22.4639C34.4464 22.4639 36.8584 19.9799 36.8584 16.7399C36.8584 13.4999 34.4464 11.0159 31.2064 11.0159C27.9304 11.0159 25.5184 13.4999 25.5184 16.7399C25.5184 19.9799 27.9304 22.4639 31.2064 22.4639ZM45.9788 25.9199V-7.9155e-05H50.0108V10.7999C52.2428 8.53192 55.1228 7.12792 57.9668 7.12792C61.3508 7.12792 63.5828 9.10792 63.5828 12.0599C63.5828 14.8679 61.4228 17.1719 57.5708 18.5759L58.8668 20.0879C59.8388 21.3119 61.2068 22.0319 62.6468 22.0319H63.5828V25.9199H62.1788C59.4068 25.9199 56.5628 25.0199 54.9428 22.0679L53.1788 19.6919C52.1708 19.8359 51.1268 19.9799 50.0108 20.0519V25.9199H45.9788ZM57.2108 10.8359C54.8348 10.8359 51.8828 12.5639 50.0108 15.0119V16.7399C55.9148 16.1279 59.4788 14.5439 59.4788 12.4919C59.4788 11.4839 58.6148 10.8359 57.2108 10.8359ZM77.31 26.3519C74.25 26.3519 71.586 25.0919 69.894 23.1119L68.67 25.9199H64.494L72.738 7.55992H77.346C78.462 12.3839 84.834 12.4199 84.834 18.9359C84.834 23.3639 81.99 26.3519 77.31 26.3519ZM80.694 18.8639C80.694 15.7679 76.806 14.9399 74.97 11.6639L71.37 19.7999C72.414 21.3839 74.394 22.4639 76.554 22.4639C79.002 22.4639 80.694 21.0599 80.694 18.8639Z" fill="white" />
-            </svg>
+      <nav className="fixed left-1/2 -translate-x-1/2 top-[40px] z-50 w-[1546px] h-[68px]">
+        <div className="flex items-center justify-between px-[12px] py-[4px] gap-[563px] bg-white/[0.01] backdrop-blur-[11px] rounded-full h-full">
+          {/* Logo - "raks" */}
+          <div className="flex items-center justify-center">
+            <span
+              className="text-[36px] leading-[47px] font-medium text-white text-center w-[87px] h-[47px]"
+              style={{ fontFamily: 'Neulis Cursive, system-ui, sans-serif' }}
+            >
+              raks
+            </span>
           </div>
 
           {/* Navigation Icons */}
-          <div className="flex items-center justify-center gap-7 px-0 py-0">
+          <div className="flex items-center justify-center gap-[28px] w-[236px] h-[60px]">
             {NAV_ITEMS.map((item, index) => {
               const isActive = activeNav === item.id;
               return (
@@ -176,7 +179,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           </div>
 
           {/* Social Icons */}
-          <div className="flex items-center gap-5 px-8 py-2 opacity-44">
+          <div className="flex items-center gap-[20px] w-[73px] h-[29px] opacity-44">
             <a
               href="https://linkedin.com"
               target="_blank"
@@ -473,6 +476,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       <style>{`
         @import url('https://fonts.cdnfonts.com/css/nexa-bold');
         @import url('https://fonts.googleapis.com/css2?family=Nexa+Text:wght@100;200;300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.cdnfonts.com/css/neulis-cursive');
       `}</style>
     </div>
   );
