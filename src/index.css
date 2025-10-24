@@ -144,3 +144,8 @@ body {
     overscroll-behavior-x: none;
   }
 }
+
+/* Hide scrollbar for pills container */
+.overflow-x-auto::-webkit-scrollbar {
+  display: none;
+}
