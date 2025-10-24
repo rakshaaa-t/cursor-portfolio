@@ -73,6 +73,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
   const [isPlaceholderHovered, setIsPlaceholderHovered] = React.useState(false);
   const [showAlternateText, setShowAlternateText] = React.useState(false);
+  const [startTypewriter, setStartTypewriter] = React.useState(false);
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -563,10 +564,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           onMouseEnter={() => {
                             setIsPlaceholderHovered(true);
                             setShowAlternateText(true);
+                            // Start typewriter after fade out completes + small delay
+                            setTimeout(() => setStartTypewriter(true), 500);
                           }}
                           onMouseLeave={() => {
                             setIsPlaceholderHovered(false);
                             setShowAlternateText(false);
+                            setStartTypewriter(false);
                           }}
                           style={{ pointerEvents: 'auto' }}
                         >
@@ -580,13 +584,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                               talk 2 me
                             </motion.span>
                             
-                            {isPlaceholderHovered && (
+                            {isPlaceholderHovered && !showAlternateText && (
                               <motion.div
                                 className="absolute inset-0"
                                 initial={{ x: '-100%' }}
                                 animate={{ x: '200%' }}
                                 transition={{ 
-                                  duration: 0.7, 
+                                  duration: 0.5, 
                                   ease: [0.4, 0, 0.2, 1]
                                 }}
                                 style={{
@@ -597,14 +601,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                             )}
                           </div>
                           
-                          {showAlternateText && (
+                          {startTypewriter && (
                             <motion.div
                               className="absolute text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap flex items-center h-[24px] overflow-hidden"
                               style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                               initial={{ width: 0 }}
                               animate={{ width: 'auto' }}
-                              exit={{ width: 0 }}
-                              transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+                              transition={{ duration: 1.0, ease: [0.4, 0, 0.2, 1] }}
                             >
                               raksha can see all our messages
                             </motion.div>
