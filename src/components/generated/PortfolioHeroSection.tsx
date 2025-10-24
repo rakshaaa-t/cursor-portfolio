@@ -354,7 +354,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             {/* Chat Messages Container - Scrollable */}
             <div 
               ref={chatContainerRef}
-              className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[90px] bottom-[160px] overflow-y-auto flex flex-col gap-4 px-2"
+              className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[90px] h-[240px] overflow-y-auto flex flex-col gap-4 px-2"
               style={{ scrollBehavior: 'smooth' }}
             >
               {/* Initial Welcome Message - Always show */}
