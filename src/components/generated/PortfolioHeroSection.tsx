@@ -322,23 +322,23 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             {/* Second Chat Bubble - Dark - Right aligned within 640px container */}
             <div className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[215px] flex justify-end">
               <div className="relative inline-block max-w-[560px]">
-                {/* Background bubble with dynamic width */}
-                <div 
-                  className="px-4 py-[20px] rounded-[30px]"
+                <svg xmlns="http://www.w3.org/2000/svg" width="395" height="70" viewBox="0 0 395 70" fill="none" preserveAspectRatio="xMaxYMid meet"
                   style={{
-                    background: 'rgba(0, 0, 0, 0.79)',
                     filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
                   }}
                 >
-                  <p
-                    className="text-[14px] leading-[21px] font-light text-white text-right whitespace-nowrap"
-                    style={{ 
-                      fontFamily: 'Nexa Text, system-ui, sans-serif'
-                    }}
-                  >
-                    Hi raksha can u tell me a bit about yourself
-                  </p>
-                </div>
+                  <path d="M0 35C0 15.67 15.67 0 35 0H316C340.301 0 360 19.6995 360 44V70H35C15.67 70 0 54.33 0 35Z" fill="black" fillOpacity="0.79"/>
+                </svg>
+                
+                {/* Text overlay */}
+                <p
+                  className="absolute top-[22px] right-[22px] text-[14px] leading-[21px] font-light text-white text-right whitespace-nowrap"
+                  style={{ 
+                    fontFamily: 'Nexa Text, system-ui, sans-serif'
+                  }}
+                >
+                  Hi raksha can u tell me a bit about yourself
+                </p>
               </div>
             </div>
 
