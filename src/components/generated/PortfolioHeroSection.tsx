@@ -515,57 +515,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         </div>
       </div>
 
-            {/* Bottom Section - Suggestions + Input */}
+            {/* Bottom Section - Input + Suggestions */}
             <div className="absolute w-[640px] left-[80px] bottom-[40px] flex flex-col items-center gap-[12px]">
-              {/* Suggestion Pills - Horizontally Scrollable */}
-              <div 
-                className="w-full overflow-x-auto flex items-center gap-2"
-                style={{
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none',
-                  WebkitOverflowScrolling: 'touch'
-                }}
-              >
-                  {ALL_SUGGESTIONS.map((suggestion, index) => {
-                    const isAnimating = animatingPillId === index;
-                    return (
-                      <motion.button 
-                        key={suggestion}
-                        onClick={(e) => handlePillClick(suggestion, index, e)}
-                        disabled={isLoading || animatingPillId !== null}
-                        className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group flex-shrink-0 transition-all duration-200"
-                        style={{
-                          background: 'rgba(255, 255, 255, 0.15)',
-                          backdropFilter: 'blur(20px)',
-                          WebkitBackdropFilter: 'blur(20px)',
-                          border: '1px solid rgba(255, 255, 255, 0.2)',
-                          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-                        }}
-                        whileHover={{
-                          boxShadow: '0 0 8px rgba(79, 92, 255, 0.12), 0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-                        }}
-                        initial={{ opacity: 1, scale: 1 }}
-                        animate={{
-                          opacity: isAnimating ? 0 : 1,
-                          scale: isAnimating ? 0.95 : 1
-                        }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{
-                          duration: 0.2,
-                          ease: [0.4, 0, 0.2, 1]
-                        }}
-                      >
-                        <span
-                          className="text-[13px] leading-[20px] font-normal text-black/[0.64] whitespace-nowrap text-center group-hover:text-black/[0.8] transition-colors duration-200"
-                          style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
-                        >
-                          {suggestion}
-        </span>
-                      </motion.button>
-                    );
-                  })}
-              </div>
-
               {/* Input Bar - Smaller */}
               <div
                 className="w-[640px] h-[56px] flex items-center justify-center px-[22px] py-[4px] rounded-[100px] border border-white"
@@ -664,6 +615,55 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     <ArrowUp className="w-[20px] h-[20px] text-[#283FE4]" strokeWidth={2} />
                   </button>
                 </div>
+              </div>
+
+              {/* Suggestion Pills - Horizontally Scrollable */}
+              <div 
+                className="w-full overflow-x-auto flex items-center gap-2"
+                style={{
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none',
+                  WebkitOverflowScrolling: 'touch'
+                }}
+              >
+                  {ALL_SUGGESTIONS.map((suggestion, index) => {
+                    const isAnimating = animatingPillId === index;
+                    return (
+                      <motion.button 
+                        key={suggestion}
+                        onClick={(e) => handlePillClick(suggestion, index, e)}
+                        disabled={isLoading || animatingPillId !== null}
+                        className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group flex-shrink-0 transition-all duration-200"
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.15)',
+                          backdropFilter: 'blur(20px)',
+                          WebkitBackdropFilter: 'blur(20px)',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
+                          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                        }}
+                        whileHover={{
+                          boxShadow: '0 0 8px rgba(79, 92, 255, 0.12), 0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                        }}
+                        initial={{ opacity: 1, scale: 1 }}
+                        animate={{
+                          opacity: isAnimating ? 0 : 1,
+                          scale: isAnimating ? 0.95 : 1
+                        }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{
+                          duration: 0.2,
+                          ease: [0.4, 0, 0.2, 1]
+                        }}
+                      >
+                        <span
+                          className="text-[13px] leading-[20px] font-normal text-black/[0.64] whitespace-nowrap text-center group-hover:text-black/[0.8] transition-colors duration-200"
+                          style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
+                        >
+                          {suggestion}
+        </span>
+                      </motion.button>
+                    );
+                  })}
               </div>
             </div>
           </div>
