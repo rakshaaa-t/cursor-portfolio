@@ -627,7 +627,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 onMouseLeave={() => setIsHoveringPills(false)}
               >
                 <motion.div
-                  key={isHoveringPills ? 'hovering' : 'normal'}
                   className="flex items-center gap-3"
                   drag="x"
                   dragConstraints={{ left: -2000, right: 100 }}
@@ -642,7 +641,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       repeat: Infinity,
                       ease: "linear",
                       repeatType: "loop"
-                    }
+                    },
+                    duration: 0.3
                   }}
                   style={{ willChange: 'transform', cursor: 'grab' }}
                   whileDrag={{ cursor: 'grabbing' }}
