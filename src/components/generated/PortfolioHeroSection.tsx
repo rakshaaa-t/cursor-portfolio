@@ -261,8 +261,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             <div className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[90px]">
               <svg 
                 width="560" 
-                height="500" 
-                viewBox="0 0 560 500" 
+                height="120" 
+                viewBox="0 0 560 120" 
                 fill="none" 
                 xmlns="http://www.w3.org/2000/svg" 
                 className="absolute left-0"
@@ -295,8 +295,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             <div className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[215px]">
               <svg 
                 width="480" 
-                height="500" 
-                viewBox="0 0 480 500" 
+                height="75" 
+                viewBox="0 0 480 75" 
                 fill="none" 
                 xmlns="http://www.w3.org/2000/svg" 
                 className="absolute right-0"
