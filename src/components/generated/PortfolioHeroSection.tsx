@@ -694,9 +694,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                               style={{ 
                                 fontFamily: 'Nexa, system-ui, sans-serif',
                                 opacity: isHoveringInput ? 0 : 1,
-                                lineHeight: '24px',
-                                display: 'flex',
-                                alignItems: 'center'
+                                lineHeight: '1',
+                                display: 'inline-block'
                               }}
                             >
                               talk 2 me
@@ -707,9 +706,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                               className="text-[16px] font-normal text-black/[0.44] whitespace-nowrap"
                               style={{ 
                                 fontFamily: 'Nexa, system-ui, sans-serif',
-                                lineHeight: '24px',
-                                display: 'flex',
-                                alignItems: 'center'
+                                lineHeight: '1',
+                                display: 'inline-block'
                               }}
                             >
                               {"raksha can see all our messages".substring(0, revealedChars)}
