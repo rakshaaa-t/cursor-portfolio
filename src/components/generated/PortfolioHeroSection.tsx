@@ -74,7 +74,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
-    console.log('Messages state changed:', messages);
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
@@ -83,8 +82,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const handleSendMessage = async (messageText?: string) => {
     const textToSend = messageText || inputValue.trim();
     if (!textToSend || isLoading) return;
-
-    console.log('Sending message:', textToSend);
 
     // Add user message
     const userMessage: ChatMessage = {
@@ -95,19 +92,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       timestamp: Date.now()
     };
 
-    setMessages(prev => {
-      const newMessages = [...prev, userMessage];
-      console.log('Updated messages after user:', newMessages);
-      return newMessages;
-    });
+    setMessages(prev => [...prev, userMessage]);
     setInputValue("");
     setIsLoading(true);
 
     try {
       // Send to AI
-      console.log('Calling AI with API key:', AI_CONFIG.API_KEY ? 'Key exists' : 'No key');
       const response = await sendToAI(textToSend, messages, AI_CONFIG.API_KEY);
-      console.log('AI response:', response);
       
       // Add AI response
       const aiMessage: ChatMessage = {
@@ -118,13 +109,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         timestamp: Date.now()
       };
 
-      setMessages(prev => {
-        const newMessages = [...prev, aiMessage];
-        console.log('Updated messages after AI:', newMessages);
-        return newMessages;
-      });
+      setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
-      console.error('Error in handleSendMessage:', error);
       // Fallback response
       const fallbackMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -146,18 +132,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     }
   };
 
-  // TEST: Render message count at top
-  console.log('RENDER - Current messages:', messages.length, messages);
-  
   return (
     <div className="relative w-full min-h-screen bg-[#D8D4E8] overflow-hidden">
-      {/* DEBUG PANEL - Remove after testing */}
-      <div className="fixed top-0 left-0 bg-red-500 text-white p-4 z-[9999]">
-        <p>Messages: {messages.length}</p>
-        <p>Loading: {isLoading ? 'Yes' : 'No'}</p>
-        <p>Input: "{inputValue}"</p>
-      </div>
-      
       {/* Background Blurs */}
       <div className="absolute w-[1472px] h-[761px] -left-[227px] top-[281px] bg-[rgba(0,132,255,0.1)] rounded-[4444px] blur-[200px] pointer-events-none" />
       <div className="absolute w-[1629px] h-[842px] left-[474px] top-[617px] bg-white rounded-[4444px] blur-[200px] pointer-events-none" />
@@ -379,45 +355,30 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             <div 
               ref={chatContainerRef}
               className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[90px] bottom-[160px] overflow-y-auto flex flex-col gap-4 px-2"
+              style={{ scrollBehavior: 'smooth' }}
             >
               {/* Initial Welcome Message - Always show */}
-              <div className="w-full relative">
-                <svg 
-                  width="560" 
-                  height="120" 
-                  viewBox="0 0 560 120" 
-                  fill="none" 
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={{
-                    filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
-                  }}
-                >
-                  <path d="M0 75C0 40 0 22 11 11C22 0 40 0 75 0H505C518 0 525 0 530 1.5C542 5 551 14 555 26C556 31 556 38 556 50C556 62 556 69 555 74C551 86 542 95 530 98.5C525 100 518 100 505 100H0V75Z" fill="white" />
-                </svg>
-
-                <div className="absolute top-0 left-0 w-[560px] h-[100px] flex items-center px-5 gap-3">
+              <div className="w-full flex-shrink-0 mb-2">
+                <div className="flex items-start gap-3 max-w-[560px]">
                   <div className="relative w-[48px] h-[48px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
                     <img
                       src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
                       alt="Profile"
-                      className="absolute w-full h-full object-cover"
+                      className="w-full h-full object-cover"
                     />
                   </div>
-                  <p
-                    className="flex-1 text-[14px] leading-[21px] font-extralight text-black"
-                    style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
+                  <div
+                    className="px-[22px] py-[20px] rounded-[30px] bg-white text-black flex-1"
+                    style={{
+                      filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
+                    }}
                   >
-                    <span>you can ask me here about my design process, my past projects or just get to know me better!</span>
-                  </p>
+                    <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
+                      you can ask me here about my design process, my past projects or just get to know me better!
+                    </p>
+                  </div>
                 </div>
               </div>
-
-              {/* Debug: Show message count */}
-              {messages.length > 0 && (
-                <div className="text-xs text-gray-500 mb-2">
-                  Messages: {messages.length}
-                </div>
-              )}
 
               {/* Dynamic Messages */}
               {messages.map((msg) => (
