@@ -74,6 +74,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
+    console.log('Messages state changed:', messages);
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
@@ -400,6 +401,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   </p>
                 </div>
               </div>
+
+              {/* Debug: Show message count */}
+              {messages.length > 0 && (
+                <div className="text-xs text-gray-500 mb-2">
+                  Messages: {messages.length}
+                </div>
+              )}
 
               {/* Dynamic Messages */}
               {messages.map((msg) => (
