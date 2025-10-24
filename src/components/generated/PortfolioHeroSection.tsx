@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useAnimationFrame } from "framer-motion";
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { sendToAI, getFallbackResponse, type ChatMessage } from "../../lib/ai-chat";
 import { AI_CONFIG } from "../../lib/config";
@@ -74,7 +74,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [animatingPillId, setAnimatingPillId] = React.useState<number | null>(null);
   const [latestMessageId, setLatestMessageId] = React.useState<string | null>(null);
   const [isHoveringPills, setIsHoveringPills] = React.useState(false);
-  const pillsControls = useAnimationControls();
+  
+  // Motion values for smooth continuous animation
+  const x = useMotionValue(0);
+  const baseVelocityRef = React.useRef(-640 / 48.75); // pixels per second (normal speed)
+  const slowVelocityRef = React.useRef(-640 / 78); // pixels per second (slow speed)
+  const currentVelocityRef = React.useRef(baseVelocityRef.current);
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -83,18 +88,25 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     }
   }, [messages, isLoading]);
 
-  // Control pill animation speed based on hover
-  React.useEffect(() => {
-    pillsControls.start({
-      x: [-640, 0],
-      transition: {
-        duration: isHoveringPills ? 78 : 48.75,
-        repeat: Infinity,
-        ease: "linear",
-        repeatType: "loop"
-      }
-    });
-  }, [isHoveringPills, pillsControls]);
+  // Smooth velocity transition based on hover
+  useAnimationFrame((time, delta) => {
+    const targetVelocity = isHoveringPills ? slowVelocityRef.current : baseVelocityRef.current;
+    
+    // Smoothly interpolate velocity (ease into new speed)
+    const velocityDiff = targetVelocity - currentVelocityRef.current;
+    currentVelocityRef.current += velocityDiff * 0.05; // 5% interpolation for smoothness
+    
+    // Move based on current velocity
+    const movement = currentVelocityRef.current * (delta / 1000);
+    let newX = x.get() + movement;
+    
+    // Loop seamlessly when we've scrolled one full width
+    if (newX <= -640) {
+      newX = newX + 640;
+    }
+    
+    x.set(newX);
+  });
 
   const handleSendMessage = async (messageText?: string) => {
     const textToSend = messageText || inputValue.trim();
@@ -642,12 +654,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               >
                 <motion.div
                   className="flex items-center gap-3"
+                  style={{ x, willChange: 'transform', cursor: 'grab' }}
                   drag="x"
                   dragConstraints={{ left: -2000, right: 100 }}
                   dragElastic={0.05}
                   dragTransition={{ bounceStiffness: 300, bounceDamping: 40 }}
-                  animate={pillsControls}
-                  style={{ willChange: 'transform', cursor: 'grab' }}
                   whileDrag={{ cursor: 'grabbing' }}
                 >
                   {/* Render pills twice for seamless loop */}
