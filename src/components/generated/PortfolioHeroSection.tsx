@@ -229,7 +229,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="relative w-[800px] h-[480px] mx-auto bg-gradient-to-b from-[#E9E8FF] to-[#EFF4EC] rounded-[44px] border-2 border-white overflow-hidden"
+          className="relative w-[800px] h-[480px] mx-auto bg-gradient-to-b from-[#E9E8FF] to-[#EFF4EC] rounded-[44px] border-2 border-white overflow-visible"
           style={{
             boxShadow: '0px 480px 192px rgba(0, 0, 0, 0.01), 0px 270px 162px rgba(0, 0, 0, 0.02), 0px 120px 120px rgba(0, 0, 0, 0.03), 0px 30px 66px rgba(0, 0, 0, 0.04)'
           }}
@@ -240,7 +240,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
           <div className="relative">
             {/* Header - "hey i'm raks" | "email : contact@rakshaaa.com" */}
-            <div className="absolute w-[560px] h-[24px] left-1/2 -translate-x-1/2 top-[36px] flex items-end justify-between">
+            <div className="absolute w-[640px] h-[24px] left-1/2 -translate-x-1/2 top-[36px] flex items-end justify-between">
               <div className="flex items-end gap-3">
                 <span
                   className="text-[16px] leading-[24px] font-light text-black"
@@ -257,9 +257,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               </span>
             </div>
 
-            {/* First Chat Bubble - White - Smaller */}
-            <div className="absolute left-[80px] top-[90px]">
-              <svg width="480" height="120" viewBox="0 0 480 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* First Chat Bubble - White - Aligned */}
+            <div className="absolute left-1/2 -translate-x-1/2 -translate-x-[80px] top-[90px]">
+              <svg width="560" height="120" viewBox="0 0 560 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <filter id="whiteBubbleFilter" x="0" y="0" width="770" height="486" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
                     <feFlood floodOpacity="0" result="BackgroundImageFix" />
@@ -287,12 +287,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   </filter>
                 </defs>
                 <g filter="url(#whiteBubbleFilter)">
-                  <path d="M0 75C0 40 0 22 11 11C22 0 40 0 75 0H430C443 0 450 0 455 1.5C467 5 476 14 480 26C481 31 481 38 481 50C481 62 481 69 480 74C476 86 467 95 455 98.5C450 100 443 100 430 100H0V75Z" fill="white" />
+                  <path d="M0 75C0 40 0 22 11 11C22 0 40 0 75 0H505C518 0 525 0 530 1.5C542 5 551 14 555 26C556 31 556 38 556 50C556 62 556 69 555 74C551 86 542 95 530 98.5C525 100 518 100 505 100H0V75Z" fill="white" />
                 </g>
               </svg>
 
               {/* Message Content Overlay */}
-              <div className="absolute top-0 left-0 w-[480px] h-[100px] flex items-center px-5 gap-3">
+              <div className="absolute top-0 left-0 w-[560px] h-[100px] flex items-center px-5 gap-3">
                 <div className="relative w-[48px] h-[48px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
                   <img
                     src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
@@ -301,7 +301,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   />
                 </div>
                 <p
-                  className="flex-1 text-[16px] leading-[24px] font-extralight text-black"
+                  className="flex-1 text-[14px] leading-[21px] font-extralight text-black"
                   style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
                 >
                   <span>you can ask me here about my design process, my past projects or just get to know me better!</span>
@@ -309,9 +309,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               </div>
             </div>
 
-            {/* Second Chat Bubble - Dark - Smaller */}
-            <div className="absolute left-[310px] top-[215px]">
-              <svg width="410" height="75" viewBox="0 0 410 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Second Chat Bubble - Dark - Aligned Right */}
+            <div className="absolute left-1/2 -translate-x-1/2 translate-x-[80px] top-[215px]">
+              <svg width="480" height="75" viewBox="0 0 480 75" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <filter id="darkBubbleFilter" x="0" y="0" width="690" height="436" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
                     <feFlood floodOpacity="0" result="BackgroundImageFix" />
@@ -339,13 +339,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   </filter>
                 </defs>
                 <g filter="url(#darkBubbleFilter)">
-                  <path d="M0 30C0 13.4 13.4 0 30 0H375C395 0 410 15 410 37V60H30C13.4 60 0 46.6 0 30Z" fill="black" fillOpacity="0.79" />
+                  <path d="M0 30C0 13.4 13.4 0 30 0H445C465 0 480 15 480 37V60H30C13.4 60 0 46.6 0 30Z" fill="black" fillOpacity="0.79" />
                 </g>
               </svg>
 
               {/* Text overlay */}
               <p
-                className="absolute top-[20px] right-[20px] text-[16px] leading-[24px] font-light text-white text-right"
+                className="absolute top-[20px] right-[20px] text-[14px] leading-[21px] font-light text-white text-right"
                 style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
               >
                 <span>Hi raksha can u tell me a bit about yourself</span>
@@ -353,14 +353,14 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             </div>
 
             {/* Bottom Section - Suggestions + Input */}
-            <div className="absolute w-[560px] left-1/2 -translate-x-1/2 top-[340px] flex flex-col items-center gap-[12px]">
+            <div className="absolute w-[640px] left-1/2 -translate-x-1/2 top-[340px] flex flex-col items-center gap-[12px]">
               {/* Suggestion Pills - With Glass Effect */}
               <div className="w-full flex items-center justify-center gap-2">
                 {SUGGESTION_PILLS.map((pill) => {
                   return (
                     <button 
                       key={pill.id} 
-                      className="relative px-6 py-2 h-[37px] rounded-full hover:bg-white/15 transition-all"
+                      className="relative px-6 py-2 h-[37px] rounded-full hover:bg-white/15 transition-all flex items-center justify-center"
                       style={{
                         background: 'rgba(255, 255, 255, 0.1)',
                         backdropFilter: 'blur(20px)',
@@ -370,7 +370,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       }}
                     >
                       <span
-                        className="text-[13px] leading-[20px] font-normal text-black/[0.64] whitespace-nowrap"
+                        className="text-[13px] leading-[20px] font-normal text-black/[0.64] whitespace-nowrap text-center"
                         style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
                       >
                         {pill.text}
@@ -382,7 +382,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
               {/* Input Bar - Smaller */}
               <div
-                className="w-[560px] h-[56px] flex items-center justify-center px-[20px] py-[6px] rounded-[100px] border border-white"
+                className="w-[640px] h-[56px] flex items-center justify-center px-[22px] py-[4px] rounded-[100px] border border-white"
                 style={{
                   background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.44) 100%)',
                   boxShadow: '0px 297px 119px rgba(0, 0, 0, 0.01), 0px 167px 100px rgba(0, 0, 0, 0.02), 0px 74px 74px rgba(0, 0, 0, 0.03), 0px 19px 41px rgba(0, 0, 0, 0.04)'
@@ -392,33 +392,52 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   {/* Left: Sparkle Icon + "Talk 2 me" */}
                   <div className="flex items-center gap-2.5">
                     {/* Sparkle Icon SVG */}
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <g clipPath="url(#clip0_371_175)">
+                        <mask id="mask0_371_175" style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+                          <path d="M24 0H0V24H24V0Z" fill="white"/>
+                          <path d="M16.6562 9.21214L14.3939 3.51184C13.893 2.24975 12.1067 2.24959 11.6056 3.5116L9.34196 9.21214C9.31836 9.27141 9.27155 9.31822 9.21228 9.34182L3.51087 11.6058C2.24898 12.1069 2.24898 13.8929 3.51087 14.394L9.21228 16.658C9.27155 16.6816 9.31836 16.7284 9.34196 16.7876L11.6055 22.4882C12.1067 23.7502 13.8929 23.75 14.3939 22.4879L16.6562 16.7876C16.6799 16.7282 16.7273 16.6815 16.7868 16.658L22.4888 14.394C23.7507 13.893 23.7507 12.1068 22.4888 11.6058L16.7868 9.34182C16.7273 9.31828 16.6799 9.27161 16.6562 9.21214Z" fill="black"/>
+                        </mask>
+                        <g mask="url(#mask0_371_175)">
+                          <path d="M13.0001 9.00529C13.5523 9.00529 14 9.45306 14.0001 10.0053V12.0053H16.0001C16.5523 12.0053 17 12.4531 17.0001 13.0053C16.9999 13.5574 16.5522 14.0053 16.0001 14.0053H14.0001V16.0053C13.9999 16.5574 13.5522 17.0053 13.0001 17.0053C12.448 17.0053 12.0003 16.5574 12.0001 16.0053V14.0053H10.0001C9.448 14.0053 9.00034 13.5574 9.00009 13.0053C9.00016 12.4531 9.44789 12.0054 10.0001 12.0053H12.0001V10.0053C12.0002 9.45309 12.4479 9.00534 13.0001 9.00529ZM6.0704 1.34123C6.40449 0.499893 7.59584 0.499834 7.92978 1.34123L9.25009 4.66935C9.26462 4.70569 9.29382 4.73394 9.33017 4.74845L12.6593 6.07072C13.5006 6.40475 13.5006 7.59507 12.6593 7.92912L9.33017 9.25138C9.29383 9.26588 9.26463 9.29417 9.25009 9.33049L7.92978 12.6586C7.59584 13.5 6.40449 13.5 6.0704 12.6586L4.74911 9.33049C4.73455 9.29416 4.7054 9.26586 4.66904 9.25138L1.34091 7.92912C0.499646 7.59507 0.499646 6.40477 1.34091 6.07072L4.66904 4.74845C4.70542 4.73397 4.73456 4.7057 4.74911 4.66935L6.0704 1.34123Z" fill="url(#paint0_linear_371_175)"/>
+                        </g>
+                        <mask id="mask1_371_175" style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="2" y="2" width="22" height="22">
+                          <path d="M16.6562 9.21214L14.3939 3.51184C13.893 2.24975 12.1067 2.24959 11.6056 3.5116L9.34196 9.21214C9.31836 9.27141 9.27155 9.31822 9.21228 9.34182L3.51087 11.6058C2.24898 12.1069 2.24898 13.8929 3.51087 14.394L9.21228 16.658C9.27155 16.6816 9.31836 16.7284 9.34196 16.7876L11.6055 22.4882C12.1067 23.7502 13.8929 23.75 14.3939 22.4879L16.6562 16.7876C16.6799 16.7282 16.7273 16.6815 16.7868 16.658L22.4888 14.394C23.7507 13.893 23.7507 12.1068 22.4888 11.6058L16.7868 9.34182C16.7273 9.31828 16.6799 9.27161 16.6562 9.21214Z" fill="white"/>
+                        </mask>
+                        <g mask="url(#mask1_371_175)">
+                          <g filter="url(#filter0_f_371_175)">
+                            <path d="M13.0001 9.00529C13.5523 9.00529 14 9.45306 14.0001 10.0053V12.0053H16.0001C16.5523 12.0053 17 12.4531 17.0001 13.0053C16.9999 13.5574 16.5522 14.0053 16.0001 14.0053H14.0001V16.0053C13.9999 16.5574 13.5522 17.0053 13.0001 17.0053C12.448 17.0053 12.0003 16.5574 12.0001 16.0053V14.0053H10.0001C9.448 14.0053 9.00034 13.5574 9.00009 13.0053C9.00016 12.4531 9.44789 12.0054 10.0001 12.0053H12.0001V10.0053C12.0002 9.45309 12.4479 9.00534 13.0001 9.00529ZM6.0704 1.34123C6.40449 0.499893 7.59584 0.499834 7.92978 1.34123L9.25009 4.66935C9.26462 4.70569 9.29382 4.73394 9.33017 4.74845L12.6593 6.07072C13.5006 6.40475 13.5006 7.59507 12.6593 7.92912L9.33017 9.25138C9.29383 9.26588 9.26463 9.29417 9.25009 9.33049L7.92978 12.6586C7.59584 13.5 6.40449 13.5 6.0704 12.6586L4.74911 9.33049C4.73455 9.29416 4.7054 9.26586 4.66904 9.25138L1.34091 7.92912C0.499646 7.59507 0.499646 6.40477 1.34091 6.07072L4.66904 4.74845C4.70542 4.73397 4.73456 4.7057 4.74911 4.66935L6.0704 1.34123Z" fill="url(#paint1_linear_371_175)"/>
+                          </g>
+                        </g>
+                        <path d="M16.6562 9.21214L14.3939 3.51184C13.893 2.24975 12.1067 2.24959 11.6056 3.5116L9.34196 9.21214C9.31836 9.27141 9.27155 9.31822 9.21228 9.34182L3.51087 11.6058C2.24898 12.1069 2.24898 13.8929 3.51087 14.394L9.21228 16.658C9.27155 16.6816 9.31836 16.7284 9.34196 16.7876L11.6055 22.4882C12.1067 23.7502 13.8929 23.75 14.3939 22.4879L16.6562 16.7876C16.6799 16.7282 16.7273 16.6815 16.7868 16.658L22.4888 14.394C23.7507 13.893 23.7507 12.1068 22.4888 11.6058L16.7868 9.34182C16.7273 9.31828 16.6799 9.27161 16.6562 9.21214Z" fill="url(#paint2_linear_371_175)"/>
+                        <path d="M11.6056 3.5118C12.1066 2.24991 13.8926 2.25003 14.3936 3.5118L16.6563 9.212C16.68 9.27147 16.7277 9.31834 16.7872 9.34188L22.4884 11.6056C23.7503 12.1066 23.7503 13.8936 22.4884 14.3947L16.7872 16.6583L16.7452 16.6798C16.7054 16.7057 16.6741 16.7434 16.6563 16.7882L14.3936 22.4884L14.3429 22.6027C13.8002 23.7119 12.1989 23.7121 11.6563 22.6027L11.6056 22.4884L9.34192 16.7882C9.31833 16.7289 9.2713 16.6819 9.21204 16.6583L3.51087 14.3947C2.24898 13.8936 2.24898 12.1067 3.51087 11.6056L9.21204 9.34188C9.2713 9.31828 9.31833 9.27126 9.34192 9.212L11.6056 3.5118ZM13.6974 3.78915C13.447 3.15823 12.5536 3.15757 12.3028 3.78817L10.0391 9.48934C9.9518 9.70881 9.78861 9.88887 9.58118 9.99715L9.48938 10.0392L3.78821 12.3029C3.15726 12.5534 3.15727 13.4468 3.78821 13.6974L9.48938 15.9611C9.70885 16.0484 9.88891 16.2116 9.99719 16.4191L10.0391 16.5109L12.3028 22.212C12.5536 22.8426 13.446 22.842 13.6964 22.2111L15.9591 16.5109L16.002 16.4181C16.1119 16.2084 16.2932 16.0471 16.5099 15.9611L22.212 13.6974C22.843 13.4469 22.843 12.5534 22.212 12.3029L16.5099 10.0392C16.2933 9.95312 16.1118 9.79173 16.002 9.58211L15.9591 9.48934L13.6974 3.78915Z" fill="url(#paint3_linear_371_175)"/>
+                      </g>
                       <defs>
-                        <filter id="sparkleBlur" x="-50%" y="-50%" width="200%" height="200%">
-                          <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+                        <filter id="filter0_f_371_175" x="-3.29004" y="-3.28979" width="24.29" height="24.2952" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                          <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+                          <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                          <feGaussianBlur stdDeviation="2" result="effect1_foregroundBlur_371_175"/>
                         </filter>
-                        <linearGradient id="sparkleGrad1" x1="8.85509" y1="16.71" x2="8.85509" y2="29.5" gradientUnits="userSpaceOnUse">
-                          <stop stopColor="#283FE4" stopOpacity="0.38" />
-                          <stop offset="1" stopColor="white" stopOpacity="0.38" />
+                        <linearGradient id="paint0_linear_371_175" x1="8.85509" y1="0.709981" x2="8.85509" y2="13.5" gradientUnits="userSpaceOnUse">
+                          <stop stopColor="#283FE4" stopOpacity="0.38"/>
+                          <stop offset="1" stopColor="white" stopOpacity="0.38"/>
                         </linearGradient>
-                        <linearGradient id="sparkleGrad2" x1="13.1508" y1="41.999" x2="12.8493" y2="16.0008" gradientUnits="userSpaceOnUse">
-                          <stop stopColor="#283FE4" stopOpacity="0.38" />
-                          <stop offset="1" stopColor="white" stopOpacity="0.6" />
+                        <linearGradient id="paint1_linear_371_175" x1="8.85509" y1="0.709981" x2="8.85509" y2="13.5" gradientUnits="userSpaceOnUse">
+                          <stop stopColor="#283FE4" stopOpacity="0.38"/>
+                          <stop offset="1" stopColor="white" stopOpacity="0.38"/>
                         </linearGradient>
-                        <linearGradient id="sparkleGrad3" x1="12.9992" y1="18.5651" x2="12.9992" y2="29.5001" gradientUnits="userSpaceOnUse">
-                          <stop stopColor="white" />
-                          <stop offset="1" stopColor="white" stopOpacity="0" />
+                        <linearGradient id="paint2_linear_371_175" x1="13.1508" y1="25.999" x2="12.8493" y2="0.000757185" gradientUnits="userSpaceOnUse">
+                          <stop stopColor="#283FE4" stopOpacity="0.38"/>
+                          <stop offset="1" stopColor="white" stopOpacity="0.6"/>
                         </linearGradient>
+                        <linearGradient id="paint3_linear_371_175" x1="12.9992" y1="2.56506" x2="12.9992" y2="13.5001" gradientUnits="userSpaceOnUse">
+                          <stop stopColor="white"/>
+                          <stop offset="1" stopColor="white" stopOpacity="0"/>
+                        </linearGradient>
+                        <clipPath id="clip0_371_175">
+                          <rect width="24" height="24" fill="white"/>
+                        </clipPath>
                       </defs>
-
-                      {/* Main sparkle shape */}
-                      <path d="M16.6562 25.2121L14.3939 19.5118C13.893 18.2498 12.1067 18.2496 11.6056 19.5116L9.34196 25.2121C9.31836 25.2714 9.27155 25.3182 9.21228 25.3418L3.51087 27.6058C2.24898 28.1069 2.24898 29.8929 3.51087 30.394L9.21228 32.658C9.27155 32.6816 9.31836 32.7284 9.34196 32.7876L11.6055 38.4882C12.1067 39.7502 13.8929 39.75 14.3939 38.4879L16.6562 32.7876C16.6799 32.7282 16.7273 32.6815 16.7868 32.658L22.4888 30.394C23.7507 29.893 23.7507 28.1068 22.4888 27.6058L16.7868 25.3418C16.7273 25.3183 16.6799 25.2716 16.6562 25.2121Z" fill="url(#sparkleGrad2)" transform="scale(0.42) translate(3, -28)" />
-
-                      {/* Blurred background layer */}
-                      <path d="M16.6562 25.2121L14.3939 19.5118C13.893 18.2498 12.1067 18.2496 11.6056 19.5116L9.34196 25.2121C9.31836 25.2714 9.27155 25.3182 9.21228 25.3418L3.51087 27.6058C2.24898 28.1069 2.24898 29.8929 3.51087 30.394L9.21228 32.658C9.27155 32.6816 9.31836 32.7284 9.34196 32.7876L11.6055 38.4882C12.1067 39.7502 13.8929 39.75 14.3939 38.4879L16.6562 32.7876C16.6799 32.7282 16.7273 32.6815 16.7868 32.658L22.4888 30.394C23.7507 29.893 23.7507 28.1068 22.4888 27.6058L16.7868 25.3418C16.7273 25.3183 16.6799 25.2716 16.6562 25.2121Z" fill="url(#sparkleGrad1)" filter="url(#sparkleBlur)" transform="scale(0.42) translate(3, -28)" opacity="0.6" />
-
-                      {/* Top highlight */}
-                      <path d="M16.6562 25.2121L14.3939 19.5118C13.893 18.2498 12.1067 18.2496 11.6056 19.5116L9.34196 25.2121C9.31836 25.2714 9.27155 25.3182 9.21228 25.3418L3.51087 27.6058C2.24898 28.1069 2.24898 29.8929 3.51087 30.394L9.21228 32.658C9.27155 32.6816 9.31836 32.7284 9.34196 32.7876L11.6055 38.4882C12.1067 39.7502 13.8929 39.75 14.3939 38.4879L16.6562 32.7876C16.6799 32.7282 16.7273 32.6815 16.7868 32.658L22.4888 30.394C23.7507 29.893 23.7507 28.1068 22.4888 27.6058L16.7868 25.3418C16.7273 25.3183 16.6799 25.2716 16.6562 25.2121Z" fill="url(#sparkleGrad3)" transform="scale(0.42) translate(3, -28)" />
                     </svg>
 
                     <span
