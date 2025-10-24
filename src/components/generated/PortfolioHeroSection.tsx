@@ -560,7 +560,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       {!inputValue && (
                         <div
                           className="absolute inset-0 pointer-events-none flex items-center"
-                          onMouseEnter={() => setIsPlaceholderHovered(true)}
+                          onMouseEnter={() => {
+                            setIsPlaceholderHovered(true);
+                            setShowAlternateText(true);
+                          }}
                           onMouseLeave={() => {
                             setIsPlaceholderHovered(false);
                             setShowAlternateText(false);
@@ -572,12 +575,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                               className="text-[16px] leading-[24px] font-normal text-black/[0.44]"
                               style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                               animate={{ opacity: showAlternateText ? 0 : 1 }}
-                              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                              transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
                             >
-                              Talk 2 me
+                              talk 2 me
                             </motion.span>
                             
-                            {isPlaceholderHovered && !showAlternateText && (
+                            {isPlaceholderHovered && (
                               <motion.div
                                 className="absolute inset-0"
                                 initial={{ x: '-100%' }}
@@ -586,7 +589,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                                   duration: 0.7, 
                                   ease: [0.4, 0, 0.2, 1]
                                 }}
-                                onAnimationComplete={() => setShowAlternateText(true)}
                                 style={{
                                   background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.25) 50%, transparent 100%)',
                                   pointerEvents: 'none'
@@ -600,7 +602,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                             style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: showAlternateText ? 1 : 0 }}
-                            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
                           >
                             raksha can see all our messages
                           </motion.span>
