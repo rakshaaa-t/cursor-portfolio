@@ -683,21 +683,29 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                       />
                       {!inputValue && (
-                        <div className="absolute inset-0 pointer-events-none flex items-center whitespace-nowrap">
+                        <div className="absolute inset-0 pointer-events-none flex items-center justify-start whitespace-nowrap">
                           {showOriginalText ? (
                             <span
-                              className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap transition-opacity duration-75"
+                              className="text-[16px] font-normal text-black/[0.44] whitespace-nowrap transition-opacity duration-75"
                               style={{ 
                                 fontFamily: 'Nexa, system-ui, sans-serif',
-                                opacity: isHoveringInput ? 0 : 1
+                                opacity: isHoveringInput ? 0 : 1,
+                                lineHeight: '24px',
+                                display: 'flex',
+                                alignItems: 'center'
                               }}
                             >
                               talk 2 me
                             </span>
                           ) : (
                             <span
-                              className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap"
-                              style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
+                              className="text-[16px] font-normal text-black/[0.44] whitespace-nowrap"
+                              style={{ 
+                                fontFamily: 'Nexa, system-ui, sans-serif',
+                                lineHeight: '24px',
+                                display: 'flex',
+                                alignItems: 'center'
+                              }}
                             >
                               {"raksha can see all our messages".substring(0, revealedChars)}
                             </span>
