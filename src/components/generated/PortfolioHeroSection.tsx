@@ -8,6 +8,29 @@ import { AI_CONFIG } from "../../lib/config";
 
 export interface RakshaPortfolioProps {}
 
+// Helper function to convert URLs in text to clickable links
+const linkifyText = (text: string) => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts = text.split(urlRegex);
+  
+  return parts.map((part, index) => {
+    if (part.match(urlRegex)) {
+      return (
+        <a
+          key={index}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#283FE4] underline hover:text-[#4F5CFF] transition-colors"
+        >
+          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+};
+
 // Memoized message component to prevent re-renders
 const MessageBubble = React.memo(({ msg }: { msg: ChatMessage }) => {
   if (msg.sender === 'ai') {
@@ -28,7 +51,7 @@ const MessageBubble = React.memo(({ msg }: { msg: ChatMessage }) => {
           }}
         >
           <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
-            {msg.content || ''}
+            {linkifyText(msg.content || '')}
           </p>
         </div>
       </div>
