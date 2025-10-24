@@ -201,7 +201,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           setTypedChars(0);
         }, 100);
       }
-    }, 3); // 3ms per character (human-like fast typing speed)
+    }, 20); // 20ms per character (natural human fast typing speed)
     
     return () => {
       if (typingIntervalRef.current) {
@@ -242,6 +242,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
       setMessages(prev => [...prev, aiMessage]);
       
+      // Trigger typing effect
+      setTypingMessageId(aiMessage.id);
+      setTypedChars(0);
     } catch (error) {
       // Fallback response
       const fallbackMessage: ChatMessage = {
@@ -253,6 +256,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       };
       setMessages(prev => [...prev, fallbackMessage]);
       
+      // Trigger typing effect
+      setTypingMessageId(fallbackMessage.id);
+      setTypedChars(0);
     } finally {
       setIsLoading(false);
     }
@@ -299,6 +305,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       };
       setMessages(prev => [...prev, aiMessage]);
       
+      // Trigger typing effect
+      setTypingMessageId(aiMessage.id);
+      setTypedChars(0);
     } catch (error) {
       const fallbackMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -309,6 +318,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       };
       setMessages(prev => [...prev, fallbackMessage]);
       
+      // Trigger typing effect
+      setTypingMessageId(fallbackMessage.id);
+      setTypedChars(0);
     } finally {
       setIsLoading(false);
       // Clear latest message ID immediately
@@ -580,7 +592,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         }}
                       >
                         <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
-                          {msg.content || ''}
+                          {typingMessageId === msg.id ? (msg.content || '').substring(0, typedChars) : (msg.content || '')}
               </p>
             </div>
                     </div>
@@ -607,9 +619,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       >
                         <p className="text-[14px] leading-[21px] font-light" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
                           {msg.content}
-                        </p>
-                      </div>
-                    </motion.div>
+              </p>
+            </div>
+          </motion.div>
                   )}
                 </div>
               ))}
