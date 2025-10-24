@@ -258,8 +258,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             </div>
 
             {/* First Chat Bubble - White - Left aligned within 640px container */}
-            <div className="absolute left-1/2 -translate-x-1/2 -translate-x-[40px] top-[90px]">
-              <svg width="560" height="120" viewBox="0 0 560 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[90px]">
+              <svg width="560" height="120" viewBox="0 0 560 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute left-0">
                 <defs>
                   <filter id="whiteBubbleFilter" x="0" y="0" width="770" height="486" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
                     <feFlood floodOpacity="0" result="BackgroundImageFix" />
@@ -310,8 +310,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             </div>
 
             {/* Second Chat Bubble - Dark - Right aligned within 640px container */}
-            <div className="absolute left-1/2 -translate-x-1/2 translate-x-[80px] top-[215px]">
-              <svg width="480" height="75" viewBox="0 0 480 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[215px]">
+              <svg width="480" height="75" viewBox="0 0 480 75" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-0">
                 <defs>
                   <filter id="darkBubbleFilter" x="0" y="0" width="690" height="436" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
                     <feFlood floodOpacity="0" result="BackgroundImageFix" />
