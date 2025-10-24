@@ -281,7 +281,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       <div className="absolute w-[1629px] h-[842px] left-[474px] top-[617px] bg-white rounded-[4444px] blur-[80px] pointer-events-none" />
 
       {/* Navigation */}
-      <nav className="fixed left-1/2 -translate-x-1/2 top-[40px] z-50 w-[1546px] h-[68px]">
+      <nav className="fixed left-1/2 -translate-x-1/2 top-[20px] z-50 w-[1546px] h-[68px]">
         <div className="flex items-center justify-between px-[12px] py-[4px] gap-[563px] bg-white/[0.01] rounded-full h-full">
           {/* Logo - "raks" */}
           <div className="flex items-center justify-center">
