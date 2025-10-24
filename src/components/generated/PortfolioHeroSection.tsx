@@ -352,7 +352,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   className={`relative w-[60px] h-[60px] flex items-center justify-center rounded-full transition-all duration-300 ${
                     isActive
                       ? "bg-[#283FE4] border border-white shadow-[1px_2px_4px_rgba(0,0,0,0.1),5px_7px_8px_rgba(0,0,0,0.09),11px_15px_11px_rgba(0,0,0,0.05),19px_26px_13px_rgba(0,0,0,0.01)]"
-                      : "bg-white/32 border-none hover:bg-white/40"
+                      : "bg-white/32 border-none hover:bg-white/40 backdrop-blur-md"
                   }`}
                   aria-label={item.label}
                 >
