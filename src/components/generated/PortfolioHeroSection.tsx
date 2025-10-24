@@ -148,11 +148,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     
     if (!chatContainer) return;
     
-    // Get the end position (bottom of chat area)
+    // Get the end position (bottom right of chat area where user messages appear)
     const chatRect = chatContainer.getBoundingClientRect();
     const endPos = new DOMRect(
-      chatRect.right - 200, // Position from right side
-      chatRect.bottom - 50,  // Near bottom
+      chatRect.right - 220, // Position from right side
+      chatRect.bottom - 60,  // Near bottom
       startPos.width,
       startPos.height
     );
@@ -176,6 +176,14 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       
       setLatestMessageId(userMessage.id);
       setMessages(prev => [...prev, userMessage]);
+      
+      // Auto-scroll to bottom after message is added
+      setTimeout(() => {
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+      }, 50);
+      
       setIsLoading(true);
       
       try {
@@ -776,52 +784,75 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       </div>
 
       {/* Flying Pill Animation */}
-      {flyingPill && (
-        <motion.div
-          className="fixed pointer-events-none z-[9999] px-6 py-2 h-[37px] rounded-full flex items-center justify-center overflow-hidden"
-          initial={{
-            left: flyingPill.startPos.left,
-            top: flyingPill.startPos.top,
-            width: flyingPill.startPos.width,
-            height: flyingPill.startPos.height,
-            background: 'rgba(255, 255, 255, 0.15)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-            borderRadius: '9999px'
-          }}
-          animate={{
-            left: flyingPill.endPos.left,
-            top: flyingPill.endPos.top,
-            background: 'rgba(0, 0, 0, 0.79)',
-            border: '1px solid transparent',
-            boxShadow: '0 15px 34px rgba(40, 63, 228, 0.04), 0 62px 62px rgba(40, 63, 228, 0.03)',
-            borderRadius: '30px 30px 0px 30px'
-          }}
-          transition={{
-            duration: 0.6,
-            ease: [0.4, 0, 0.2, 1],
-            left: {
+      {flyingPill && (() => {
+        const startX = flyingPill.startPos.left;
+        const startY = flyingPill.startPos.top;
+        const endX = flyingPill.endPos.left;
+        const endY = flyingPill.endPos.top;
+        const midX = (startX + endX) / 2;
+        const midY = Math.min(startY, endY) - 80; // Arc upward by 80px
+        
+        return (
+          <motion.div
+            className="fixed pointer-events-none z-[9999] flex items-center justify-center"
+            style={{
+              left: startX,
+              top: startY,
+              width: flyingPill.startPos.width,
+              height: flyingPill.startPos.height,
+            }}
+            animate={{
+              left: [startX, midX, endX],
+              top: [startY, midY, endY],
+            }}
+            transition={{
               duration: 0.6,
-              ease: [0.34, 1.56, 0.64, 1] // Slight arc easing
-            },
-            top: {
-              duration: 0.6,
-              ease: [0.34, 1.2, 0.64, 1] // Creates upward arc
-            }
-          }}
-        >
-          <motion.span
-            className="text-[13px] leading-[20px] font-normal whitespace-nowrap text-center"
-            style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
-            initial={{ color: 'rgba(0, 0, 0, 0.64)' }}
-            animate={{ color: 'rgba(255, 255, 255, 1)', fontSize: '14px' }}
-            transition={{ duration: 0.6 }}
+              ease: [0.34, 0, 0.2, 1],
+              times: [0, 0.5, 1]
+            }}
           >
-            {flyingPill.text}
-          </motion.span>
-        </motion.div>
-      )}
+            <motion.div
+              className="w-full h-full flex items-center justify-center px-6 py-2"
+              initial={{
+                background: 'rgba(255, 255, 255, 0.15)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                borderRadius: '9999px'
+              }}
+              animate={{
+                background: 'rgba(0, 0, 0, 0.79)',
+                backdropFilter: 'blur(0px)',
+                border: '1px solid transparent',
+                boxShadow: '0 15px 34px rgba(40, 63, 228, 0.04), 0 62px 62px rgba(40, 63, 228, 0.03)',
+                borderRadius: '30px 30px 0px 30px'
+              }}
+              transition={{
+                duration: 0.6,
+                ease: [0.4, 0, 0.2, 1]
+              }}
+            >
+              <motion.span
+                className="font-normal whitespace-nowrap text-center"
+                style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
+                initial={{ 
+                  color: 'rgba(0, 0, 0, 0.64)',
+                  fontSize: '13px',
+                  lineHeight: '20px'
+                }}
+                animate={{ 
+                  color: 'rgba(255, 255, 255, 1)',
+                  fontSize: '14px',
+                  lineHeight: '21px'
+                }}
+                transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+              >
+                {flyingPill.text}
+              </motion.span>
+            </motion.div>
+          </motion.div>
+        );
+      })()}
 
       <style>{`
         @import url('https://fonts.cdnfonts.com/css/nexa-bold');
