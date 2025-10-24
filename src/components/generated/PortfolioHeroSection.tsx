@@ -74,6 +74,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [isPlaceholderHovered, setIsPlaceholderHovered] = React.useState(false);
   const [showAlternateText, setShowAlternateText] = React.useState(false);
   const [startTypewriter, setStartTypewriter] = React.useState(false);
+  const typewriterTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -562,12 +563,26 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         <div
                           className="absolute inset-0 pointer-events-none flex items-center whitespace-nowrap"
                           onMouseEnter={() => {
+                            // Clear any existing timeout
+                            if (typewriterTimeoutRef.current) {
+                              clearTimeout(typewriterTimeoutRef.current);
+                            }
+                            
                             setIsPlaceholderHovered(true);
                             setShowAlternateText(true);
+                            
                             // Start typewriter after fade out completes + small delay
-                            setTimeout(() => setStartTypewriter(true), 300);
+                            typewriterTimeoutRef.current = setTimeout(() => {
+                              setStartTypewriter(true);
+                            }, 300);
                           }}
                           onMouseLeave={() => {
+                            // Clear timeout on mouse leave
+                            if (typewriterTimeoutRef.current) {
+                              clearTimeout(typewriterTimeoutRef.current);
+                              typewriterTimeoutRef.current = null;
+                            }
+                            
                             setIsPlaceholderHovered(false);
                             setShowAlternateText(false);
                             setStartTypewriter(false);
@@ -605,14 +620,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                             <motion.div
                               className="absolute text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap flex items-center h-[24px] overflow-hidden"
                               style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
-                              initial={{ width: 0, x: -10, y: 5, opacity: 0 }}
-                              animate={{ width: 'auto', x: 0, y: 0, opacity: 1 }}
-                              transition={{ 
-                                width: { duration: 0.7, ease: [0.4, 0, 0.2, 1] },
-                                x: { duration: 0.7, ease: [0.4, 0, 0.2, 1] },
-                                y: { duration: 0.7, ease: [0.4, 0, 0.2, 1] },
-                                opacity: { duration: 0.5, ease: [0.4, 0, 0.2, 1] }
-                              }}
+                              initial={{ width: 0 }}
+                              animate={{ width: 'auto' }}
+                              transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
                             >
                               raksha can see all our messages
                             </motion.div>
