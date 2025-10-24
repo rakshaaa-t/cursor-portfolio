@@ -591,7 +591,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         key={suggestion}
                         onClick={(e) => handlePillClick(suggestion, index, e)}
                         disabled={isLoading || animatingPillId !== null || isRefreshing}
-                        className="relative px-6 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group"
+                        className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group"
                         style={{
                           background: 'rgba(255, 255, 255, 0.15)',
                           backdropFilter: 'blur(20px)',
@@ -632,13 +632,14 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 <motion.button
                   onClick={handleRefreshSuggestions}
                   disabled={isRefreshing || animatingPillId !== null}
-                  className="relative w-[37px] h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group"
+                  className="relative w-[37px] h-[37px] min-w-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group flex-shrink-0"
                   style={{
                     background: 'rgba(255, 255, 255, 0.15)',
                     backdropFilter: 'blur(20px)',
                     WebkitBackdropFilter: 'blur(20px)',
                     border: '1px solid rgba(255, 255, 255, 0.2)',
-                    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                    padding: '0'
                   }}
                   animate={{
                     rotate: isRefreshing ? 360 : 0
@@ -649,7 +650,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   }}
                 >
                   {/* Refresh Icon SVG */}
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
                     <path d="M13.65 2.35C12.2 0.9 10.21 0 8 0C3.58 0 0.01 3.58 0.01 8C0.01 12.42 3.58 16 8 16C11.73 16 14.84 13.45 15.73 10H13.65C12.83 12.33 10.61 14 8 14C4.69 14 2 11.31 2 8C2 4.69 4.69 2 8 2C9.66 2 11.14 2.69 12.22 3.78L9 7H16V0L13.65 2.35Z" fill="rgba(0, 0, 0, 0.64)" className="group-hover:fill-[rgba(0,0,0,0.8)] transition-colors duration-200"/>
                   </svg>
                   
