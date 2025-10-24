@@ -23,20 +23,20 @@ const NAV_ITEMS = [
   }
 ] as const;
 
-const SUGGESTION_PILLS = [
-  {
-    id: 1,
-    text: "tell me more about ova"
-  },
-  {
-    id: 2,
-    text: "what is your design process?"
-  },
-  {
-    id: 3,
-    text: "what tools do you use ?"
-  }
-] as const;
+const ALL_SUGGESTIONS = [
+  "tell me more about ova",
+  "what is your design process?",
+  "what is your design tech stack?",
+  "how did you get into design?",
+  "what's your favorite project?",
+  "do you take freelance work?",
+  "what's your design philosophy?",
+  "tell me about the greex project",
+  "what inspired you to design?",
+  "how do you approach research?",
+  "tell me about the ioc project",
+  "can you share design tips?"
+];
 
 const PROJECT_CARDS = [
   {
@@ -77,6 +77,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const typewriterTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const [animatingPillId, setAnimatingPillId] = React.useState<number | null>(null);
   const [latestMessageId, setLatestMessageId] = React.useState<string | null>(null);
+  const [visibleSuggestions, setVisibleSuggestions] = React.useState<string[]>(() => {
+    // Get 3 random suggestions on initial load
+    const shuffled = [...ALL_SUGGESTIONS].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 3);
+  });
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -136,6 +142,31 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       e.preventDefault();
       handleSendMessage();
     }
+  };
+
+  const handleRefreshSuggestions = () => {
+    if (isRefreshing || animatingPillId !== null) return;
+    
+    setIsRefreshing(true);
+    
+    // Wait for fade out
+    setTimeout(() => {
+      // Get new random suggestions excluding current ones
+      const availableSuggestions = ALL_SUGGESTIONS.filter(s => !visibleSuggestions.includes(s));
+      const shuffled = [...availableSuggestions].sort(() => Math.random() - 0.5);
+      const newSuggestions = shuffled.slice(0, 3);
+      
+      // If we don't have enough new ones, add from all suggestions
+      if (newSuggestions.length < 3) {
+        const allShuffled = [...ALL_SUGGESTIONS].sort(() => Math.random() - 0.5);
+        setVisibleSuggestions(allShuffled.slice(0, 3));
+      } else {
+        setVisibleSuggestions(newSuggestions);
+      }
+      
+      // Reset refreshing state after fade in
+      setTimeout(() => setIsRefreshing(false), 200);
+    }, 200);
   };
 
   const handlePillClick = async (pillText: string, pillId: number, event: React.MouseEvent<HTMLButtonElement>) => {
@@ -538,15 +569,15 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
             {/* Bottom Section - Suggestions + Input */}
             <div className="absolute w-[640px] left-[80px] bottom-[20px] flex flex-col items-center gap-[12px]">
-              {/* Suggestion Pills - With Glass Effect */}
+              {/* Suggestion Pills - With Glass Effect + Refresh Button */}
               <div className="w-full flex items-center justify-center gap-2">
-                {SUGGESTION_PILLS.map((pill) => {
-                  const isAnimating = animatingPillId === pill.id;
+                {visibleSuggestions.map((suggestion, index) => {
+                  const isAnimating = animatingPillId === index;
                   return (
                     <motion.button 
-                      key={pill.id}
-                      onClick={(e) => handlePillClick(pill.text, pill.id, e)}
-                      disabled={isLoading || animatingPillId !== null}
+                      key={`${suggestion}-${index}`}
+                      onClick={(e) => handlePillClick(suggestion, index, e)}
+                      disabled={isLoading || animatingPillId !== null || isRefreshing}
                       className="relative px-6 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group"
                       style={{
                         background: 'rgba(255, 255, 255, 0.15)',
@@ -556,7 +587,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
                       }}
                       animate={{
-                        opacity: isAnimating ? 0 : 1,
+                        opacity: isAnimating || isRefreshing ? 0 : 1,
                         scale: isAnimating ? 0.95 : 1
                       }}
                       transition={{
@@ -568,7 +599,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         className="text-[13px] leading-[20px] font-normal text-black/[0.64] whitespace-nowrap text-center group-hover:text-black/[0.8] transition-colors duration-200"
                         style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
                       >
-                        {pill.text}
+                        {suggestion}
                       </span>
                       {/* Subtle hover glow */}
                       <div 
@@ -580,6 +611,40 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     </motion.button>
                   );
                 })}
+                
+                {/* Refresh Button */}
+                <motion.button
+                  onClick={handleRefreshSuggestions}
+                  disabled={isRefreshing || animatingPillId !== null}
+                  className="relative w-[37px] h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.15)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                  }}
+                  animate={{
+                    rotate: isRefreshing ? 360 : 0
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    ease: [0.4, 0, 0.2, 1]
+                  }}
+                >
+                  {/* Refresh Icon SVG */}
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.65 2.35C12.2 0.9 10.21 0 8 0C3.58 0 0.01 3.58 0.01 8C0.01 12.42 3.58 16 8 16C11.73 16 14.84 13.45 15.73 10H13.65C12.83 12.33 10.61 14 8 14C4.69 14 2 11.31 2 8C2 4.69 4.69 2 8 2C9.66 2 11.14 2.69 12.22 3.78L9 7H16V0L13.65 2.35Z" fill="rgba(0, 0, 0, 0.64)" className="group-hover:fill-[rgba(0,0,0,0.8)] transition-colors duration-200"/>
+                  </svg>
+                  
+                  {/* Subtle hover glow */}
+                  <div 
+                    className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+                    style={{
+                      boxShadow: '0 0 20px rgba(79, 92, 255, 0.15), 0 0 40px rgba(79, 92, 255, 0.08)'
+                    }}
+                  />
+                </motion.button>
               </div>
 
               {/* Input Bar - Smaller */}
