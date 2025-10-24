@@ -8,11 +8,34 @@ import { AI_CONFIG } from "../../lib/config";
 
 export interface RakshaPortfolioProps {}
 
+// Human-like typing animation
+const TypewriterText = ({ text }: { text: string }) => {
+  const [displayText, setDisplayText] = React.useState("");
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    if (currentIndex < text.length) {
+      const timer = setTimeout(() => {
+        setDisplayText(prev => prev + text[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, 20 + Math.random() * 40); // Variable speed for human feel
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, text]);
+
+  return <span>{displayText}</span>;
+};
+
 // Memoized message component to prevent re-renders
-const MessageBubble = React.memo(({ msg }: { msg: ChatMessage }) => {
+const MessageBubble = React.memo(({ msg, isTyping }: { msg: ChatMessage; isTyping?: boolean }) => {
   if (msg.sender === 'ai') {
     return (
-      <div className="flex items-start gap-3 max-w-[560px]">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="flex items-start gap-3 max-w-[560px]"
+      >
         <div className="relative w-[48px] h-[48px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
           <img
             src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
@@ -28,15 +51,20 @@ const MessageBubble = React.memo(({ msg }: { msg: ChatMessage }) => {
           }}
         >
           <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
-            {msg.content || ''}
+            {isTyping ? <TypewriterText text={msg.content || ''} /> : (msg.content || '')}
           </p>
         </div>
-      </div>
+      </motion.div>
     );
   }
   
   return (
-    <div className="max-w-[560px]">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="max-w-[560px]"
+    >
       <div
         className="px-[22px] py-[20px] bg-black/[0.79] text-white"
         style={{
@@ -48,7 +76,7 @@ const MessageBubble = React.memo(({ msg }: { msg: ChatMessage }) => {
           {msg.content}
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 });
 
@@ -118,6 +146,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [isLoading, setIsLoading] = React.useState(false);
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
   const [visiblePills, setVisiblePills] = React.useState<string[]>(ALL_SUGGESTIONS);
+  const [typingMessageId, setTypingMessageId] = React.useState<string | null>(null);
   
   // Input ref for instant typing response
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -138,10 +167,17 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     });
   }, []);
 
-  // Auto-scroll to bottom when messages change
+  // Auto-scroll to bottom - smooth without jumping
   React.useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      requestAnimationFrame(() => {
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTo({
+            top: chatContainerRef.current.scrollHeight,
+            behavior: 'smooth'
+          });
+        }
+      });
     }
   }, [messages.length]);
   
@@ -193,6 +229,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       };
 
       addMessage(aiMessage);
+      setTypingMessageId(aiMessage.id);
     } catch (error: any) {
       // Only add fallback if not aborted
       if (error?.name !== 'AbortError') {
@@ -204,6 +241,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           timestamp: Date.now()
         };
         addMessage(fallbackMessage);
+        setTypingMessageId(fallbackMessage.id);
       }
     } finally {
       setIsLoading(false);
@@ -256,6 +294,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       };
       
       addMessage(aiMessage);
+      setTypingMessageId(aiMessage.id);
     } catch (error: any) {
       // Only add fallback if not aborted
       if (error?.name !== 'AbortError') {
@@ -267,6 +306,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           timestamp: Date.now()
         };
         addMessage(fallbackMessage);
+        setTypingMessageId(fallbackMessage.id);
       }
     } finally {
       setIsLoading(false);
@@ -521,7 +561,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               {/* Dynamic Messages - Memoized for performance */}
               {messages.map((msg) => (
                 <div key={msg.id} className={`w-full flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <MessageBubble msg={msg} />
+                  <MessageBubble msg={msg} isTyping={typingMessageId === msg.id} />
                 </div>
               ))}
               
@@ -555,11 +595,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
             {/* Bottom Section - Input + Suggestions */}
             <div className="absolute w-[640px] left-[80px] bottom-[40px] flex flex-col items-center gap-[12px]">
-              {/* Input Bar - Smaller */}
+              {/* Input Bar with Backdrop Blur */}
               <div
-                className="w-[640px] h-[56px] flex items-center justify-center px-[22px] py-[4px] rounded-[100px] border border-white"
+                className="w-[640px] h-[56px] flex items-center justify-center px-[22px] py-[4px] rounded-[100px] border border-white/30 backdrop-blur-md"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.85)',
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  backdropFilter: 'blur(20px)',
                   boxShadow: '0px 297px 119px rgba(0, 0, 0, 0.01), 0px 167px 100px rgba(0, 0, 0, 0.02), 0px 74px 74px rgba(0, 0, 0, 0.03), 0px 19px 41px rgba(0, 0, 0, 0.04)'
                 }}
               >
@@ -664,16 +705,19 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 </div>
               </div>
 
-              {/* Suggestion Pills - Static (no animations) */}
+              {/* Suggestion Pills with Hover Animations */}
               <div className="w-full overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                 <div className="flex items-center gap-3">
                   {visiblePills.map((suggestion, index) => {
                     return (
-                      <button 
+                      <motion.button 
                         key={`${suggestion}-${index}`}
                         onClick={() => handlePillClick(suggestion)}
                         disabled={isLoading}
-                        className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer flex-shrink-0 hover:opacity-80 transition-opacity"
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer flex-shrink-0"
                         style={{
                           background: 'rgba(255, 255, 255, 0.3)',
                           border: '1px solid rgba(255, 255, 255, 0.4)'
@@ -685,7 +729,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         >
                           {suggestion}
         </span>
-                      </button>
+                      </motion.button>
                     );
                   })}
                 </div>
