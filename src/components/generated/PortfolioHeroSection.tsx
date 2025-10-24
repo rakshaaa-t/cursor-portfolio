@@ -519,11 +519,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             <div className="absolute w-[640px] left-[80px] bottom-[40px] flex flex-col items-center gap-[12px]">
               {/* Suggestion Pills - Horizontally Scrollable */}
               <div 
-                className="w-full overflow-x-auto flex items-center gap-2 pb-2"
+                className="w-full overflow-x-auto flex items-center gap-2 py-3"
                 style={{
                   scrollbarWidth: 'none',
                   msOverflowStyle: 'none',
-                  WebkitOverflowScrolling: 'touch'
+                  WebkitOverflowScrolling: 'touch',
+                  paddingLeft: '2px',
+                  paddingRight: '2px'
                 }}
               >
                   {ALL_SUGGESTIONS.map((suggestion, index) => {
