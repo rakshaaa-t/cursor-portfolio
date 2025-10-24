@@ -512,7 +512,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     <motion.div 
                       className="max-w-[560px]"
                       initial={latestMessageId === msg.id ? { 
-                        opacity: 0,
+          opacity: 0,
                         y: 10,
                         scale: 0.98
                       } : false}
@@ -521,7 +521,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         y: 0,
                         scale: [0.98, 1.015, 1]
                       } : {
-                        opacity: 1,
+          opacity: 1,
                         y: 0,
                         scale: 1
                       }}
@@ -615,7 +615,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
                         >
                           {suggestion}
-                        </span>
+        </span>
                         {/* Subtle hover glow */}
                         <div 
                           className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
