@@ -184,7 +184,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     
     // Use requestAnimationFrame for smoother updates
     let lastUpdate = 0;
-    const updateInterval = 1; // 1ms per character (super fast!)
+    const updateInterval = 20; // 20ms per character (natural ChatGPT-like speed)
     
     const updateTyping = (timestamp: number) => {
       if (!lastUpdate) lastUpdate = timestamp;
