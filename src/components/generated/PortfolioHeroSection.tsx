@@ -320,8 +320,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       setTypedChars(0);
     } finally {
       setIsLoading(false);
-      // Clear latest message ID after animation
-      setTimeout(() => setLatestMessageId(null), 150);
+      // Clear latest message ID immediately
+      setLatestMessageId(null);
     }
   };
 
@@ -604,7 +604,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         opacity: 1
                       }}
                       transition={{
-                        duration: 0.15
+                        duration: 0.05
                       }}
                     >
                       <div
