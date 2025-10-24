@@ -323,7 +323,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="relative w-[800px] h-[480px] mx-auto bg-gradient-to-b from-[#E9E8FF] to-[#EFF4EC] rounded-[44px] border-2 border-white overflow-visible"
+          className="relative w-[800px] h-[480px] mx-auto bg-gradient-to-b from-[#E9E8FF] to-[#EFF4EC] rounded-[44px] overflow-visible"
           style={{
             boxShadow: '0px 480px 192px rgba(0, 0, 0, 0.01), 0px 270px 162px rgba(0, 0, 0, 0.02), 0px 120px 120px rgba(0, 0, 0, 0.03), 0px 30px 66px rgba(0, 0, 0, 0.04)'
           }}
@@ -354,7 +354,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             {/* Chat Messages Container - Scrollable */}
             <div 
               ref={chatContainerRef}
-              className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[90px] h-[240px] overflow-y-auto flex flex-col gap-4 px-2 custom-scrollbar"
+              className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[90px] h-[220px] overflow-y-auto flex flex-col gap-4 px-2 custom-scrollbar"
               style={{ scrollBehavior: 'smooth' }}
             >
               {/* Initial Welcome Message - Always show */}
@@ -402,8 +402,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         />
                       </div>
                       <div
-                        className="px-[22px] py-[20px] rounded-[30px] bg-white text-black"
+                        className="px-[22px] py-[20px] bg-white text-black"
                         style={{
+                          borderRadius: '30px 30px 30px 0px',
                           filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
                         }}
                       >
@@ -416,8 +417,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   {msg.sender === 'user' && (
                     <div className="max-w-[560px]">
                       <div
-                        className="px-[22px] py-[20px] rounded-[30px] bg-black/[0.79] text-white"
+                        className="px-[22px] py-[20px] bg-black/[0.79] text-white"
                         style={{
+                          borderRadius: '30px 30px 0px 30px',
                           filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
                         }}
                       >
@@ -442,8 +444,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       />
                     </div>
                     <div
-                      className="px-[22px] py-[20px] rounded-[30px] bg-white text-black"
+                      className="px-[22px] py-[20px] bg-white text-black"
                       style={{
+                        borderRadius: '30px 30px 30px 0px',
                         filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
                       }}
                     >
