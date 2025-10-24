@@ -565,7 +565,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                             setIsPlaceholderHovered(true);
                             setShowAlternateText(true);
                             // Start typewriter after fade out completes + small delay
-                            setTimeout(() => setStartTypewriter(true), 500);
+                            setTimeout(() => setStartTypewriter(true), 300);
                           }}
                           onMouseLeave={() => {
                             setIsPlaceholderHovered(false);
@@ -579,7 +579,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                               className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap block"
                               style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                               animate={{ opacity: showAlternateText ? 0 : 1 }}
-                              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                             >
                               talk 2 me
                             </motion.span>
@@ -590,7 +590,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                                 initial={{ x: '-100%' }}
                                 animate={{ x: '200%' }}
                                 transition={{ 
-                                  duration: 0.5, 
+                                  duration: 0.4, 
                                   ease: [0.4, 0, 0.2, 1]
                                 }}
                                 style={{
@@ -605,9 +605,14 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                             <motion.div
                               className="absolute text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap flex items-center h-[24px] overflow-hidden"
                               style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
-                              initial={{ width: 0 }}
-                              animate={{ width: 'auto' }}
-                              transition={{ duration: 1.0, ease: [0.4, 0, 0.2, 1] }}
+                              initial={{ width: 0, x: -10, y: 5, opacity: 0 }}
+                              animate={{ width: 'auto', x: 0, y: 0, opacity: 1 }}
+                              transition={{ 
+                                width: { duration: 0.7, ease: [0.4, 0, 0.2, 1] },
+                                x: { duration: 0.7, ease: [0.4, 0, 0.2, 1] },
+                                y: { duration: 0.7, ease: [0.4, 0, 0.2, 1] },
+                                opacity: { duration: 0.5, ease: [0.4, 0, 0.2, 1] }
+                              }}
                             >
                               raksha can see all our messages
                             </motion.div>
