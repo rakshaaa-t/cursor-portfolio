@@ -77,8 +77,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   
   // AI typing effect state
   const [typingMessageId, setTypingMessageId] = React.useState<string | null>(null);
-  const [typedChars, setTypedChars] = React.useState(0);
   const typingIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
+  const typingTextRefs = React.useRef<Map<string, HTMLParagraphElement>>(new Map());
   
   // Motion values for smooth continuous animation
   const x = useMotionValue(0);
@@ -171,7 +171,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     };
   }, [isHoveringInput]);
 
-  // AI typing effect
+  // AI typing effect using direct DOM manipulation (no re-renders!)
   React.useEffect(() => {
     if (!typingMessageId) return;
     
@@ -180,6 +180,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     if (!typingMessage || !typingMessage.content) return;
     
     const fullText = typingMessage.content;
+    const textElement = typingTextRefs.current.get(typingMessageId);
+    if (!textElement) return;
+    
     let charIndex = 0;
     
     // Clear any existing typing interval
@@ -187,10 +190,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       clearInterval(typingIntervalRef.current);
     }
     
-    // Start typing animation
+    // Start typing animation - update DOM directly
     typingIntervalRef.current = setInterval(() => {
       charIndex++;
-      setTypedChars(charIndex);
+      if (textElement) {
+        textElement.textContent = fullText.substring(0, charIndex);
+      }
       
       if (charIndex >= fullText.length) {
         if (typingIntervalRef.current) {
@@ -200,7 +205,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         // Clear typing state after completion
         setTimeout(() => {
           setTypingMessageId(null);
-          setTypedChars(0);
         }, 100);
       }
     }, 4); // 4ms per character (80% quicker: 20 * 0.2)
@@ -246,7 +250,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       
       // Trigger typing effect
       setTypingMessageId(aiMessage.id);
-      setTypedChars(0);
     } catch (error) {
       // Fallback response
       const fallbackMessage: ChatMessage = {
@@ -260,7 +263,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       
       // Trigger typing effect
       setTypingMessageId(fallbackMessage.id);
-      setTypedChars(0);
     } finally {
       setIsLoading(false);
     }
@@ -309,7 +311,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       
       // Trigger typing effect
       setTypingMessageId(aiMessage.id);
-      setTypedChars(0);
     } catch (error) {
       const fallbackMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -322,7 +323,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       
       // Trigger typing effect
       setTypingMessageId(fallbackMessage.id);
-      setTypedChars(0);
     } finally {
       setIsLoading(false);
       // Clear latest message ID immediately
@@ -548,7 +548,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               <div 
                 ref={chatContainerRef}
                 className="overflow-y-auto flex flex-col gap-3 pr-3 pb-20 custom-scrollbar flex-1"
-                style={{ scrollBehavior: 'smooth', scrollPaddingBottom: '20px' }}
+                style={{ scrollPaddingBottom: '20px' }}
               >
               {/* Initial Welcome Message - Always show */}
               <div className="w-full flex-shrink-0 mb-2">
@@ -578,7 +578,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               {messages.map((msg) => (
                 <div key={msg.id} className={`w-full flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {msg.sender === 'ai' && (
-                    <div className="flex items-start gap-3 max-w-[560px]">
+                    <motion.div 
+                      className="flex items-start gap-3 max-w-[560px]"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                    >
                       <div className="relative w-[48px] h-[48px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
                         <img
                           src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
@@ -595,14 +600,17 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           transform: 'translate3d(0,0,0)'
                         }}
                       >
-                        <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif', willChange: 'contents' }}>
-                          {React.useMemo(() => 
-                            typingMessageId === msg.id ? (msg.content || '').substring(0, typedChars) : (msg.content || ''),
-                            [typingMessageId, msg.id, msg.content, typedChars]
-                          )}
+                        <p 
+                          ref={(el) => {
+                            if (el) typingTextRefs.current.set(msg.id, el);
+                          }}
+                          className="text-[14px] leading-[21px] font-extralight" 
+                          style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
+                        >
+                          {msg.content || ''}
               </p>
             </div>
-                    </div>
+                    </motion.div>
                   )}
                   {msg.sender === 'user' && (
                     <motion.div 
