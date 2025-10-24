@@ -558,10 +558,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             <div className="absolute w-[640px] left-[80px] bottom-[40px] flex flex-col items-center gap-[12px]">
               {/* Input Bar with Backdrop Blur */}
               <div
-                className="w-[640px] h-[56px] flex items-center justify-center px-[22px] py-[4px] rounded-[100px] border border-white/30 backdrop-blur-md"
+                className="w-[640px] h-[56px] flex items-center justify-center px-[22px] py-[4px] rounded-[100px] border border-white/40 backdrop-blur-xl"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.2)',
-                  backdropFilter: 'blur(12px)',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
                   boxShadow: '0px 297px 119px rgba(0, 0, 0, 0.01), 0px 167px 100px rgba(0, 0, 0, 0.02), 0px 74px 74px rgba(0, 0, 0, 0.03), 0px 19px 41px rgba(0, 0, 0, 0.04)'
                 }}
               >
