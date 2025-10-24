@@ -545,8 +545,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     >
                       <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
                         ...
-                      </p>
-                    </div>
+              </p>
+            </div>
                   </div>
                 </div>
               )}
@@ -665,7 +665,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               </div>
 
               {/* Suggestion Pills - Static (no animations) */}
-              <div className="w-full overflow-x-auto">
+              <div className="w-full overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                 <div className="flex items-center gap-3">
                   {visiblePills.map((suggestion, index) => {
                     return (
@@ -684,7 +684,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
                         >
                           {suggestion}
-                        </span>
+        </span>
                       </button>
                     );
                   })}
