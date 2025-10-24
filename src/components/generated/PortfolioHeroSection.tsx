@@ -575,7 +575,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                               className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap block"
                               style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                               animate={{ opacity: showAlternateText ? 0 : 1 }}
-                              transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+                              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
                             >
                               talk 2 me
                             </motion.span>
@@ -597,15 +597,15 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                             )}
                           </div>
                           
-                          <motion.span
-                            className="absolute text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap flex items-center h-[24px]"
+                          <motion.div
+                            className="absolute text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap flex items-center h-[24px] overflow-hidden"
                             style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: showAlternateText ? 1 : 0 }}
-                            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+                            initial={{ width: 0 }}
+                            animate={{ width: showAlternateText ? 'auto' : 0 }}
+                            transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
                           >
                             raksha can see all our messages
-                          </motion.span>
+                          </motion.div>
                         </div>
                       )}
                     </div>
