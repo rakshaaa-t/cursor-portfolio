@@ -588,11 +588,16 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         className="px-[18px] py-[14px] bg-white text-black"
                         style={{
                           borderRadius: '30px 30px 30px 0px',
-                          filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
+                          filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))',
+                          willChange: 'contents',
+                          transform: 'translate3d(0,0,0)'
                         }}
                       >
-                        <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
-                          {typingMessageId === msg.id ? (msg.content || '').substring(0, typedChars) : (msg.content || '')}
+                        <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif', willChange: 'contents' }}>
+                          {React.useMemo(() => 
+                            typingMessageId === msg.id ? (msg.content || '').substring(0, typedChars) : (msg.content || ''),
+                            [typingMessageId, msg.id, msg.content, typedChars]
+                          )}
               </p>
             </div>
                     </div>
@@ -614,7 +619,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         className="px-[22px] py-[20px] bg-black/[0.79] text-white"
                         style={{
                           borderRadius: '30px 30px 0px 30px',
-                          filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
+                          filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))',
+                          transform: 'translate3d(0,0,0)'
                         }}
                       >
                         <p className="text-[14px] leading-[21px] font-light" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
