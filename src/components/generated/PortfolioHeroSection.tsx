@@ -201,7 +201,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           setTypedChars(0);
         }, 100);
       }
-    }, 30); // 30ms per character
+    }, 15); // 15ms per character (faster)
     
     return () => {
       if (typingIntervalRef.current) {
