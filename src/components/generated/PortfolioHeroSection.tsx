@@ -71,6 +71,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [inputValue, setInputValue] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
+  const [isPlaceholderHovered, setIsPlaceholderHovered] = React.useState(false);
+  const [showAlternateText, setShowAlternateText] = React.useState(false);
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -545,16 +547,66 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       </defs>
                     </svg>
 
-                    <input
-                      type="text"
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                      onKeyPress={handleKeyPress}
-                      disabled={isLoading}
-                      placeholder="Talk 2 me"
-                      className="flex-1 bg-transparent border-none outline-none text-[16px] leading-[24px] font-normal text-black placeholder:text-black/[0.44] disabled:opacity-50 min-w-0"
-                      style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
-                    />
+                    <div className="relative flex-1 min-w-0">
+                      <input
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        disabled={isLoading}
+                        className="w-full bg-transparent border-none outline-none text-[16px] leading-[24px] font-normal text-black disabled:opacity-50"
+                        style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
+                      />
+                      {!inputValue && (
+                        <div
+                          className="absolute inset-0 pointer-events-none flex items-center"
+                          onMouseEnter={() => setIsPlaceholderHovered(true)}
+                          onMouseLeave={() => {
+                            setIsPlaceholderHovered(false);
+                            setShowAlternateText(false);
+                          }}
+                          style={{ pointerEvents: 'auto' }}
+                        >
+                          <div className="relative overflow-hidden">
+                            <motion.span
+                              className="text-[16px] leading-[24px] font-normal text-black/[0.44]"
+                              style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
+                              animate={{ opacity: showAlternateText ? 0 : 1 }}
+                              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                            >
+                              Talk 2 me
+                            </motion.span>
+                            
+                            {isPlaceholderHovered && !showAlternateText && (
+                              <motion.div
+                                className="absolute inset-0"
+                                initial={{ x: '-100%' }}
+                                animate={{ x: '200%' }}
+                                transition={{ 
+                                  duration: 0.7, 
+                                  ease: [0.4, 0, 0.2, 1]
+                                }}
+                                onAnimationComplete={() => setShowAlternateText(true)}
+                                style={{
+                                  background: 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.25) 50%, transparent 100%)',
+                                  pointerEvents: 'none'
+                                }}
+                              />
+                            )}
+                          </div>
+                          
+                          <motion.span
+                            className="absolute text-[16px] leading-[24px] font-normal text-black/[0.44]"
+                            style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: showAlternateText ? 1 : 0 }}
+                            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                          >
+                            raksha can see all our messages
+                          </motion.span>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Right: Send Button */}
