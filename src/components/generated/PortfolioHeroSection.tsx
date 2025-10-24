@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { sendToAI, getFallbackResponse, type ChatMessage } from "../../lib/ai-chat";
 import { AI_CONFIG } from "../../lib/config";
@@ -149,24 +149,21 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     
     setIsRefreshing(true);
     
-    // Wait for fade out
-    setTimeout(() => {
-      // Get new random suggestions excluding current ones
-      const availableSuggestions = ALL_SUGGESTIONS.filter(s => !visibleSuggestions.includes(s));
-      const shuffled = [...availableSuggestions].sort(() => Math.random() - 0.5);
-      const newSuggestions = shuffled.slice(0, 3);
-      
-      // If we don't have enough new ones, add from all suggestions
-      if (newSuggestions.length < 3) {
-        const allShuffled = [...ALL_SUGGESTIONS].sort(() => Math.random() - 0.5);
-        setVisibleSuggestions(allShuffled.slice(0, 3));
-      } else {
-        setVisibleSuggestions(newSuggestions);
-      }
-      
-      // Reset refreshing state after fade in
-      setTimeout(() => setIsRefreshing(false), 200);
-    }, 200);
+    // Get new random suggestions excluding current ones
+    const availableSuggestions = ALL_SUGGESTIONS.filter(s => !visibleSuggestions.includes(s));
+    const shuffled = [...availableSuggestions].sort(() => Math.random() - 0.5);
+    const newSuggestions = shuffled.slice(0, 3);
+    
+    // If we don't have enough new ones, add from all suggestions
+    if (newSuggestions.length < 3) {
+      const allShuffled = [...ALL_SUGGESTIONS].sort(() => Math.random() - 0.5);
+      setVisibleSuggestions(allShuffled.slice(0, 3));
+    } else {
+      setVisibleSuggestions(newSuggestions);
+    }
+    
+    // Reset refreshing state after animation completes
+    setTimeout(() => setIsRefreshing(false), 400);
   };
 
   const handlePillClick = async (pillText: string, pillId: number, event: React.MouseEvent<HTMLButtonElement>) => {
@@ -177,6 +174,22 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     
     // Wait for pill to fade out
     setTimeout(async () => {
+      // Replace the used pill with a new random suggestion
+      const usedSuggestions = [...visibleSuggestions];
+      const availableSuggestions = ALL_SUGGESTIONS.filter(s => !usedSuggestions.includes(s));
+      
+      if (availableSuggestions.length > 0) {
+        const randomIndex = Math.floor(Math.random() * availableSuggestions.length);
+        const newSuggestion = availableSuggestions[randomIndex];
+        
+        // Replace the clicked pill with new suggestion
+        const newSuggestions = [...visibleSuggestions];
+        newSuggestions[pillId] = newSuggestion;
+        setVisibleSuggestions(newSuggestions);
+      }
+      
+      setAnimatingPillId(null);
+      
       // Add message to chat
       const userMessage: ChatMessage = {
         id: Date.now().toString(),
@@ -212,7 +225,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         setMessages(prev => [...prev, fallbackMessage]);
       } finally {
         setIsLoading(false);
-        setAnimatingPillId(null);
         // Clear latest message ID after bounce animation
         setTimeout(() => setLatestMessageId(null), 300);
       }
@@ -571,46 +583,50 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             <div className="absolute w-[640px] left-[80px] bottom-[20px] flex flex-col items-center gap-[12px]">
               {/* Suggestion Pills - With Glass Effect + Refresh Button */}
               <div className="w-full flex items-center justify-center gap-2">
-                {visibleSuggestions.map((suggestion, index) => {
-                  const isAnimating = animatingPillId === index;
-                  return (
-                    <motion.button 
-                      key={`${suggestion}-${index}`}
-                      onClick={(e) => handlePillClick(suggestion, index, e)}
-                      disabled={isLoading || animatingPillId !== null || isRefreshing}
-                      className="relative px-6 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group"
-                      style={{
-                        background: 'rgba(255, 255, 255, 0.15)',
-                        backdropFilter: 'blur(20px)',
-                        WebkitBackdropFilter: 'blur(20px)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-                      }}
-                      animate={{
-                        opacity: isAnimating || isRefreshing ? 0 : 1,
-                        scale: isAnimating ? 0.95 : 1
-                      }}
-                      transition={{
-                        duration: 0.2,
-                        ease: [0.4, 0, 0.2, 1]
-                      }}
-                    >
-                      <span
-                        className="text-[13px] leading-[20px] font-normal text-black/[0.64] whitespace-nowrap text-center group-hover:text-black/[0.8] transition-colors duration-200"
-                        style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
-                      >
-                        {suggestion}
-                      </span>
-                      {/* Subtle hover glow */}
-                      <div 
-                        className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+                <AnimatePresence mode="wait">
+                  {visibleSuggestions.map((suggestion, index) => {
+                    const isAnimating = animatingPillId === index;
+                    return (
+                      <motion.button 
+                        key={suggestion}
+                        onClick={(e) => handlePillClick(suggestion, index, e)}
+                        disabled={isLoading || animatingPillId !== null || isRefreshing}
+                        className="relative px-6 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group"
                         style={{
-                          boxShadow: '0 0 20px rgba(79, 92, 255, 0.15), 0 0 40px rgba(79, 92, 255, 0.08)'
+                          background: 'rgba(255, 255, 255, 0.15)',
+                          backdropFilter: 'blur(20px)',
+                          WebkitBackdropFilter: 'blur(20px)',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
+                          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
                         }}
-                      />
-                    </motion.button>
-                  );
-                })}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{
+                          opacity: isAnimating ? 0 : 1,
+                          scale: isAnimating ? 0.95 : 1
+                        }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{
+                          duration: 0.2,
+                          ease: [0.4, 0, 0.2, 1]
+                        }}
+                      >
+                        <span
+                          className="text-[13px] leading-[20px] font-normal text-black/[0.64] whitespace-nowrap text-center group-hover:text-black/[0.8] transition-colors duration-200"
+                          style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
+                        >
+                          {suggestion}
+                        </span>
+                        {/* Subtle hover glow */}
+                        <div 
+                          className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+                          style={{
+                            boxShadow: '0 0 20px rgba(79, 92, 255, 0.15), 0 0 40px rgba(79, 92, 255, 0.08)'
+                          }}
+                        />
+                      </motion.button>
+                    );
+                  })}
+                </AnimatePresence>
                 
                 {/* Refresh Button */}
                 <motion.button
