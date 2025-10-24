@@ -148,9 +148,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         clearTimeout(timeoutRef.current);
       }
       
-      // Reset to original state
-      setShowOriginalText(true);
+      // Instantly clear typed text, then fade in original
       setRevealedChars(0);
+      // Small delay to ensure typed text clears before fade in starts
+      setTimeout(() => {
+        setShowOriginalText(true);
+      }, 10);
     }
     
     return () => {
@@ -469,9 +472,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             <div 
               className="absolute left-[80px] w-[640px] top-0 h-[40px] pointer-events-none z-10"
               style={{
-                background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0))',
                 backdropFilter: 'blur(30px)',
-                WebkitBackdropFilter: 'blur(30px)'
+                WebkitBackdropFilter: 'blur(30px)',
+                maskImage: 'linear-gradient(to bottom, black, transparent)',
+                WebkitMaskImage: 'linear-gradient(to bottom, black, transparent)'
               }}
             />
             
@@ -684,9 +688,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       />
                       {!inputValue && (
                         <div className="absolute inset-0 pointer-events-none flex items-center justify-start whitespace-nowrap">
-                          {showOriginalText ? (
+                          {showOriginalText && (
                             <span
-                              className="text-[16px] font-normal text-black/[0.44] whitespace-nowrap transition-opacity duration-75"
+                              className="text-[16px] font-normal text-black/[0.44] whitespace-nowrap transition-opacity duration-150"
                               style={{ 
                                 fontFamily: 'Nexa, system-ui, sans-serif',
                                 opacity: isHoveringInput ? 0 : 1,
@@ -697,7 +701,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                             >
                               talk 2 me
                             </span>
-                          ) : (
+                          )}
+                          {!showOriginalText && revealedChars > 0 && (
                             <span
                               className="text-[16px] font-normal text-black/[0.44] whitespace-nowrap"
                               style={{ 
