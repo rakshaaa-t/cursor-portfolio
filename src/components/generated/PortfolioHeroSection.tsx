@@ -67,6 +67,70 @@ const PROJECT_CARDS = [
 
 export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: RakshaPortfolioProps) => {
   const [activeNav, setActiveNav] = React.useState<"chat" | "inbox" | "calendar">("chat");
+  const [messages, setMessages] = React.useState<ChatMessage[]>([]);
+  const [inputValue, setInputValue] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
+  const chatContainerRef = React.useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom when messages change
+  React.useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages, isLoading]);
+
+  const handleSendMessage = async (messageText?: string) => {
+    const textToSend = messageText || inputValue.trim();
+    if (!textToSend || isLoading) return;
+
+    // Add user message
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      type: 'text',
+      content: textToSend,
+      sender: 'user',
+      timestamp: Date.now()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInputValue("");
+    setIsLoading(true);
+
+    try {
+      // Send to AI
+      const response = await sendToAI(textToSend, messages, AI_CONFIG.API_KEY);
+      
+      // Add AI response
+      const aiMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        type: 'text',
+        content: response.message,
+        sender: 'ai',
+        timestamp: Date.now()
+      };
+
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      // Fallback response
+      const fallbackMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        type: 'text',
+        content: getFallbackResponse(textToSend),
+        sender: 'ai',
+        timestamp: Date.now()
+      };
+      setMessages(prev => [...prev, fallbackMessage]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
 
   return (
     <div className="relative w-full min-h-screen bg-[#D8D4E8] overflow-hidden">
@@ -287,61 +351,111 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               </span>
             </div>
 
-            {/* First Chat Bubble - White - Left aligned within 640px container */}
-            <div className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[90px]">
-              <svg 
-                width="560" 
-                height="120" 
-                viewBox="0 0 560 120" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg" 
-                className="absolute left-0"
-                style={{
-                  filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
-                }}
-              >
-                <path d="M0 75C0 40 0 22 11 11C22 0 40 0 75 0H505C518 0 525 0 530 1.5C542 5 551 14 555 26C556 31 556 38 556 50C556 62 556 69 555 74C551 86 542 95 530 98.5C525 100 518 100 505 100H0V75Z" fill="white" />
-              </svg>
+            {/* Chat Messages Container - Scrollable */}
+            <div 
+              ref={chatContainerRef}
+              className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[90px] bottom-[160px] overflow-y-auto flex flex-col gap-4 px-2"
+            >
+              {messages.length === 0 ? (
+                // Initial Welcome Message
+                <div className="w-full">
+                  <svg 
+                    width="560" 
+                    height="120" 
+                    viewBox="0 0 560 120" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className="absolute left-0"
+                    style={{
+                      filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
+                    }}
+                  >
+                    <path d="M0 75C0 40 0 22 11 11C22 0 40 0 75 0H505C518 0 525 0 530 1.5C542 5 551 14 555 26C556 31 556 38 556 50C556 62 556 69 555 74C551 86 542 95 530 98.5C525 100 518 100 505 100H0V75Z" fill="white" />
+                  </svg>
 
-              {/* Message Content Overlay */}
-              <div className="absolute top-0 left-0 w-[560px] h-[100px] flex items-center px-5 gap-3">
-                <div className="relative w-[48px] h-[48px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
-                  <img
-                    src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
-                    alt="Profile"
-                    className="absolute w-full h-full object-cover"
-                  />
+                  <div className="absolute top-0 left-0 w-[560px] h-[100px] flex items-center px-5 gap-3">
+                    <div className="relative w-[48px] h-[48px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
+                      <img
+                        src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
+                        alt="Profile"
+                        className="absolute w-full h-full object-cover"
+                      />
+                    </div>
+                    <p
+                      className="flex-1 text-[14px] leading-[21px] font-extralight text-black"
+                      style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
+                    >
+                      <span>you can ask me here about my design process, my past projects or just get to know me better!</span>
+                    </p>
+                  </div>
                 </div>
-                <p
-                  className="flex-1 text-[14px] leading-[21px] font-extralight text-black"
-                  style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
-                >
-                  <span>you can ask me here about my design process, my past projects or just get to know me better!</span>
-                </p>
-              </div>
-            </div>
-
-            {/* Second Chat Bubble - Dark - Right aligned within 640px container */}
-            <div className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[215px] flex justify-end">
-              <div className="relative inline-block max-w-[560px]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="395" height="70" viewBox="0 0 395 70" fill="none" preserveAspectRatio="xMaxYMid meet"
-                  style={{
-                    filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
-                  }}
-                >
-                  <path d="M0 35C0 15.67 15.67 0 35 0H316C340.301 0 360 19.6995 360 44V70H35C15.67 70 0 54.33 0 35Z" fill="black" fillOpacity="0.79"/>
-                </svg>
-                
-                {/* Text overlay - vertically and horizontally centered with proper padding */}
-                <p
-                  className="absolute inset-0 flex items-center justify-center px-[22px] text-[14px] leading-[21px] font-light text-white text-center"
-                  style={{ 
-                    fontFamily: 'Nexa Text, system-ui, sans-serif'
-                  }}
-                >
-                  Hi raksha can u tell me a bit about yourself
-                </p>
-              </div>
+              ) : (
+                // Dynamic Messages
+                <>
+                  {messages.map((msg) => (
+                    <div key={msg.id} className={`w-full flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                      {msg.sender === 'ai' && (
+                        <div className="flex items-start gap-3 max-w-[560px]">
+                          <div className="relative w-[48px] h-[48px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
+                            <img
+                              src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
+                              alt="Profile"
+                              className="absolute w-full h-full object-cover"
+                            />
+                          </div>
+                          <div
+                            className="px-[22px] py-[20px] rounded-[30px] bg-white text-black"
+                            style={{
+                              filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
+                            }}
+                          >
+                            <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
+                              {msg.content}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      {msg.sender === 'user' && (
+                        <div className="max-w-[560px]">
+                          <div
+                            className="px-[22px] py-[20px] rounded-[30px] bg-black/[0.79] text-white"
+                            style={{
+                              filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
+                            }}
+                          >
+                            <p className="text-[14px] leading-[21px] font-light" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
+                              {msg.content}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  {isLoading && (
+                    <div className="w-full flex justify-start">
+                      <div className="flex items-start gap-3 max-w-[560px]">
+                        <div className="relative w-[48px] h-[48px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
+                          <img
+                            src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
+                            alt="Profile"
+                            className="absolute w-full h-full object-cover"
+                          />
+                        </div>
+                        <div
+                          className="px-[22px] py-[20px] rounded-[30px] bg-white text-black"
+                          style={{
+                            filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
+                          }}
+                        >
+                          <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
+                            ...
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
 
             {/* Bottom Section - Suggestions + Input */}
@@ -351,8 +465,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 {SUGGESTION_PILLS.map((pill) => {
                   return (
                     <button 
-                      key={pill.id} 
-                      className="relative px-6 py-2 h-[37px] rounded-full hover:bg-white/15 transition-all flex items-center justify-center"
+                      key={pill.id}
+                      onClick={() => handleSendMessage(pill.text)}
+                      disabled={isLoading}
+                      className="relative px-6 py-2 h-[37px] rounded-full hover:bg-white/15 transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                       style={{
                         background: 'rgba(255, 255, 255, 0.1)',
                         backdropFilter: 'blur(20px)',
@@ -432,17 +548,23 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       </defs>
                     </svg>
 
-                    <span
-                      className="text-[16px] leading-[24px] font-normal text-black/[0.44]"
+                    <input
+                      type="text"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      disabled={isLoading}
+                      placeholder="Talk 2 me"
+                      className="flex-1 bg-transparent border-none outline-none text-[16px] leading-[24px] font-normal text-black placeholder:text-black/[0.44] disabled:opacity-50"
                       style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
-                    >
-                      <span>Talk 2 me</span>
-                    </span>
+                    />
                   </div>
 
                   {/* Right: Send Button */}
                   <button
-                    className="w-[44px] h-[44px] bg-white rounded-[3333px] flex items-center justify-center hover:shadow-lg transition-shadow"
+                    onClick={() => handleSendMessage()}
+                    disabled={isLoading || !inputValue.trim()}
+                    className="w-[44px] h-[44px] bg-white rounded-[3333px] flex items-center justify-center hover:shadow-lg transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{
                       boxShadow: '-17px 20px 10px rgba(40, 63, 228, 0.01), -10px 11px 9px rgba(40, 63, 228, 0.02), -4px 5px 7px rgba(40, 63, 228, 0.03), -1px 1px 4px rgba(40, 63, 228, 0.04)'
                     }}
