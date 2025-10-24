@@ -354,12 +354,25 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             {/* Chat Messages Container - Scrollable */}
             <div 
               ref={chatContainerRef}
-              className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[90px] h-[240px] overflow-y-auto flex flex-col gap-4 px-2"
+              className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[90px] h-[240px] overflow-y-auto flex flex-col gap-4 px-2 custom-scrollbar"
               style={{ scrollBehavior: 'smooth' }}
             >
               {/* Initial Welcome Message - Always show */}
-              <div className="w-full flex-shrink-0 mb-2">
-                <div className="flex items-start gap-3 max-w-[560px]">
+              <div className="w-full flex-shrink-0 mb-2 relative">
+                <svg 
+                  width="560" 
+                  height="120" 
+                  viewBox="0 0 560 120" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{
+                    filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
+                  }}
+                >
+                  <path d="M0 75C0 40 0 22 11 11C22 0 40 0 75 0H505C518 0 525 0 530 1.5C542 5 551 14 555 26C556 31 556 38 556 50C556 62 556 69 555 74C551 86 542 95 530 98.5C525 100 518 100 505 100H0V75Z" fill="white" />
+                </svg>
+
+                <div className="absolute top-0 left-0 w-[560px] h-[100px] flex items-center px-5 gap-3">
                   <div className="relative w-[48px] h-[48px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
                     <img
                       src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
@@ -367,16 +380,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div
-                    className="px-[22px] py-[20px] rounded-[30px] bg-white text-black flex-1"
-                    style={{
-                      filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
-                    }}
+                  <p
+                    className="flex-1 text-[14px] leading-[21px] font-extralight text-black"
+                    style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
                   >
-                    <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
-                      you can ask me here about my design process, my past projects or just get to know me better!
-                    </p>
-                  </div>
+                    <span>you can ask me here about my design process, my past projects or just get to know me better!</span>
+                  </p>
                 </div>
               </div>
 
@@ -606,6 +615,32 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         @import url('https://fonts.cdnfonts.com/css/nexa-bold');
         @import url('https://fonts.googleapis.com/css2?family=Nexa+Text:wght@100;200;300;400;500;600;700;800;900&display=swap');
         @import url('https://fonts.cdnfonts.com/css/neulis-cursive');
+        
+        /* Custom Scrollbar Styling */
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+          border-radius: 10px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(139, 127, 186, 0.3);
+          border-radius: 10px;
+          transition: background 0.3s ease;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(139, 127, 186, 0.5);
+        }
+        
+        /* Firefox */
+        .custom-scrollbar {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(139, 127, 186, 0.3) transparent;
+        }
       `}</style>
     </div>
   );
