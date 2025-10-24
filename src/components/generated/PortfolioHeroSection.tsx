@@ -91,12 +91,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
     if (chatContainerRef.current) {
-      // Use setTimeout to ensure DOM has updated
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         if (chatContainerRef.current) {
           chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
-      }, 0);
+      });
     }
   }, [messages.length]);
 
@@ -138,10 +137,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           setTypedChars(0);
         }, 50);
       }
-    }, 1); // 1ms per character - super fast!
+    }, 10); // 10ms per character - super fast and smooth!
     
     return () => clearInterval(interval);
-  }, [typingMessageId, messages]);
+  }, [typingMessageId]);
 
   const handleSendMessage = async (messageText?: string) => {
     const textToSend = messageText || inputValue.trim();
@@ -534,13 +533,16 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     <motion.div 
                       className="max-w-[560px]"
                       initial={latestMessageId === msg.id ? { 
-                        opacity: 0
+                        opacity: 0,
+                        y: 4
                       } : false}
                       animate={{
-                        opacity: 1
+                        opacity: 1,
+                        y: 0
                       }}
                       transition={{
-                        duration: 0.05
+                        duration: 0.15,
+                        ease: "easeOut"
                       }}
                     >
                       <div
