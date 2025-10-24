@@ -453,7 +453,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           transition={{ delay: 0.1 }}
           className="text-center mt-8 mb-12 px-16"
         >
-          <h2 className="text-[40px] leading-[1.3] font-bold text-[#4F5CFF] mb-3">
+          <h2 className="text-[36px] leading-normal font-extrabold text-[#283FE4] mb-3" style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}>
             <span>End-To-End Product Design, Frontend development and Branding.</span>
           </h2>
           <p className="text-[18px] leading-[1.5] text-gray-600 font-normal">
