@@ -323,7 +323,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="relative w-[800px] h-[480px] mx-auto bg-gradient-to-b from-[#E9E8FF] to-[#EFF4EC] rounded-[44px] overflow-visible px-[32px] py-[20px]"
+          className="relative w-[800px] h-[480px] mx-auto bg-gradient-to-b from-[#E9E8FF] to-[#EFF4EC] rounded-[44px] overflow-visible"
           style={{
             boxShadow: '0px 480px 192px rgba(0, 0, 0, 0.01), 0px 270px 162px rgba(0, 0, 0, 0.02), 0px 120px 120px rgba(0, 0, 0, 0.03), 0px 30px 66px rgba(0, 0, 0, 0.04)'
           }}
@@ -332,9 +332,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           <div className="absolute w-[421px] h-[336px] left-1/2 bottom-[-99px] -translate-x-1/2 translate-x-[236px] bg-[rgba(101,73,255,0.14)] rounded-[4444px] blur-[100px] pointer-events-none" />
           <div className="absolute w-[605px] h-[313px] left-1/2 bottom-[267px] -translate-x-1/2 -translate-x-[172px] bg-gradient-to-r from-[rgba(255,255,255,0.88)] to-[rgba(255,255,255,0.1936)] rounded-[4444px] blur-[100px] pointer-events-none" />
 
-          <div className="relative h-full">
+          <div className="relative h-full px-[32px] py-[20px]">
             {/* Header - "hey i'm raks" | "email : contact@rakshaaa.com" */}
-            <div className="absolute w-[640px] h-[24px] left-[48px] top-0 flex items-end justify-between">
+            <div className="absolute w-[640px] h-[24px] left-[80px] top-[20px] flex items-end justify-between">
               <div className="flex items-end gap-3">
                 <span
                   className="text-[16px] leading-[24px] font-light text-black"
@@ -353,11 +353,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
             {/* Chat Messages Container - Scrollable */}
             <div 
-              className="absolute left-[48px] w-[640px] top-[44px] h-[276px] flex flex-col"
+              className="absolute left-[80px] w-[640px] top-[64px] h-[256px] flex flex-col"
             >
               <div 
                 ref={chatContainerRef}
-                className="overflow-y-auto flex flex-col gap-3 pr-[2px] pb-3 custom-scrollbar flex-1"
+                className="overflow-y-auto flex flex-col gap-3 pr-3 pb-4 custom-scrollbar flex-1"
                 style={{ scrollBehavior: 'smooth' }}
               >
               {/* Initial Welcome Message - Always show */}
@@ -456,7 +456,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       </div>
 
             {/* Bottom Section - Suggestions + Input */}
-            <div className="absolute w-[640px] left-[48px] bottom-0 flex flex-col items-center gap-[12px]">
+            <div className="absolute w-[640px] left-[80px] bottom-[20px] flex flex-col items-center gap-[12px]">
               {/* Suggestion Pills - With Glass Effect */}
               <div className="w-full flex items-center justify-center gap-2">
                 {SUGGESTION_PILLS.map((pill) => {
