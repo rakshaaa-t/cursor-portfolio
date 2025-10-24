@@ -297,10 +297,18 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           <div className="flex items-center justify-center gap-[28px] w-[236px] h-[60px]">
             {NAV_ITEMS.map((item, index) => {
               const isActive = activeNav === item.id;
+              const isCalendar = item.id === "calendar";
+              
               return (
                 <button
                   key={item.id}
-                  onClick={() => setActiveNav(item.id)}
+                  onClick={() => {
+                    if (isCalendar) {
+                      window.open('https://cal.com/raksha-tated-v2ee58/15min', '_blank');
+                    } else {
+                      setActiveNav(item.id);
+                    }
+                  }}
                   className={`relative w-[60px] h-[60px] flex items-center justify-center rounded-full transition-all duration-300 backdrop-blur-md ${
                     isActive
                       ? "bg-[#283FE4] border border-white shadow-[1px_2px_4px_rgba(0,0,0,0.1),5px_7px_8px_rgba(0,0,0,0.09),11px_15px_11px_rgba(0,0,0,0.05),19px_26px_13px_rgba(0,0,0,0.01)]"
