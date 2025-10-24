@@ -105,16 +105,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     
     // Move based on current velocity
     const movement = currentVelocityRef.current * (delta / 1000);
-    let newX = x.get() + movement;
-    
-    // Calculate loop width dynamically based on visible pills
-    // Approximate: each pill ~120px width + 12px gap = 132px per pill
-    const loopWidth = visiblePills.length * 132;
-    
-    // Loop seamlessly when we've scrolled one full width
-    if (newX <= -loopWidth) {
-      newX = newX + loopWidth;
-    }
+    const newX = x.get() + movement;
     
     x.set(newX);
   });
