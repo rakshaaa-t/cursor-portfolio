@@ -118,6 +118,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [isLoading, setIsLoading] = React.useState(false);
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
   const [visiblePills, setVisiblePills] = React.useState<string[]>(ALL_SUGGESTIONS);
+  const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
   
   // Input ref for instant typing response
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -304,7 +305,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   key={item.id}
                   onClick={() => {
                     if (isCalendar) {
-                      window.open('https://cal.com/raksha-tated-v2ee58/15min', '_blank');
+                      setIsCalendarOpen(true);
                     } else {
                       setActiveNav(item.id);
                     }
@@ -771,6 +772,39 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           scrollbar-color: rgba(139, 127, 186, 0.3) transparent;
         }
       `}</style>
+
+      {/* Cal.com Embedded Modal */}
+      {isCalendarOpen && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          onClick={() => setIsCalendarOpen(false)}
+        >
+          <div 
+            className="relative w-[90%] max-w-[1000px] h-[90vh] bg-white rounded-[24px] shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setIsCalendarOpen(false)}
+              className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-black/10 hover:bg-black/20 transition-colors"
+              aria-label="Close calendar"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+
+            {/* Cal.com Embed */}
+            <iframe
+              src="https://cal.com/raksha-tated-v2ee58/15min"
+              className="w-full h-full border-0"
+              allow="camera; microphone; autoplay; display-capture"
+              title="Book a meeting with Raksha"
+            />
+          </div>
+        </div>
+      )}
       </div>
   );
 };
