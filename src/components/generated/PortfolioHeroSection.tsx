@@ -623,27 +623,28 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               {/* Suggestion Pills - Infinite Horizontal Scroll */}
               <div 
                 className="w-full overflow-hidden relative"
-                style={{ cursor: 'grab' }}
                 onMouseEnter={() => setIsHoveringPills(true)}
                 onMouseLeave={() => setIsHoveringPills(false)}
               >
                 <motion.div
                   className="flex items-center gap-3"
                   drag="x"
-                  dragConstraints={{ left: -1000, right: 0 }}
-                  dragElastic={0.1}
-                  animate={{
-                    x: isHoveringPills ? undefined : [-640, 0]
-                  }}
+                  dragConstraints={{ left: -2000, right: 100 }}
+                  dragElastic={0.05}
+                  dragTransition={{ bounceStiffness: 300, bounceDamping: 40 }}
+                  animate={!isHoveringPills ? {
+                    x: [-640, 0]
+                  } : undefined}
                   transition={{
                     x: {
-                      duration: isHoveringPills ? 30 : 15,
+                      duration: isHoveringPills ? 39 : 19.5,
                       repeat: Infinity,
                       ease: "linear",
                       repeatType: "loop"
                     }
                   }}
-                  style={{ willChange: 'transform' }}
+                  style={{ willChange: 'transform', cursor: 'grab' }}
+                  whileDrag={{ cursor: 'grabbing' }}
                 >
                   {/* Render pills twice for seamless loop */}
                   {[...ALL_SUGGESTIONS, ...ALL_SUGGESTIONS].map((suggestion, index) => {
@@ -663,8 +664,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           background: 'rgba(255, 255, 255, 0.2)',
                           backdropFilter: 'blur(20px)',
                           WebkitBackdropFilter: 'blur(20px)',
-                          border: '1px solid rgba(255, 255, 255, 0.3)',
-                          boxShadow: '0 4px 16px 0 rgba(31, 38, 135, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+                          border: '1px solid rgba(255, 255, 255, 0.3)'
                         }}
                         whileHover={{
                           scale: 1.05,
