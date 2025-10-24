@@ -3,6 +3,8 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { ArrowUp, ArrowUpRight } from "lucide-react";
+import { sendToAI, getFallbackResponse, type ChatMessage } from "../../lib/ai-chat";
+import { AI_CONFIG } from "../../lib/config";
 
 export interface RakshaPortfolioProps {}
 
@@ -330,9 +332,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   <path d="M0 35C0 15.67 15.67 0 35 0H316C340.301 0 360 19.6995 360 44V70H35C15.67 70 0 54.33 0 35Z" fill="black" fillOpacity="0.79"/>
                 </svg>
                 
-                {/* Text overlay - vertically and horizontally centered */}
+                {/* Text overlay - vertically and horizontally centered with proper padding */}
                 <p
-                  className="absolute inset-0 flex items-center justify-end pr-[22px] text-[14px] leading-[21px] font-light text-white text-right whitespace-nowrap"
+                  className="absolute inset-0 flex items-center justify-center px-[22px] text-[14px] leading-[21px] font-light text-white text-center"
                   style={{ 
                     fontFamily: 'Nexa Text, system-ui, sans-serif'
                   }}
