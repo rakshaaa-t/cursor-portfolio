@@ -472,10 +472,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             <div 
               className="absolute left-[80px] w-[640px] top-0 h-[40px] pointer-events-none z-10"
               style={{
-                backdropFilter: 'blur(30px)',
-                WebkitBackdropFilter: 'blur(30px)',
-                maskImage: 'linear-gradient(to bottom, black, transparent)',
-                WebkitMaskImage: 'linear-gradient(to bottom, black, transparent)'
+                background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0))',
+                backdropFilter: 'blur(25px)',
+                WebkitBackdropFilter: 'blur(25px)'
               }}
             />
             
