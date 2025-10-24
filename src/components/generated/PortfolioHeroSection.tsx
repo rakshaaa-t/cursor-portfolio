@@ -8,6 +8,52 @@ import { AI_CONFIG } from "../../lib/config";
 
 export interface RakshaPortfolioProps {}
 
+// Memoized message component to prevent re-renders
+const MessageBubble = React.memo(({ msg }: { msg: ChatMessage }) => {
+  if (msg.sender === 'ai') {
+    return (
+      <div className="flex items-start gap-3 max-w-[560px]">
+        <div className="relative w-[48px] h-[48px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
+          <img
+            src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
+            alt="Profile"
+            className="absolute w-full h-full object-cover"
+          />
+        </div>
+        <div
+          className="px-[18px] py-[14px] bg-white text-black"
+          style={{
+            borderRadius: '30px 30px 30px 0px',
+            boxShadow: '0 4px 12px rgba(40, 63, 228, 0.08)'
+          }}
+        >
+          <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
+            {msg.content || ''}
+          </p>
+        </div>
+      </div>
+    );
+  }
+  
+  return (
+    <div className="max-w-[560px]">
+      <div
+        className="px-[22px] py-[20px] bg-black/[0.79] text-white"
+        style={{
+          borderRadius: '30px 30px 0px 30px',
+          boxShadow: '0 4px 12px rgba(40, 63, 228, 0.08)'
+        }}
+      >
+        <p className="text-[14px] leading-[21px] font-light" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
+          {msg.content}
+        </p>
+      </div>
+    </div>
+  );
+});
+
+MessageBubble.displayName = 'MessageBubble';
+
 const NAV_ITEMS = [
   {
     id: "chat" as const,
@@ -428,53 +474,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 </div>
               </div>
 
-              {/* Dynamic Messages */}
+              {/* Dynamic Messages - Memoized for performance */}
               {messages.map((msg) => (
                 <div key={msg.id} className={`w-full flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  {msg.sender === 'ai' && (
-                    <motion.div 
-                      className="flex items-start gap-3 max-w-[560px]"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
-                    >
-                      <div className="relative w-[48px] h-[48px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
-                        <img
-                          src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
-                          alt="Profile"
-                          className="absolute w-full h-full object-cover"
-                        />
-                      </div>
-                      <div
-                        className="px-[18px] py-[14px] bg-white text-black"
-                        style={{
-                          borderRadius: '30px 30px 30px 0px',
-                          filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))',
-                          willChange: 'contents',
-                          transform: 'translate3d(0,0,0)'
-                        }}
-                      >
-                        <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
-                          {msg.content || ''}
-              </p>
-            </div>
-          </motion.div>
-                  )}
-                  {msg.sender === 'user' && (
-                    <div className="max-w-[560px]">
-                      <div
-                        className="px-[22px] py-[20px] bg-black/[0.79] text-white"
-                        style={{
-                          borderRadius: '30px 30px 0px 30px',
-                          filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
-                        }}
-                      >
-                        <p className="text-[14px] leading-[21px] font-light" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
-                          {msg.content}
-                        </p>
-                      </div>
-                    </div>
-                  )}
+                  <MessageBubble msg={msg} />
                 </div>
               ))}
               
@@ -493,7 +496,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       className="px-[22px] py-[20px] bg-white text-black"
                       style={{
                         borderRadius: '30px 30px 30px 0px',
-                        filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
+                        boxShadow: '0 4px 12px rgba(40, 63, 228, 0.08)'
                       }}
                     >
                       <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
