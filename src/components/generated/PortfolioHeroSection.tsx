@@ -80,6 +80,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const baseVelocityRef = React.useRef(-640 / 48.75); // pixels per second (normal speed)
   const slowVelocityRef = React.useRef(-640 / 78); // pixels per second (slow speed)
   const currentVelocityRef = React.useRef(baseVelocityRef.current);
+  
+  // Placeholder animation states
+  const [isHoveringInput, setIsHoveringInput] = React.useState(false);
+  const [showOriginalText, setShowOriginalText] = React.useState(true);
+  const [revealedChars, setRevealedChars] = React.useState(0);
+  const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -107,6 +113,52 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     
     x.set(newX);
   });
+
+  // Placeholder hover animation
+  React.useEffect(() => {
+    if (isHoveringInput) {
+      // Clear any existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      
+      // Fade out original text
+      setShowOriginalText(false);
+      
+      // Wait for fade out, then start typewriter
+      timeoutRef.current = setTimeout(() => {
+        setRevealedChars(0);
+        const fullText = "raksha can see all our messages";
+        let charIndex = 0;
+        
+        const typeInterval = setInterval(() => {
+          charIndex++;
+          setRevealedChars(charIndex);
+          
+          if (charIndex >= fullText.length) {
+            clearInterval(typeInterval);
+          }
+        }, 28); // 28ms per character (8% faster than 30ms)
+        
+        return () => clearInterval(typeInterval);
+      }, 138); // 138ms pause (8% faster than 150ms)
+    } else {
+      // Clear any existing timeout
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      
+      // Reset to original state
+      setShowOriginalText(true);
+      setRevealedChars(0);
+    }
+    
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [isHoveringInput]);
 
   const handleSendMessage = async (messageText?: string) => {
     const textToSend = messageText || inputValue.trim();
@@ -413,6 +465,16 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           <div className="absolute w-[605px] h-[313px] left-1/2 bottom-[267px] -translate-x-1/2 -translate-x-[172px] bg-gradient-to-r from-[rgba(255,255,255,0.88)] to-[rgba(255,255,255,0.1936)] rounded-[4444px] blur-[100px] pointer-events-none" />
 
           <div className="relative h-full">
+            {/* Top Transparent Blur Overlay */}
+            <div 
+              className="absolute left-[80px] w-[640px] top-0 h-[40px] pointer-events-none z-10"
+              style={{
+                background: 'linear-gradient(to bottom, rgba(233, 232, 255, 0.95), rgba(233, 232, 255, 0))',
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)'
+              }}
+            />
+            
             {/* Chat Messages Container - Scrollable */}
             <div 
               className="absolute left-[80px] w-[640px] top-[40px] h-[320px] flex flex-col"
@@ -606,7 +668,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       </defs>
                     </svg>
 
-                    <div className="relative flex-1 min-w-0 h-[24px] flex items-center">
+                    <div 
+                      className="relative flex-1 min-w-0 h-[24px] flex items-center"
+                      onMouseEnter={() => setIsHoveringInput(true)}
+                      onMouseLeave={() => setIsHoveringInput(false)}
+                    >
                       <input
                         type="text"
                         value={inputValue}
@@ -617,15 +683,25 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                       />
                       {!inputValue && (
-                        <div
-                          className="absolute inset-0 pointer-events-none flex items-center whitespace-nowrap"
-                        >
-                          <span
-                            className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap"
-                            style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
-                          >
-                            talk 2 me
-                          </span>
+                        <div className="absolute inset-0 pointer-events-none flex items-center whitespace-nowrap">
+                          {showOriginalText ? (
+                            <span
+                              className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap transition-opacity duration-150"
+                              style={{ 
+                                fontFamily: 'Nexa, system-ui, sans-serif',
+                                opacity: isHoveringInput ? 0 : 1
+                              }}
+                            >
+                              talk 2 me
+                            </span>
+                          ) : (
+                            <span
+                              className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap"
+                              style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
+                            >
+                              {"raksha can see all our messages".substring(0, revealedChars)}
+                            </span>
+                          )}
                         </div>
                       )}
                     </div>
