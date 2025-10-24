@@ -497,7 +497,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               >
                 <div className="w-full flex items-center justify-between gap-3">
                   {/* Left: Sparkle Icon + Input */}
-                  <div className="flex items-center gap-3 flex-1">
+                  <div className="flex items-center gap-3 flex-1" style={{ alignItems: 'center' }}>
                     {/* Sparkle Icon SVG */}
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                       <g clipPath="url(#clip0_371_175)">
@@ -547,7 +547,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       </defs>
                     </svg>
 
-                    <div className="relative flex-1 min-w-0">
+                    <div className="relative flex-1 min-w-0 flex items-center">
                       <input
                         type="text"
                         value={inputValue}
@@ -559,7 +559,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       />
                       {!inputValue && (
                         <div
-                          className="absolute inset-0 pointer-events-none flex items-center"
+                          className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none flex items-center"
                           onMouseEnter={() => {
                             setIsPlaceholderHovered(true);
                             setShowAlternateText(true);
