@@ -354,7 +354,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             {/* Chat Messages Container - Scrollable */}
             <div 
               ref={chatContainerRef}
-              className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[90px] h-[220px] overflow-y-auto flex flex-col gap-4 px-2 custom-scrollbar"
+              className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[75px] h-[280px] overflow-y-auto flex flex-col gap-3 px-2 custom-scrollbar"
               style={{ scrollBehavior: 'smooth' }}
             >
               {/* Initial Welcome Message - Always show */}
@@ -368,7 +368,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     />
                   </div>
                   <div
-                    className="px-[22px] py-[20px] bg-white text-black flex-1"
+                    className="px-[18px] py-[14px] bg-white text-black flex-1"
                     style={{
                       borderRadius: '30px 30px 30px 0px',
                       filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
@@ -394,7 +394,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         />
                       </div>
                       <div
-                        className="px-[22px] py-[20px] bg-white text-black"
+                        className="px-[18px] py-[14px] bg-white text-black"
                         style={{
                           borderRadius: '30px 30px 30px 0px',
                           filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
@@ -489,9 +489,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   boxShadow: '0px 297px 119px rgba(0, 0, 0, 0.01), 0px 167px 100px rgba(0, 0, 0, 0.02), 0px 74px 74px rgba(0, 0, 0, 0.03), 0px 19px 41px rgba(0, 0, 0, 0.04)'
                 }}
               >
-                <div className="w-full flex items-center justify-between">
-                  {/* Left: Sparkle Icon + "Talk 2 me" */}
-                  <div className="flex items-center gap-2.5">
+                <div className="w-full flex items-center justify-between gap-3">
+                  {/* Left: Sparkle Icon + Input */}
+                  <div className="flex items-center gap-3 flex-1">
                     {/* Sparkle Icon SVG */}
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                       <g clipPath="url(#clip0_371_175)">
@@ -548,7 +548,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       onKeyPress={handleKeyPress}
                       disabled={isLoading}
                       placeholder="Talk 2 me"
-                      className="flex-1 bg-transparent border-none outline-none text-[16px] leading-[24px] font-normal text-black placeholder:text-black/[0.44] disabled:opacity-50 ml-2"
+                      className="flex-1 bg-transparent border-none outline-none text-[16px] leading-[24px] font-normal text-black placeholder:text-black/[0.44] disabled:opacity-50 min-w-0"
                       style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                     />
                   </div>
