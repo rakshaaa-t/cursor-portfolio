@@ -242,9 +242,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
       setMessages(prev => [...prev, aiMessage]);
       
-      // Trigger typing effect
-      setTypingMessageId(aiMessage.id);
-      setTypedChars(0);
     } catch (error) {
       // Fallback response
       const fallbackMessage: ChatMessage = {
@@ -256,9 +253,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       };
       setMessages(prev => [...prev, fallbackMessage]);
       
-      // Trigger typing effect
-      setTypingMessageId(fallbackMessage.id);
-      setTypedChars(0);
     } finally {
       setIsLoading(false);
     }
@@ -305,9 +299,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       };
       setMessages(prev => [...prev, aiMessage]);
       
-      // Trigger typing effect
-      setTypingMessageId(aiMessage.id);
-      setTypedChars(0);
     } catch (error) {
       const fallbackMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -318,9 +309,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       };
       setMessages(prev => [...prev, fallbackMessage]);
       
-      // Trigger typing effect
-      setTypingMessageId(fallbackMessage.id);
-      setTypedChars(0);
     } finally {
       setIsLoading(false);
       // Clear latest message ID immediately
@@ -592,7 +580,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         }}
                       >
                         <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
-                          {typingMessageId === msg.id ? (msg.content || '').substring(0, typedChars) : (msg.content || '')}
+                          {msg.content || ''}
               </p>
             </div>
                     </div>
