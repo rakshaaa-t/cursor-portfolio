@@ -93,7 +93,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const typeIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
 
-  // Auto-scroll to bottom when messages change or during typing
+  // Auto-scroll to bottom when messages change (not during typing)
   React.useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTo({
@@ -101,7 +101,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         behavior: 'smooth'
       });
     }
-  }, [messages, isLoading, typedChars]);
+  }, [messages.length]);
 
   // Smooth velocity transition based on hover
   useAnimationFrame((time, delta) => {
@@ -274,8 +274,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const handlePillClick = async (pillText: string) => {
     if (isLoading) return;
     
-    // Remove pill from visible array immediately
-    setVisiblePills(prev => prev.filter(p => p !== pillText));
+    // Cycle pill to end for infinite loop
+    setVisiblePills(prev => {
+      const filtered = prev.filter(p => p !== pillText);
+      return [...filtered, pillText];
+    });
     
     // Add message to chat
     const userMessage: ChatMessage = {
