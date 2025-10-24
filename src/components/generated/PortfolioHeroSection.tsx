@@ -86,6 +86,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [showOriginalText, setShowOriginalText] = React.useState(true);
   const [revealedChars, setRevealedChars] = React.useState(0);
   const timeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  const typeIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -116,12 +117,15 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
   // Placeholder hover animation
   React.useEffect(() => {
+    // Clear any existing timeout and interval
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    if (typeIntervalRef.current) {
+      clearInterval(typeIntervalRef.current);
+    }
+    
     if (isHoveringInput) {
-      // Clear any existing timeout
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      
       // Fade out original text
       setShowOriginalText(false);
       
@@ -131,27 +135,23 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         const fullText = "raksha can see all our messages";
         let charIndex = 0;
         
-        const typeInterval = setInterval(() => {
+        typeIntervalRef.current = setInterval(() => {
           charIndex++;
           setRevealedChars(charIndex);
           
           if (charIndex >= fullText.length) {
-            clearInterval(typeInterval);
+            if (typeIntervalRef.current) {
+              clearInterval(typeIntervalRef.current);
+              typeIntervalRef.current = null;
+            }
           }
         }, 17); // 17ms per character (40% faster: 28 * 0.6)
-        
-        return () => clearInterval(typeInterval);
       }, 83); // 83ms pause (40% faster: 138 * 0.6)
     } else {
-      // Clear any existing timeout
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      
       // Instantly clear typed text, then fade in original
       setRevealedChars(0);
       // Small delay to ensure typed text clears before fade in starts
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setShowOriginalText(true);
       }, 10);
     }
@@ -159,6 +159,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+      }
+      if (typeIntervalRef.current) {
+        clearInterval(typeIntervalRef.current);
       }
     };
   }, [isHoveringInput]);
@@ -693,7 +696,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                               style={{ 
                                 fontFamily: 'Nexa, system-ui, sans-serif',
                                 opacity: isHoveringInput ? 0 : 1,
-                                lineHeight: '1',
+                                lineHeight: '24px',
                                 display: 'inline-block'
                               }}
                             >
@@ -705,7 +708,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                               className="text-[16px] font-normal text-black/[0.44] whitespace-nowrap"
                               style={{ 
                                 fontFamily: 'Nexa, system-ui, sans-serif',
-                                lineHeight: '1',
+                                lineHeight: '24px',
                                 display: 'inline-block'
                               }}
                             >
