@@ -259,47 +259,18 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
             {/* First Chat Bubble - White - Left aligned within 640px container */}
             <div className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[90px]">
-              <svg width="560" height="500" viewBox="0 0 560 500" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute left-0">
-                <defs>
-                  <filter id="whiteBubbleFilter" x="-100%" y="-100%" width="300%" height="500%" filterUnits="objectBoundingBox" colorInterpolationFilters="sRGB">
-                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                    
-                    {/* Layer 1 - Close soft shadow with spread */}
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha1" />
-                    <feMorphology radius="2" operator="dilate" in="hardAlpha1" result="spread1" />
-                    <feOffset dy="15" in="spread1" />
-                    <feGaussianBlur stdDeviation="20" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.04 0" />
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow" />
-                    
-                    {/* Layer 2 - Medium shadow with spread */}
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha2" />
-                    <feMorphology radius="1" operator="dilate" in="hardAlpha2" result="spread2" />
-                    <feOffset dy="62" in="spread2" />
-                    <feGaussianBlur stdDeviation="35" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.03 0" />
-                    <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow" />
-                    
-                    {/* Layer 3 - Far soft shadow */}
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha3" />
-                    <feOffset dy="139" in="hardAlpha3" />
-                    <feGaussianBlur stdDeviation="50" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.02 0" />
-                    <feBlend mode="normal" in2="effect2_dropShadow" result="effect3_dropShadow" />
-                    
-                    {/* Layer 4 - Ambient shadow */}
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha4" />
-                    <feOffset dy="248" in="hardAlpha4" />
-                    <feGaussianBlur stdDeviation="60" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.01 0" />
-                    <feBlend mode="normal" in2="effect3_dropShadow" result="effect4_dropShadow" />
-                    
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect4_dropShadow" result="shape" />
-                  </filter>
-                </defs>
-                <g filter="url(#whiteBubbleFilter)">
-                  <path d="M0 75C0 40 0 22 11 11C22 0 40 0 75 0H505C518 0 525 0 530 1.5C542 5 551 14 555 26C556 31 556 38 556 50C556 62 556 69 555 74C551 86 542 95 530 98.5C525 100 518 100 505 100H0V75Z" fill="white" />
-                </g>
+              <svg 
+                width="560" 
+                height="500" 
+                viewBox="0 0 560 500" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="absolute left-0"
+                style={{
+                  filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
+                }}
+              >
+                <path d="M0 75C0 40 0 22 11 11C22 0 40 0 75 0H505C518 0 525 0 530 1.5C542 5 551 14 555 26C556 31 556 38 556 50C556 62 556 69 555 74C551 86 542 95 530 98.5C525 100 518 100 505 100H0V75Z" fill="white" />
               </svg>
 
               {/* Message Content Overlay */}
@@ -322,47 +293,18 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
             {/* Second Chat Bubble - Dark - Right aligned within 640px container */}
             <div className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[215px]">
-              <svg width="480" height="500" viewBox="0 0 480 500" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute right-0">
-                <defs>
-                  <filter id="darkBubbleFilter" x="-100%" y="-100%" width="300%" height="600%" filterUnits="objectBoundingBox" colorInterpolationFilters="sRGB">
-                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                    
-                    {/* Layer 1 - Close soft shadow with spread */}
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha1" />
-                    <feMorphology radius="2" operator="dilate" in="hardAlpha1" result="spread1" />
-                    <feOffset dy="15" in="spread1" />
-                    <feGaussianBlur stdDeviation="20" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.04 0" />
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow" />
-                    
-                    {/* Layer 2 - Medium shadow with spread */}
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha2" />
-                    <feMorphology radius="1" operator="dilate" in="hardAlpha2" result="spread2" />
-                    <feOffset dy="62" in="spread2" />
-                    <feGaussianBlur stdDeviation="35" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.03 0" />
-                    <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow" />
-                    
-                    {/* Layer 3 - Far soft shadow */}
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha3" />
-                    <feOffset dy="139" in="hardAlpha3" />
-                    <feGaussianBlur stdDeviation="50" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.02 0" />
-                    <feBlend mode="normal" in2="effect2_dropShadow" result="effect3_dropShadow" />
-                    
-                    {/* Layer 4 - Ambient shadow */}
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha4" />
-                    <feOffset dy="248" in="hardAlpha4" />
-                    <feGaussianBlur stdDeviation="60" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.01 0" />
-                    <feBlend mode="normal" in2="effect3_dropShadow" result="effect4_dropShadow" />
-                    
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect4_dropShadow" result="shape" />
-                  </filter>
-                </defs>
-                <g filter="url(#darkBubbleFilter)">
-                  <path d="M0 30C0 13.4 13.4 0 30 0H445C465 0 480 15 480 37V60H30C13.4 60 0 46.6 0 30Z" fill="black" fillOpacity="0.79" />
-                </g>
+              <svg 
+                width="480" 
+                height="500" 
+                viewBox="0 0 480 500" 
+                fill="none" 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="absolute right-0"
+                style={{
+                  filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
+                }}
+              >
+                <path d="M0 30C0 13.4 13.4 0 30 0H445C465 0 480 15 480 37V60H30C13.4 60 0 46.6 0 30Z" fill="black" fillOpacity="0.79" />
               </svg>
 
               {/* Text overlay */}
