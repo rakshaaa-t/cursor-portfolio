@@ -146,8 +146,18 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     }
   };
 
+  // TEST: Render message count at top
+  console.log('RENDER - Current messages:', messages.length, messages);
+  
   return (
     <div className="relative w-full min-h-screen bg-[#D8D4E8] overflow-hidden">
+      {/* DEBUG PANEL - Remove after testing */}
+      <div className="fixed top-0 left-0 bg-red-500 text-white p-4 z-[9999]">
+        <p>Messages: {messages.length}</p>
+        <p>Loading: {isLoading ? 'Yes' : 'No'}</p>
+        <p>Input: "{inputValue}"</p>
+      </div>
+      
       {/* Background Blurs */}
       <div className="absolute w-[1472px] h-[761px] -left-[227px] top-[281px] bg-[rgba(0,132,255,0.1)] rounded-[4444px] blur-[200px] pointer-events-none" />
       <div className="absolute w-[1629px] h-[842px] left-[474px] top-[617px] bg-white rounded-[4444px] blur-[200px] pointer-events-none" />

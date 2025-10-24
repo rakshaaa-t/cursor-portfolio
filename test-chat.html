@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat Test</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <script type="text/babel">
+    const { useState } = React;
+    
+    function ChatTest() {
+      const [messages, setMessages] = useState([]);
+      const [input, setInput] = useState('');
+      
+      const handleSend = () => {
+        if (!input.trim()) return;
+        console.log('Adding message:', input);
+        setMessages(prev => [...prev, { id: Date.now(), text: input, sender: 'user' }]);
+        setInput('');
+      };
+      
+      console.log('Rendering with messages:', messages);
+      
+      return (
+        <div style={{ padding: '20px', fontFamily: 'Arial' }}>
+          <h2>Chat Test</h2>
+          <div style={{ border: '1px solid black', padding: '10px', minHeight: '200px', marginBottom: '10px' }}>
+            <p>Welcome message (always visible)</p>
+            <p>Message count: {messages.length}</p>
+            {messages.map(msg => (
+              <div key={msg.id} style={{ background: '#eee', padding: '10px', margin: '5px 0', textAlign: 'right' }}>
+                {msg.text}
+              </div>
+            ))}
+          </div>
+          <input 
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+            placeholder="Type a message"
+            style={{ width: '300px', padding: '5px' }}
+          />
+          <button onClick={handleSend} style={{ padding: '5px 10px', marginLeft: '5px' }}>
+            Send
+          </button>
+        </div>
+      );
+    }
+    
+    ReactDOM.render(<ChatTest />, document.getElementById('root'));
+  </script>
+</body>
+</html>
+
