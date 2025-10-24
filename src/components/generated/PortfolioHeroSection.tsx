@@ -742,8 +742,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     </div>
 
                     <div 
-                      className="relative flex-1 min-w-0 flex items-center"
-                      style={{ height: '44px' }}
+                      className="relative flex-1 min-w-0"
+                      style={{ height: '44px', display: 'flex', alignItems: 'center' }}
                       onMouseEnter={() => setIsHoveringInput(true)}
                       onMouseLeave={() => setIsHoveringInput(false)}
                     >
@@ -753,12 +753,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyPress={handleKeyPress}
                         disabled={isLoading}
-                        className="w-full h-full bg-transparent border-none outline-none text-[16px] font-normal text-black disabled:opacity-50"
+                        className="w-full bg-transparent border-none outline-none text-[16px] font-normal text-black disabled:opacity-50"
                         style={{ 
                           fontFamily: 'Nexa, system-ui, sans-serif',
-                          lineHeight: '1',
+                          lineHeight: '16px',
                           padding: 0,
-                          transform: 'translateY(-1px)'
+                          margin: 0,
+                          height: '16px'
                         }}
                       />
                       {!inputValue && (
@@ -769,8 +770,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                               style={{ 
                                 fontFamily: 'Nexa, system-ui, sans-serif',
                                 opacity: isHoveringInput ? 0 : 1,
-                                lineHeight: '1',
-                                transform: 'translateY(-1px)'
+                                lineHeight: '16px',
+                                height: '16px',
+                                display: 'inline-block'
                               }}
                             >
                               talk 2 me
@@ -781,8 +783,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                               className="text-[16px] font-normal text-black/[0.44] whitespace-nowrap"
                               style={{ 
                                 fontFamily: 'Nexa, system-ui, sans-serif',
-                                lineHeight: '1',
-                                transform: 'translateY(-1px)'
+                                lineHeight: '16px',
+                                height: '16px',
+                                display: 'inline-block'
                               }}
                             >
                               {"raksha can see all our messages".substring(0, revealedChars)}
