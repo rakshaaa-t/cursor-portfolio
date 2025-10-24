@@ -519,13 +519,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             <div className="absolute w-[640px] left-[80px] bottom-[40px] flex flex-col items-center gap-[12px]">
               {/* Suggestion Pills - Horizontally Scrollable */}
               <div 
-                className="w-full overflow-x-auto flex items-center gap-2 py-3"
+                className="w-full overflow-x-auto flex items-center gap-2"
                 style={{
                   scrollbarWidth: 'none',
                   msOverflowStyle: 'none',
-                  WebkitOverflowScrolling: 'touch',
-                  paddingLeft: '2px',
-                  paddingRight: '2px'
+                  WebkitOverflowScrolling: 'touch'
                 }}
               >
                   {ALL_SUGGESTIONS.map((suggestion, index) => {
@@ -560,13 +558,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         >
                           {suggestion}
         </span>
-                        {/* Subtle hover glow */}
-                        <div 
-                          className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
-                          style={{
-                            boxShadow: '0 0 20px rgba(79, 92, 255, 0.15), 0 0 40px rgba(79, 92, 255, 0.08)'
-                          }}
-                        />
                       </motion.button>
                     );
                   })}
