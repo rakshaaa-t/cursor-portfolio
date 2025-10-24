@@ -221,12 +221,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           </p>
         </motion.div>
 
-        {/* Chat Interface Card - 955x544 */}
+        {/* Chat Interface Card - Made Smaller */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="relative w-[955px] h-[544px] mx-auto bg-gradient-to-b from-[#E9E8FF] to-[#EFF4EC] rounded-[44px] border-2 border-white overflow-hidden"
+          className="relative w-[800px] h-[480px] mx-auto bg-gradient-to-b from-[#E9E8FF] to-[#EFF4EC] rounded-[44px] border-2 border-white overflow-hidden"
           style={{
             boxShadow: '0px 480px 192px rgba(0, 0, 0, 0.01), 0px 270px 162px rgba(0, 0, 0, 0.02), 0px 120px 120px rgba(0, 0, 0, 0.03), 0px 30px 66px rgba(0, 0, 0, 0.04)'
           }}
@@ -237,26 +237,26 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
           <div className="relative">
             {/* Header - "hey i'm raks" | "email : contact@rakshaaa.com" */}
-            <div className="absolute w-[662px] h-[30px] left-1/2 -translate-x-1/2 top-[42px] flex items-end justify-between">
+            <div className="absolute w-[560px] h-[24px] left-1/2 -translate-x-1/2 top-[36px] flex items-end justify-between">
               <div className="flex items-end gap-3">
                 <span
-                  className="text-[20px] leading-[30px] font-light text-black"
+                  className="text-[16px] leading-[24px] font-light text-black"
                   style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                 >
                   <span>hey i'm raks</span>
                 </span>
               </div>
               <span
-                className="text-[20px] leading-[30px] font-normal text-black/[0.22]"
+                className="text-[16px] leading-[24px] font-normal text-black/[0.22]"
                 style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
               >
                 <span>email : contact@rakshaaa.com</span>
               </span>
             </div>
 
-            {/* First Chat Bubble - White (572x120) - SVG Based */}
-            <div className="absolute left-[99px] top-[107px]">
-              <svg width="572" height="139" viewBox="0 0 572 139" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* First Chat Bubble - White - Smaller */}
+            <div className="absolute left-[80px] top-[90px]">
+              <svg width="480" height="120" viewBox="0 0 480 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <filter id="whiteBubbleFilter" x="0" y="0" width="770" height="486" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
                     <feFlood floodOpacity="0" result="BackgroundImageFix" />
@@ -284,13 +284,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   </filter>
                 </defs>
                 <g filter="url(#whiteBubbleFilter)">
-                  <path d="M0 88C0 46.5164 0 25.7746 12.887 12.8873C25.775 0 46.516 0 88 0H512C526.884 0 534.326 0 540.396 1.7823C554.763 6.0009 565.999 17.2365 570.218 31.6038C572 37.6738 572 45.1158 572 60C572 74.8842 572 82.326 570.218 88.396C565.999 102.763 554.763 113.999 540.396 118.218C534.326 120 526.884 120 512 120H0V88Z" fill="white" />
+                  <path d="M0 75C0 40 0 22 11 11C22 0 40 0 75 0H430C443 0 450 0 455 1.5C467 5 476 14 480 26C481 31 481 38 481 50C481 62 481 69 480 74C476 86 467 95 455 98.5C450 100 443 100 430 100H0V75Z" fill="white" />
                 </g>
               </svg>
 
               {/* Message Content Overlay */}
-              <div className="absolute top-0 left-0 w-[572px] h-[120px] flex items-center px-6 gap-4">
-                <div className="relative w-[59px] h-[59px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
+              <div className="absolute top-0 left-0 w-[480px] h-[100px] flex items-center px-5 gap-3">
+                <div className="relative w-[48px] h-[48px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
                   <img
                     src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
                     alt="Profile"
@@ -306,9 +306,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               </div>
             </div>
 
-            {/* Second Chat Bubble - Dark (492x70) - SVG Based */}
-            <div className="absolute left-[373px] top-[250px]">
-              <svg width="492" height="89" viewBox="0 0 492 89" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Second Chat Bubble - Dark - Smaller */}
+            <div className="absolute left-[310px] top-[215px]">
+              <svg width="410" height="75" viewBox="0 0 410 75" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <filter id="darkBubbleFilter" x="0" y="0" width="690" height="436" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
                     <feFlood floodOpacity="0" result="BackgroundImageFix" />
@@ -336,13 +336,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   </filter>
                 </defs>
                 <g filter="url(#darkBubbleFilter)">
-                  <path d="M0 35C0 15.67 15.67 0 35 0H448C472.301 0 492 19.6995 492 44V70H35C15.67 70 0 54.33 0 35Z" fill="black" fillOpacity="0.79" />
+                  <path d="M0 30C0 13.4 13.4 0 30 0H375C395 0 410 15 410 37V60H30C13.4 60 0 46.6 0 30Z" fill="black" fillOpacity="0.79" />
                 </g>
               </svg>
 
               {/* Text overlay */}
               <p
-                className="absolute top-[25px] right-[24px] text-[16px] leading-[24px] font-light text-white text-right"
+                className="absolute top-[20px] right-[20px] text-[16px] leading-[24px] font-light text-white text-right"
                 style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
               >
                 <span>Hi raksha can u tell me a bit about yourself</span>
@@ -350,17 +350,17 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             </div>
 
             {/* Bottom Section - Suggestions + Input */}
-            <div className="absolute w-[662px] left-[146px] top-[398px] flex flex-col items-center gap-[15px]">
-              {/* Suggestion Pills - SVG Based */}
-              <div className="w-full flex items-center justify-center gap-3">
+            <div className="absolute w-[560px] left-1/2 -translate-x-1/2 top-[340px] flex flex-col items-center gap-[12px]">
+              {/* Suggestion Pills - With Glass Effect */}
+              <div className="w-full flex items-center justify-center gap-2">
                 {SUGGESTION_PILLS.map((pill) => {
                   return (
                     <button key={pill.id} className="relative hover:opacity-80 transition-opacity">
-                      <svg width="226" height="37" viewBox="0 0 226 37" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="226" height="37" rx="18.5" fill="white" fillOpacity="0.1" />
+                      <svg width="202" height="37" viewBox="0 0 202 37" fill="none" xmlns="http://www.w3.org/2000/svg" className="backdrop-blur-sm">
+                        <rect width="202" height="37" rx="18.5" fill="white" fillOpacity="0.1" />
                       </svg>
                       <span
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[14px] leading-[21px] font-normal text-black/[0.64] text-center whitespace-nowrap"
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[13px] leading-[20px] font-normal text-black/[0.64] text-center whitespace-nowrap"
                         style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
                       >
                         <span>{pill.text}</span>
@@ -370,9 +370,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 })}
               </div>
 
-              {/* Input Bar - 662x63 */}
+              {/* Input Bar - Smaller */}
               <div
-                className="w-[662px] h-[63px] flex items-center justify-center px-[22px] py-[6px] rounded-[100px] border border-white"
+                className="w-[560px] h-[56px] flex items-center justify-center px-[20px] py-[6px] rounded-[100px] border border-white"
                 style={{
                   background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.44) 100%)',
                   boxShadow: '0px 297px 119px rgba(0, 0, 0, 0.01), 0px 167px 100px rgba(0, 0, 0, 0.02), 0px 74px 74px rgba(0, 0, 0, 0.03), 0px 19px 41px rgba(0, 0, 0, 0.04)'
@@ -380,7 +380,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               >
                 <div className="w-full flex items-center justify-between">
                   {/* Left: Sparkle Icon + "Talk 2 me" */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2.5">
                     {/* Sparkle Icon SVG */}
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <defs>
@@ -421,13 +421,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
                   {/* Right: Send Button */}
                   <button
-                    className="w-[50px] h-[50px] bg-white rounded-[3333px] flex items-center justify-center hover:shadow-lg transition-shadow"
+                    className="w-[44px] h-[44px] bg-white rounded-[3333px] flex items-center justify-center hover:shadow-lg transition-shadow"
                     style={{
                       boxShadow: '-17px 20px 10px rgba(40, 63, 228, 0.01), -10px 11px 9px rgba(40, 63, 228, 0.02), -4px 5px 7px rgba(40, 63, 228, 0.03), -1px 1px 4px rgba(40, 63, 228, 0.04)'
                     }}
                     aria-label="Send message"
                   >
-                    <ArrowUp className="w-[24px] h-[24px] text-[#283FE4]" strokeWidth={2} />
+                    <ArrowUp className="w-[20px] h-[20px] text-[#283FE4]" strokeWidth={2} />
                   </button>
                 </div>
               </div>
