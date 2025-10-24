@@ -14,8 +14,10 @@ body {
   min-height: 100vh;
   box-sizing: border-box;
   overflow: auto;
-  overscroll-behavior-x: none;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
   background-color: #D8D4E8;
+  scroll-behavior: auto;
 }
 
 @theme inline {
@@ -141,7 +143,11 @@ body {
     width: 100%;
     margin: 0;
     padding: 0;
-    overscroll-behavior-x: none;
+    overscroll-behavior: none;
+  }
+  
+  html {
+    scroll-behavior: auto;
   }
 }
 
