@@ -75,6 +75,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [showAlternateText, setShowAlternateText] = React.useState(false);
   const [startTypewriter, setStartTypewriter] = React.useState(false);
   const typewriterTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  const [flyingPill, setFlyingPill] = React.useState<{ text: string; startPos: DOMRect; endPos: DOMRect } | null>(null);
+  const [animatingPillId, setAnimatingPillId] = React.useState<number | null>(null);
+  const [latestMessageId, setLatestMessageId] = React.useState<string | null>(null);
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -134,6 +137,73 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       e.preventDefault();
       handleSendMessage();
     }
+  };
+
+  const handlePillClick = async (pillText: string, pillId: number, event: React.MouseEvent<HTMLButtonElement>) => {
+    if (animatingPillId !== null || isLoading) return;
+    
+    const button = event.currentTarget;
+    const startPos = button.getBoundingClientRect();
+    const chatContainer = chatContainerRef.current;
+    
+    if (!chatContainer) return;
+    
+    // Get the end position (bottom of chat area)
+    const chatRect = chatContainer.getBoundingClientRect();
+    const endPos = new DOMRect(
+      chatRect.right - 200, // Position from right side
+      chatRect.bottom - 50,  // Near bottom
+      startPos.width,
+      startPos.height
+    );
+    
+    // Start animation
+    setAnimatingPillId(pillId);
+    setFlyingPill({ text: pillText, startPos, endPos });
+    
+    // Wait for flight animation to complete
+    setTimeout(async () => {
+      setFlyingPill(null);
+      
+      // Add message to chat
+      const userMessage: ChatMessage = {
+        id: Date.now().toString(),
+        type: 'text',
+        content: pillText,
+        sender: 'user',
+        timestamp: Date.now()
+      };
+      
+      setLatestMessageId(userMessage.id);
+      setMessages(prev => [...prev, userMessage]);
+      setIsLoading(true);
+      
+      try {
+        const response = await sendToAI(pillText, messages, AI_CONFIG.API_KEY);
+        const aiMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          type: 'text',
+          content: response.message,
+          sender: 'ai',
+          timestamp: Date.now()
+        };
+        setMessages(prev => [...prev, aiMessage]);
+      } catch (error) {
+        const fallbackMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          type: 'text',
+          content: getFallbackResponse(pillText),
+          sender: 'ai',
+          timestamp: Date.now()
+        };
+        setMessages(prev => [...prev, fallbackMessage]);
+      } finally {
+        setIsLoading(false);
+        setAnimatingPillId(null);
+        // Clear latest message ID after bounce animation
+        setTimeout(() => setLatestMessageId(null), 300);
+      }
+    }, 600); // Flight duration
   };
 
   return (
@@ -414,7 +484,17 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     </div>
                   )}
                   {msg.sender === 'user' && (
-                    <div className="max-w-[560px]">
+                    <motion.div 
+                      className="max-w-[560px]"
+                      initial={latestMessageId === msg.id ? { scale: 1 } : false}
+                      animate={latestMessageId === msg.id ? {
+                        scale: [1, 1.015, 1]
+                      } : {}}
+                      transition={{
+                        duration: 0.25,
+                        ease: [0.4, 0, 0.2, 1]
+                      }}
+                    >
                       <div
                         className="px-[22px] py-[20px] bg-black/[0.79] text-white"
                         style={{
@@ -426,7 +506,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           {msg.content}
                         </p>
                       </div>
-                    </div>
+                    </motion.div>
                   )}
                 </div>
               ))}
@@ -464,26 +544,36 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               {/* Suggestion Pills - With Glass Effect */}
               <div className="w-full flex items-center justify-center gap-2">
                 {SUGGESTION_PILLS.map((pill) => {
+                  const isHidden = animatingPillId === pill.id;
                   return (
                     <button 
                       key={pill.id}
-                      onClick={() => handleSendMessage(pill.text)}
-                      disabled={isLoading}
-                      className="relative px-6 py-2 h-[37px] rounded-full hover:bg-white/15 transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                      onClick={(e) => handlePillClick(pill.text, pill.id, e)}
+                      disabled={isLoading || animatingPillId !== null}
+                      className="relative px-6 py-2 h-[37px] rounded-full transition-all duration-200 flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.1)',
+                        background: 'rgba(255, 255, 255, 0.15)',
                         backdropFilter: 'blur(20px)',
                         WebkitBackdropFilter: 'blur(20px)',
-                        border: '1px solid rgba(255, 255, 255, 0.18)',
-                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.15)'
+                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                        opacity: isHidden ? 0 : 1,
+                        transition: 'all 0.2s ease'
                       }}
                     >
                       <span
-                        className="text-[13px] leading-[20px] font-normal text-black/[0.64] whitespace-nowrap text-center"
+                        className="text-[13px] leading-[20px] font-normal text-black/[0.64] whitespace-nowrap text-center group-hover:text-black/[0.8] transition-colors duration-200"
                         style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
                       >
                         {pill.text}
-        </span>
+                      </span>
+                      {/* Subtle hover glow */}
+                      <div 
+                        className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+                        style={{
+                          boxShadow: '0 0 20px rgba(79, 92, 255, 0.15), 0 0 40px rgba(79, 92, 255, 0.08)'
+                        }}
+                      />
                     </button>
                   );
                 })}
@@ -684,6 +774,54 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           })}
         </motion.div>
       </div>
+
+      {/* Flying Pill Animation */}
+      {flyingPill && (
+        <motion.div
+          className="fixed pointer-events-none z-[9999] px-6 py-2 h-[37px] rounded-full flex items-center justify-center overflow-hidden"
+          initial={{
+            left: flyingPill.startPos.left,
+            top: flyingPill.startPos.top,
+            width: flyingPill.startPos.width,
+            height: flyingPill.startPos.height,
+            background: 'rgba(255, 255, 255, 0.15)',
+            backdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+            borderRadius: '9999px'
+          }}
+          animate={{
+            left: flyingPill.endPos.left,
+            top: flyingPill.endPos.top,
+            background: 'rgba(0, 0, 0, 0.79)',
+            border: '1px solid transparent',
+            boxShadow: '0 15px 34px rgba(40, 63, 228, 0.04), 0 62px 62px rgba(40, 63, 228, 0.03)',
+            borderRadius: '30px 30px 0px 30px'
+          }}
+          transition={{
+            duration: 0.6,
+            ease: [0.4, 0, 0.2, 1],
+            left: {
+              duration: 0.6,
+              ease: [0.34, 1.56, 0.64, 1] // Slight arc easing
+            },
+            top: {
+              duration: 0.6,
+              ease: [0.34, 1.2, 0.64, 1] // Creates upward arc
+            }
+          }}
+        >
+          <motion.span
+            className="text-[13px] leading-[20px] font-normal whitespace-nowrap text-center"
+            style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
+            initial={{ color: 'rgba(0, 0, 0, 0.64)' }}
+            animate={{ color: 'rgba(255, 255, 255, 1)', fontSize: '14px' }}
+            transition={{ duration: 0.6 }}
+          >
+            {flyingPill.text}
+          </motion.span>
+        </motion.div>
+      )}
 
       <style>{`
         @import url('https://fonts.cdnfonts.com/css/nexa-bold');
