@@ -559,7 +559,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       />
                       {!inputValue && (
                         <div
-                          className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none flex items-center"
+                          className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none flex items-center whitespace-nowrap"
                           onMouseEnter={() => {
                             setIsPlaceholderHovered(true);
                             setShowAlternateText(true);
@@ -570,9 +570,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           }}
                           style={{ pointerEvents: 'auto' }}
                         >
-                          <div className="relative overflow-hidden">
+                          <div className="relative overflow-hidden whitespace-nowrap">
                             <motion.span
-                              className="text-[16px] leading-[24px] font-normal text-black/[0.44]"
+                              className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap"
                               style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                               animate={{ opacity: showAlternateText ? 0 : 1 }}
                               transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
@@ -598,7 +598,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           </div>
                           
                           <motion.span
-                            className="absolute text-[16px] leading-[24px] font-normal text-black/[0.44]"
+                            className="absolute text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap"
                             style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: showAlternateText ? 1 : 0 }}
