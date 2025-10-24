@@ -147,6 +147,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [isLoading, setIsLoading] = React.useState(false);
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
   const [visiblePills, setVisiblePills] = React.useState<string[]>(ALL_SUGGESTIONS);
+  const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
   
   // Input ref for instant typing response
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -326,11 +327,18 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           <div className="flex items-center justify-center gap-[28px] w-[236px] h-[60px]">
             {NAV_ITEMS.map((item, index) => {
               const isActive = activeNav === item.id;
+              const isCalendar = item.id === "calendar";
               
               return (
                 <button
                   key={item.id}
-                  onClick={() => setActiveNav(item.id)}
+                  onClick={() => {
+                    if (isCalendar) {
+                      setIsCalendarOpen(true);
+                    } else {
+                      setActiveNav(item.id);
+                    }
+                  }}
                   className={`relative w-[60px] h-[60px] flex items-center justify-center rounded-full transition-all duration-300 backdrop-blur-md ${
                     isActive
                       ? "bg-[#283FE4] border border-white shadow-[1px_2px_4px_rgba(0,0,0,0.1),5px_7px_8px_rgba(0,0,0,0.09),11px_15px_11px_rgba(0,0,0,0.05),19px_26px_13px_rgba(0,0,0,0.01)]"
@@ -486,7 +494,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           <h2 className="text-[36px] leading-normal font-extrabold text-[#283FE4] mb-3" style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}>
             <span>End-To-End Product Design, Frontend development and Branding.</span>
           </h2>
-          <p className="text-[20px] leading-normal font-light" style={{ fontFamily: 'Nexa, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
+          <p className="text-[20px] leading-normal font-bold" style={{ fontFamily: 'Nexa, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
             <span>Visually stunning apps, softwares and websites with functionality at it's core.</span>
           </p>
           </motion.div>
@@ -793,6 +801,39 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           scrollbar-color: rgba(139, 127, 186, 0.3) transparent;
         }
       `}</style>
+
+      {/* Cal.com Embedded Modal */}
+      {isCalendarOpen && (
+        <div 
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          onClick={() => setIsCalendarOpen(false)}
+        >
+          <div 
+            className="relative w-[90%] max-w-[1000px] h-[90vh] bg-white rounded-[24px] shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setIsCalendarOpen(false)}
+              className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-black/10 hover:bg-black/20 transition-colors"
+              aria-label="Close calendar"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+
+            {/* Cal.com Embed */}
+            <iframe
+              src="https://cal.com/raksha-tated-v2ee58/15min"
+              className="w-full h-full border-0"
+              allow="camera; microphone; autoplay; display-capture"
+              title="Book a meeting with Raksha"
+            />
+          </div>
+        </div>
+      )}
       </div>
   );
 };
