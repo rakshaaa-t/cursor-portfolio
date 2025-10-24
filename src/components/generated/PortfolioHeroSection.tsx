@@ -71,7 +71,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [inputValue, setInputValue] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
-  const [animatingPillId, setAnimatingPillId] = React.useState<number | null>(null);
+  const [visiblePills, setVisiblePills] = React.useState<string[]>(ALL_SUGGESTIONS);
   const [latestMessageId, setLatestMessageId] = React.useState<string | null>(null);
   const [isHoveringPills, setIsHoveringPills] = React.useState(false);
   
@@ -107,9 +107,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     const movement = currentVelocityRef.current * (delta / 1000);
     let newX = x.get() + movement;
     
+    // Calculate loop width dynamically based on visible pills
+    // Approximate: each pill ~120px width + 12px gap = 132px per pill
+    const loopWidth = visiblePills.length * 132;
+    
     // Loop seamlessly when we've scrolled one full width
-    if (newX <= -640) {
-      newX = newX + 640;
+    if (newX <= -loopWidth) {
+      newX = newX + loopWidth;
     }
     
     x.set(newX);
@@ -219,55 +223,50 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     }
   };
 
-  const handlePillClick = async (pillText: string, pillId: number, event: React.MouseEvent<HTMLButtonElement>) => {
-    if (animatingPillId !== null || isLoading) return;
+  const handlePillClick = async (pillText: string) => {
+    if (isLoading) return;
     
-    // Start pill fade out animation
-    setAnimatingPillId(pillId);
+    // Remove pill from visible array immediately
+    setVisiblePills(prev => prev.filter(p => p !== pillText));
     
-    // Wait for pill to fade out
-    setTimeout(async () => {
-      setAnimatingPillId(null);
-      
-      // Add message to chat
-      const userMessage: ChatMessage = {
-        id: Date.now().toString(),
+    // Add message to chat
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      type: 'text',
+      content: pillText,
+      sender: 'user',
+      timestamp: Date.now()
+    };
+    
+    setLatestMessageId(userMessage.id);
+    setMessages(prev => [...prev, userMessage]);
+    
+    setIsLoading(true);
+    
+    try {
+      const response = await sendToAI(pillText, messages, AI_CONFIG.API_KEY);
+      const aiMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
         type: 'text',
-        content: pillText,
-        sender: 'user',
+        content: response.message,
+        sender: 'ai',
         timestamp: Date.now()
       };
-      
-      setLatestMessageId(userMessage.id);
-      setMessages(prev => [...prev, userMessage]);
-      
-      setIsLoading(true);
-      
-      try {
-        const response = await sendToAI(pillText, messages, AI_CONFIG.API_KEY);
-        const aiMessage: ChatMessage = {
-          id: (Date.now() + 1).toString(),
-          type: 'text',
-          content: response.message,
-          sender: 'ai',
-          timestamp: Date.now()
-        };
-        setMessages(prev => [...prev, aiMessage]);
-      } catch (error) {
-        const fallbackMessage: ChatMessage = {
-          id: (Date.now() + 1).toString(),
-          type: 'text',
-          content: getFallbackResponse(pillText),
-          sender: 'ai',
-          timestamp: Date.now()
-        };
-        setMessages(prev => [...prev, fallbackMessage]);
-      } finally {
-        setIsLoading(false);
-        // Clear latest message ID after bounce animation
-        setTimeout(() => setLatestMessageId(null), 300);
-      }
-    }, 200); // Pill fade out duration
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      const fallbackMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        type: 'text',
+        content: getFallbackResponse(pillText),
+        sender: 'ai',
+        timestamp: Date.now()
+      };
+      setMessages(prev => [...prev, fallbackMessage]);
+    } finally {
+      setIsLoading(false);
+      // Clear latest message ID after bounce animation
+      setTimeout(() => setLatestMessageId(null), 300);
+    }
   };
 
   return (
@@ -751,18 +750,16 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   whileDrag={{ cursor: 'grabbing' }}
                 >
                   {/* Render pills twice for seamless loop */}
-                  {[...ALL_SUGGESTIONS, ...ALL_SUGGESTIONS].map((suggestion, index) => {
-                    const actualIndex = index % ALL_SUGGESTIONS.length;
-                    const isAnimating = animatingPillId === actualIndex && index < ALL_SUGGESTIONS.length;
+                  {[...visiblePills, ...visiblePills].map((suggestion, index) => {
                     return (
                       <motion.button 
                         key={`${suggestion}-${index}`}
-                        onClick={(e) => {
-                          if (index < ALL_SUGGESTIONS.length) {
-                            handlePillClick(suggestion, actualIndex, e);
+                        onClick={() => {
+                          if (index < visiblePills.length) {
+                            handlePillClick(suggestion);
                           }
                         }}
-                        disabled={isAnimating}
+                        disabled={isLoading}
                         className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer flex-shrink-0"
                         style={{
                           background: 'rgba(255, 255, 255, 0.2)',
@@ -774,13 +771,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           scale: 1.05,
                           backgroundColor: 'rgba(255, 255, 255, 0.3)'
                         }}
-                        initial={{ opacity: 1 }}
-                        animate={{
-                          opacity: isAnimating ? 0 : 1
-                        }}
+                        layout
                         transition={{
-                          duration: 0.2,
-                          ease: [0.4, 0, 0.2, 1]
+                          layout: { duration: 0.3, ease: "easeInOut" }
                         }}
                       >
                         <span
