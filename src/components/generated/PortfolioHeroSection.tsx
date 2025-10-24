@@ -185,17 +185,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   };
 
   return (
-    <div 
-      className="relative w-full min-h-screen bg-[#D8D4E8] overflow-hidden"
-      style={{
-        willChange: 'scroll-position',
-        transform: 'translate3d(0,0,0)',
-        WebkitOverflowScrolling: 'touch'
-      }}
-    >
-      {/* Background Blurs */}
-      <div className="absolute w-[1472px] h-[761px] -left-[227px] top-[281px] bg-[rgba(0,132,255,0.1)] rounded-[4444px] blur-[200px] pointer-events-none" />
-      <div className="absolute w-[1629px] h-[842px] left-[474px] top-[617px] bg-white rounded-[4444px] blur-[200px] pointer-events-none" />
+    <div className="relative w-full min-h-screen bg-[#D8D4E8] overflow-hidden">
+      {/* Background Blurs - REDUCED blur for better performance */}
+      <div className="absolute w-[1472px] h-[761px] -left-[227px] top-[281px] bg-[rgba(0,132,255,0.1)] rounded-[4444px] blur-[80px] pointer-events-none" />
+      <div className="absolute w-[1629px] h-[842px] left-[474px] top-[617px] bg-white rounded-[4444px] blur-[80px] pointer-events-none" />
 
       {/* Navigation */}
       <nav className="fixed left-1/2 -translate-x-1/2 top-[40px] z-50 w-[1546px] h-[68px]">
@@ -221,7 +214,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   className={`relative w-[60px] h-[60px] flex items-center justify-center rounded-full transition-all duration-300 ${
                     isActive
                       ? "bg-[#283FE4] border border-white shadow-[1px_2px_4px_rgba(0,0,0,0.1),5px_7px_8px_rgba(0,0,0,0.09),11px_15px_11px_rgba(0,0,0,0.05),19px_26px_13px_rgba(0,0,0,0.01)]"
-                      : "bg-white/32 border-none hover:bg-white/40 backdrop-blur-md"
+                      : "bg-white/32 border-none hover:bg-white/40"
                   }`}
                   aria-label={item.label}
                 >
@@ -388,17 +381,15 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           }}
         >
           {/* Inner Background Blurs */}
-          <div className="absolute w-[421px] h-[336px] left-1/2 bottom-[-99px] -translate-x-1/2 translate-x-[236px] bg-[rgba(101,73,255,0.14)] rounded-[4444px] blur-[100px] pointer-events-none" />
-          <div className="absolute w-[605px] h-[313px] left-1/2 bottom-[267px] -translate-x-1/2 -translate-x-[172px] bg-gradient-to-r from-[rgba(255,255,255,0.88)] to-[rgba(255,255,255,0.1936)] rounded-[4444px] blur-[100px] pointer-events-none" />
+          <div className="absolute w-[421px] h-[336px] left-1/2 bottom-[-99px] -translate-x-1/2 translate-x-[236px] bg-[rgba(101,73,255,0.14)] rounded-[4444px] blur-[60px] pointer-events-none" />
+          <div className="absolute w-[605px] h-[313px] left-1/2 bottom-[267px] -translate-x-1/2 -translate-x-[172px] bg-gradient-to-r from-[rgba(255,255,255,0.88)] to-[rgba(255,255,255,0.1936)] rounded-[4444px] blur-[60px] pointer-events-none" />
 
           <div className="relative h-full">
             {/* Top Transparent Blur Overlay */}
             <div 
               className="absolute left-[80px] w-[640px] top-0 h-[40px] pointer-events-none z-10"
               style={{
-                background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0))',
-                backdropFilter: 'blur(20px) saturate(1.2)',
-                WebkitBackdropFilter: 'blur(20px) saturate(1.2)'
+                background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0))'
               }}
             />
             
@@ -410,10 +401,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 ref={chatContainerRef}
                 className="overflow-y-auto flex flex-col gap-3 pr-3 pb-20 custom-scrollbar flex-1"
                 style={{ 
-                  scrollPaddingBottom: '20px',
-                  willChange: 'scroll-position',
-                  transform: 'translate3d(0,0,0)',
-                  WebkitOverflowScrolling: 'touch'
+                  scrollPaddingBottom: '20px'
                 }}
               >
               {/* Initial Welcome Message - Always show */}
@@ -524,9 +512,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               <div
                 className="w-[640px] h-[56px] flex items-center justify-center px-[22px] py-[4px] rounded-[100px] border border-white"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.7)',
-                  backdropFilter: 'blur(40px)',
-                  WebkitBackdropFilter: 'blur(40px)',
+                  background: 'rgba(255, 255, 255, 0.85)',
                   boxShadow: '0px 297px 119px rgba(0, 0, 0, 0.01), 0px 167px 100px rgba(0, 0, 0, 0.02), 0px 74px 74px rgba(0, 0, 0, 0.03), 0px 19px 41px rgba(0, 0, 0, 0.04)'
                 }}
               >
@@ -642,10 +628,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         disabled={isLoading}
                         className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer flex-shrink-0 hover:opacity-80 transition-opacity"
                         style={{
-                          background: 'rgba(255, 255, 255, 0.2)',
-                          backdropFilter: 'blur(20px)',
-                          WebkitBackdropFilter: 'blur(20px)',
-                          border: '1px solid rgba(255, 255, 255, 0.3)'
+                          background: 'rgba(255, 255, 255, 0.3)',
+                          border: '1px solid rgba(255, 255, 255, 0.4)'
                         }}
                       >
                         <span
@@ -674,7 +658,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             return (
               <div
                 key={project.id}
-                className="group relative bg-white/30 backdrop-blur-sm border border-white/60 rounded-[32px] overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer"
+                className="group relative bg-white/40 border border-white/60 rounded-[32px] overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer"
               >
                 <div className="p-5">
                   <div className="flex items-start justify-between mb-3">
@@ -682,7 +666,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       <span>{project.title}</span>
                     </h3>
                     <button
-                      className="w-[38px] h-[38px] bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/40 transition-colors"
+                      className="w-[38px] h-[38px] bg-white/30 rounded-full flex items-center justify-center group-hover:bg-white/50 transition-colors"
                       aria-label={`View ${project.title}`}
                     >
                       <ArrowUpRight className="w-4 h-4 text-[#4F5CFF]" strokeWidth={2} />
