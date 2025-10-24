@@ -533,13 +533,16 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         key={suggestion}
                         onClick={(e) => handlePillClick(suggestion, index, e)}
                         disabled={isLoading || animatingPillId !== null}
-                        className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group flex-shrink-0"
+                        className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group flex-shrink-0 transition-all duration-200"
                         style={{
                           background: 'rgba(255, 255, 255, 0.15)',
                           backdropFilter: 'blur(20px)',
                           WebkitBackdropFilter: 'blur(20px)',
                           border: '1px solid rgba(255, 255, 255, 0.2)',
                           boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                        }}
+                        whileHover={{
+                          boxShadow: '0 0 8px rgba(79, 92, 255, 0.12), 0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
                         }}
                         initial={{ opacity: 1, scale: 1 }}
                         animate={{
