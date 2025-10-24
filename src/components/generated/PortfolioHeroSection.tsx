@@ -1,69 +1,10 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, Sparkles, ArrowUp, Trash2 } from 'lucide-react';
-import { ensureLightMode } from '../../lib/utils';
-import { sendToAI, getFallbackResponse, type ChatMessage as AIChatMessage } from '../../lib/ai-chat';
-import { AI_CONFIG } from '../../lib/config';
+import * as React from "react";
+import { motion } from "framer-motion";
+import { ArrowUp, ArrowUpRight } from "lucide-react";
 
-interface ProjectCard {
-  id: string;
-  title: string;
-  subtitle: string;
-  image: string;
-  rotation: number;
-}
-
-interface ChatMessage {
-  id: string;
-  type: 'text' | 'card-with-question' | 'greeting';
-  content?: string;
-  card?: {
-    id: string;
-    image: string;
-    title: string;
-  };
-  sender: 'user' | 'system' | 'ai';
-  timestamp: number;
-  isTyping?: boolean;
-  attachedProject?: ProjectCard;
-}
-
-export interface PortfolioHeroSectionProps {
-  projectCards?: ProjectCard[];
-}
-
-const DEFAULT_PROJECTS: ProjectCard[] = [
-  {
-    id: 'card-1',
-    title: 'ova : period Tracking App',
-    subtitle: '',
-    image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760524296/6_3x_shots_so_y310gt.png',
-    rotation: 0
-  },
-  {
-    id: 'card-2',
-    title: 'greex : defi trading platform',
-    subtitle: '',
-    image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525138/172_2x_shots_so_plr79y.png',
-    rotation: 0
-  },
-  {
-    id: 'card-3',
-    title: 'ioc : vendor management platform',
-    subtitle: '',
-    image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525270/190_2x_shots_so_gytftu.png',
-    rotation: 0
-  },
-  {
-    id: 'card-4',
-    title: 'dealdoc : deal management platform',
-    subtitle: '',
-    image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525328/19_2x_shots_so_lio1is.png',
-    rotation: 0
-  }
-];
+export interface RakshaPortfolioProps {}
 
 const NAV_ITEMS = [
   {
@@ -80,220 +21,58 @@ const NAV_ITEMS = [
   }
 ] as const;
 
-export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
-  projectCards = DEFAULT_PROJECTS
-}) => {
-  useEffect(() => {
-    ensureLightMode();
-  }, []);
+const SUGGESTION_PILLS = [
+  {
+    id: 1,
+    text: "tell me more about ova"
+  },
+  {
+    id: 2,
+    text: "what is your design process?"
+  },
+  {
+    id: 3,
+    text: "what tools do you use ?"
+  }
+] as const;
 
-  const [activeTab, setActiveTab] = useState<'work' | 'vibe-coded' | 'writings'>('work');
-  const [activeNav, setActiveNav] = useState<"chat" | "inbox" | "calendar">("chat");
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: 'greeting',
-      type: 'greeting',
-      content: 'you can ask me here about my design process, my past projects or just get to know me better!',
-      sender: 'system',
-      timestamp: Date.now()
-    }
-  ]);
-  const [inputValue, setInputValue] = useState('');
-  const [isAITyping, setIsAITyping] = useState(false);
-  const [draggedProject, setDraggedProject] = useState<ProjectCard | null>(null);
-  const [isDraggingOverChat, setIsDraggingOverChat] = useState(false);
-  const [usedCardIds, setUsedCardIds] = useState<Set<string>>(new Set());
-  
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const chatAreaRef = useRef<HTMLDivElement>(null);
+const PROJECT_CARDS = [
+  {
+    id: 1,
+    title: "ova : period tracking app",
+    gradient: "from-blue-100 via-purple-100 to-pink-100",
+    bgGradient: "from-blue-200 to-purple-200"
+  },
+  {
+    id: 2,
+    title: "greex : defi trading platform",
+    gradient: "from-gray-800 to-gray-900",
+    bgGradient: "from-gray-700 to-black"
+  },
+  {
+    id: 3,
+    title: "ioc : vendor management app",
+    gradient: "from-white to-gray-100",
+    bgGradient: "from-gray-50 to-gray-200"
+  },
+  {
+    id: 4,
+    title: "dealdoc : deal management...",
+    gradient: "from-blue-400 to-blue-600",
+    bgGradient: "from-blue-500 to-blue-700"
+  }
+] as const;
 
-  const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, []);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, scrollToBottom]);
-
-  useEffect(() => {
-    const savedMessages = localStorage.getItem('chatMessages');
-    if (savedMessages) {
-      try {
-        setMessages(JSON.parse(savedMessages));
-      } catch (e) {
-        console.error('Failed to load saved messages:', e);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('chatMessages', JSON.stringify(messages));
-  }, [messages]);
-
-  const handleSendMessage = async () => {
-    if (!inputValue.trim()) return;
-
-    const newMessage: ChatMessage = {
-      id: `msg-${Date.now()}`,
-      type: 'text',
-      content: inputValue,
-      sender: 'user',
-      timestamp: Date.now()
-    };
-
-    setMessages(prev => [...prev, newMessage]);
-    setInputValue('');
-
-    // AI Response
-    if (AI_CONFIG.ENABLED && AI_CONFIG.API_KEY && AI_CONFIG.API_KEY.startsWith('sk-proj-')) {
-      setIsAITyping(true);
-
-      try {
-        const aiResponse = await sendToAI(inputValue, messages, AI_CONFIG.API_KEY);
-
-        const aiMessage: ChatMessage = {
-          id: `ai-${Date.now()}`,
-          type: 'text',
-          content: aiResponse.message,
-          sender: 'ai',
-          timestamp: Date.now()
-        };
-
-        setMessages(prev => [...prev, aiMessage]);
-      } catch (error) {
-        console.error('AI Error:', error);
-        const fallbackMessage: ChatMessage = {
-          id: `ai-${Date.now()}`,
-          type: 'text',
-          content: getFallbackResponse(inputValue),
-          sender: 'ai',
-          timestamp: Date.now()
-        };
-        setMessages(prev => [...prev, fallbackMessage]);
-      } finally {
-        setIsAITyping(false);
-      }
-    }
-  };
-
-  const handleClearConversation = () => {
-    setMessages([
-      {
-        id: 'greeting',
-        type: 'greeting',
-        content: 'you can ask me here about my design process, my past projects or just get to know me better!',
-        sender: 'system',
-        timestamp: Date.now()
-      }
-    ]);
-    setUsedCardIds(new Set());
-    localStorage.removeItem('chatMessages');
-  };
-
-  const handleDragStart = (e: React.DragEvent, project: ProjectCard) => {
-    setDraggedProject(project);
-    e.dataTransfer.effectAllowed = 'copy';
-
-    const thumbnail = document.createElement('div');
-    thumbnail.style.cssText = `
-      position: absolute; top: -9999px; left: -9999px; width: 200px;
-      background: linear-gradient(135deg, rgba(235, 233, 243, 0.95), rgba(232, 231, 241, 0.98));
-      backdrop-filter: blur(20px); border-radius: 16px; padding: 12px;
-      border: 2px solid rgba(255, 255, 255, 0.6);
-      box-shadow: 0 8px 32px rgba(74, 74, 232, 0.2), 0 2px 8px rgba(0, 0, 0, 0.1);
-    `;
-    
-    const imgWrapper = document.createElement('div');
-    imgWrapper.style.cssText = `width: 100%; height: 110px; border-radius: 12px; overflow: hidden; background: #f5f4f8;`;
-    
-    const img = document.createElement('img');
-    img.src = project.image;
-    img.style.cssText = `width: 100%; height: 100%; object-fit: cover;`;
-    
-    imgWrapper.appendChild(img);
-    thumbnail.appendChild(imgWrapper);
-    document.body.appendChild(thumbnail);
-    
-    e.dataTransfer.setDragImage(thumbnail, 100, 65);
-    
-    setTimeout(() => document.body.removeChild(thumbnail), 0);
-  };
-
-  const handleDragEnd = () => {
-    setDraggedProject(null);
-    setIsDraggingOverChat(false);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
-    setIsDraggingOverChat(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    const rect = chatAreaRef.current?.getBoundingClientRect();
-    if (rect && (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom)) {
-      setIsDraggingOverChat(false);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDraggingOverChat(false);
-    
-    if (draggedProject && !usedCardIds.has(draggedProject.id)) {
-      const projectName = draggedProject.title.split(':')[0].trim();
-      const newMessage: ChatMessage = {
-        id: `msg-${Date.now()}`,
-        type: 'card-with-question',
-        content: `tell me more about ${projectName}, what were the design challenges with it?`,
-        sender: 'user',
-        timestamp: Date.now(),
-        attachedProject: draggedProject
-      };
-      
-      setMessages(prev => [...prev, newMessage]);
-      setUsedCardIds(prev => new Set([...prev, draggedProject.id]));
-      setDraggedProject(null);
-
-      // Auto-reply to card question
-      setTimeout(async () => {
-        if (AI_CONFIG.ENABLED && AI_CONFIG.API_KEY && AI_CONFIG.API_KEY.startsWith('sk-proj-')) {
-          setIsAITyping(true);
-
-          try {
-            const aiResponse = await sendToAI(newMessage.content!, messages, AI_CONFIG.API_KEY);
-
-            const aiMessage: ChatMessage = {
-              id: `ai-${Date.now()}`,
-              type: 'text',
-              content: aiResponse.message,
-              sender: 'ai',
-              timestamp: Date.now()
-            };
-
-            setMessages(prev => [...prev, aiMessage]);
-          } catch (error) {
-            console.error('AI Error:', error);
-            const fallbackMessage: ChatMessage = {
-              id: `ai-${Date.now()}`,
-              type: 'text',
-              content: getFallbackResponse(newMessage.content!),
-              sender: 'ai',
-              timestamp: Date.now()
-            };
-            setMessages(prev => [...prev, fallbackMessage]);
-          } finally {
-            setIsAITyping(false);
-          }
-        }
-      }, 800);
-    }
-  };
+export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: RakshaPortfolioProps) => {
+  const [activeNav, setActiveNav] = React.useState<"chat" | "inbox" | "calendar">("chat");
 
   return (
-    <div className="h-screen w-screen bg-[#d9d7e4] flex flex-col overflow-hidden font-['Geist',_system-ui,_sans-serif]">
-      {/* Top Navigation */}
+    <div className="relative w-full min-h-screen bg-[#D8D4E8] overflow-hidden">
+      {/* Background Blurs */}
+      <div className="absolute w-[1472px] h-[761px] -left-[227px] top-[281px] bg-[rgba(0,132,255,0.1)] rounded-[4444px] blur-[200px] pointer-events-none" />
+      <div className="absolute w-[1629px] h-[842px] left-[474px] top-[617px] bg-white rounded-[4444px] blur-[200px] pointer-events-none" />
+
+      {/* Navigation */}
       <nav className="fixed left-1/2 -translate-x-1/2 top-10 z-50 w-full max-w-[1542px] px-8">
         <div className="flex items-center justify-between gap-14 px-0 py-0 bg-white/[0.03] backdrop-blur-[22px] rounded-full border border-white/10">
           {/* Logo */}
@@ -425,320 +204,275 @@ export const PortfolioHeroSection: React.FC<PortfolioHeroSectionProps> = ({
         </div>
       </nav>
 
-      {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden pt-32">
-        {/* Left Content - Projects */}
-        <div className="w-[960px] flex flex-col overflow-hidden pt-[32px]">
-          {/* Top Tabs */}
-          <div className="flex items-center gap-[48px] px-[24px] pb-[32px]">
-            {(['work', 'vibe coded', 'writings'] as const).map((tab) => (
-              <motion.button
-                key={tab}
-                onClick={() => setActiveTab(tab as 'work' | 'vibe-coded' | 'writings')}
-                className="relative pb-[8px]"
-                whileHover={{ scale: 1.02 }}
-              >
-                <span
-                  className={`text-[15px] font-normal transition-colors ${
-                    activeTab === 'work' && tab === 'work'
-                      ? 'text-[#4a4ae8]'
-                      : 'text-[#3d3a4f]/75'
-                  }`}
-                >
-                  {tab}
-                </span>
-                {activeTab === 'work' && tab === 'work' && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#4a4ae8]"
-                    transition={{
-                      type: 'spring',
-                      stiffness: 380,
-                      damping: 30
-                    }}
-                  />
-                )}
-              </motion.button>
-            ))}
-          </div>
-
-          {/* Projects Scroll Area */}
-          <div className="flex-1 overflow-y-auto px-[24px] pb-[24px] space-y-[24px] custom-scrollbar">
-            {projectCards.map((project, index) => (
-              <motion.div
-                key={project.id}
-                draggable
-                onDragStart={(e) => handleDragStart(e as any, project)}
-                onDragEnd={handleDragEnd}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ 
-                  opacity: draggedProject?.id === project.id ? 0.4 : 1,
-                  scale: draggedProject?.id === project.id ? 0.95 : 1,
-                  y: 0
-                }}
-                transition={{ delay: index * 0.1 }}
-                className={`group cursor-grab active:cursor-grabbing ${
-                  usedCardIds.has(project.id) ? 'pointer-events-none' : ''
-                }`}
-              >
-                <div className="bg-[#ebe9f3]/60 backdrop-blur-sm rounded-[28px] p-[20px] border border-white/40 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                  <h3 className="text-[14px] font-normal text-[#2d2a3f] mb-[16px] tracking-[-0.01em]">
-                    <span>{project.title}</span>
-                  </h3>
-
-                  <div className="relative bg-[#f5f4f8] rounded-[20px] overflow-hidden aspect-[16/10]">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover"
-                    />
-
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="absolute top-[14px] right-[14px] w-[40px] h-[40px] rounded-full bg-[#c8c5dc]/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-[0_2px_6px_rgba(0,0,0,0.1)]"
-                      aria-label="View project"
-                    >
-                      <ArrowUpRight className="w-[20px] h-[20px] text-[#2d2a3f]" strokeWidth={2} />
-                    </motion.button>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right Side - Chat Interface */}
-        <div 
-          ref={chatAreaRef}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          className="flex-1 flex flex-col overflow-hidden pt-[32px] pr-[32px] pb-[32px] transition-all relative"
+      {/* Content Container */}
+      <div className="relative w-full max-w-[1440px] mx-auto px-8 pt-32">
+        {/* Main Heading */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.1 }}
+          className="text-center mt-8 mb-12 px-16"
         >
-          {/* Large Rounded Container Wrapper */}
-          <div className={`flex-1 bg-[#e8e7f1]/50 backdrop-blur-sm rounded-[40px] border border-white/60 shadow-[0_2px_12px_rgba(0,0,0,0.03)] flex flex-col overflow-hidden transition-all ${
-            isDraggingOverChat ? 'ring-4 ring-[#4a4ae8] ring-opacity-50 scale-[0.99]' : ''
-          }`}>
-            {/* Chat Header */}
-            <div className="px-[48px] pt-[48px] pb-[24px]">
-              <div className="flex items-start justify-between mb-[32px]">
-                <h1 className="text-[28px] font-normal text-[#2d2a3f] tracking-[-0.02em]">
-                  <span>hey, I'm Raks</span>
-                </h1>
-                <div className="flex items-center gap-[8px]">
-                  <span className="text-[13px] text-[#6b6883] font-light">
-                    <span>email :</span>
-                  </span>
-                  <span className="text-[13px] text-[#2d2a3f] font-normal">
-                    <span>contact@rakshaaa.com</span>
-                  </span>
+          <h2 className="text-[40px] leading-[1.3] font-bold text-[#4F5CFF] mb-3">
+            <span>End-To-End Product Design, Frontend development and Branding.</span>
+          </h2>
+          <p className="text-[18px] leading-[1.5] text-gray-600 font-normal">
+            <span>Visually stunning apps, softwares and websites with functionality at it's core.</span>
+          </p>
+        </motion.div>
+
+        {/* Chat Interface Card - 955x544 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="relative w-[955px] h-[544px] mx-auto bg-gradient-to-b from-[#E9E8FF] to-[#EFF4EC] rounded-[44px] border-2 border-white overflow-hidden"
+          style={{
+            boxShadow: '0px 480px 192px rgba(0, 0, 0, 0.01), 0px 270px 162px rgba(0, 0, 0, 0.02), 0px 120px 120px rgba(0, 0, 0, 0.03), 0px 30px 66px rgba(0, 0, 0, 0.04)'
+          }}
+        >
+          {/* Inner Background Blurs */}
+          <div className="absolute w-[421px] h-[336px] left-1/2 bottom-[-99px] -translate-x-1/2 translate-x-[236px] bg-[rgba(101,73,255,0.14)] rounded-[4444px] blur-[100px] pointer-events-none" />
+          <div className="absolute w-[605px] h-[313px] left-1/2 bottom-[267px] -translate-x-1/2 -translate-x-[172px] bg-gradient-to-r from-[rgba(255,255,255,0.88)] to-[rgba(255,255,255,0.1936)] rounded-[4444px] blur-[100px] pointer-events-none" />
+
+          <div className="relative">
+            {/* Header - "hey i'm raks" | "email : contact@rakshaaa.com" */}
+            <div className="absolute w-[662px] h-[30px] left-1/2 -translate-x-1/2 top-[42px] flex items-end justify-between">
+              <div className="flex items-end gap-3">
+                <span
+                  className="text-[20px] leading-[30px] font-light text-black"
+                  style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
+                >
+                  <span>hey i'm raks</span>
+                </span>
+              </div>
+              <span
+                className="text-[20px] leading-[30px] font-normal text-black/[0.22]"
+                style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
+              >
+                <span>email : contact@rakshaaa.com</span>
+              </span>
+            </div>
+
+            {/* First Chat Bubble - White (572x120) - SVG Based */}
+            <div className="absolute left-[99px] top-[107px]">
+              <svg width="572" height="139" viewBox="0 0 572 139" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <filter id="whiteBubbleFilter" x="0" y="0" width="770" height="486" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dy="15" />
+                    <feGaussianBlur stdDeviation="17" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.04 0" />
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dy="62" />
+                    <feGaussianBlur stdDeviation="31" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.03 0" />
+                    <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dy="139" />
+                    <feGaussianBlur stdDeviation="42" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.02 0" />
+                    <feBlend mode="normal" in2="effect2_dropShadow" result="effect3_dropShadow" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dy="248" />
+                    <feGaussianBlur stdDeviation="49.5" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.01 0" />
+                    <feBlend mode="normal" in2="effect3_dropShadow" result="effect4_dropShadow" />
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect4_dropShadow" result="shape" />
+                  </filter>
+                </defs>
+                <g filter="url(#whiteBubbleFilter)">
+                  <path d="M0 88C0 46.5164 0 25.7746 12.887 12.8873C25.775 0 46.516 0 88 0H512C526.884 0 534.326 0 540.396 1.7823C554.763 6.0009 565.999 17.2365 570.218 31.6038C572 37.6738 572 45.1158 572 60C572 74.8842 572 82.326 570.218 88.396C565.999 102.763 554.763 113.999 540.396 118.218C534.326 120 526.884 120 512 120H0V88Z" fill="white" />
+                </g>
+              </svg>
+
+              {/* Message Content Overlay */}
+              <div className="absolute top-0 left-0 w-[572px] h-[120px] flex items-center px-6 gap-4">
+                <div className="relative w-[59px] h-[59px] flex-shrink-0 rounded-full overflow-hidden bg-[#D9D9D9]">
+                  <img
+                    src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
+                    alt="Profile"
+                    className="absolute w-full h-full object-cover"
+                  />
                 </div>
+                <p
+                  className="flex-1 text-[16px] leading-[24px] font-extralight text-black"
+                  style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
+                >
+                  <span>you can ask me here about my design process, my past projects or just get to know me better!</span>
+                </p>
               </div>
             </div>
 
-            {/* Chat Messages Area */}
-            <div className="flex-1 overflow-y-auto px-[48px] pb-[24px] custom-scrollbar">
-              <div className="max-w-[720px] space-y-[20px]">
-                {/* Drop Indicator */}
-                {isDraggingOverChat && draggedProject && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    className="flex items-center gap-[12px] bg-[#4a4ae8]/10 backdrop-blur-sm rounded-[16px] px-[20px] py-[12px] border-2 border-dashed border-[#4a4ae8]/40 mb-[20px]"
-                  >
-                    <img 
-                      src={draggedProject.image} 
-                      alt={draggedProject.title}
-                      className="w-[32px] h-[32px] rounded-[8px] object-cover" 
-                    />
-                    <span className="text-[13px] text-[#4a4ae8] font-medium">
-                      Drop to ask about {draggedProject.title.split(':')[0].trim()}
+            {/* Second Chat Bubble - Dark (492x70) - SVG Based */}
+            <div className="absolute left-[373px] top-[250px]">
+              <svg width="492" height="89" viewBox="0 0 492 89" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <filter id="darkBubbleFilter" x="0" y="0" width="690" height="436" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dy="15" />
+                    <feGaussianBlur stdDeviation="17" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.04 0" />
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dy="62" />
+                    <feGaussianBlur stdDeviation="31" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.03 0" />
+                    <feBlend mode="normal" in2="effect1_dropShadow" result="effect2_dropShadow" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dy="139" />
+                    <feGaussianBlur stdDeviation="42" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.02 0" />
+                    <feBlend mode="normal" in2="effect2_dropShadow" result="effect3_dropShadow" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                    <feOffset dy="248" />
+                    <feGaussianBlur stdDeviation="49.5" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0.156863 0 0 0 0 0.247059 0 0 0 0 0.894118 0 0 0 0.01 0" />
+                    <feBlend mode="normal" in2="effect3_dropShadow" result="effect4_dropShadow" />
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect4_dropShadow" result="shape" />
+                  </filter>
+                </defs>
+                <g filter="url(#darkBubbleFilter)">
+                  <path d="M0 35C0 15.67 15.67 0 35 0H448C472.301 0 492 19.6995 492 44V70H35C15.67 70 0 54.33 0 35Z" fill="black" fillOpacity="0.79" />
+                </g>
+              </svg>
+
+              {/* Text overlay */}
+              <p
+                className="absolute top-[25px] right-[24px] text-[16px] leading-[24px] font-light text-white text-right"
+                style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
+              >
+                <span>Hi raksha can u tell me a bit about yourself</span>
+              </p>
+            </div>
+
+            {/* Bottom Section - Suggestions + Input */}
+            <div className="absolute w-[662px] left-[146px] top-[398px] flex flex-col items-center gap-[15px]">
+              {/* Suggestion Pills - SVG Based */}
+              <div className="w-full flex items-center justify-center gap-3">
+                {SUGGESTION_PILLS.map((pill) => {
+                  return (
+                    <button key={pill.id} className="relative hover:opacity-80 transition-opacity">
+                      <svg width="226" height="37" viewBox="0 0 226 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="226" height="37" rx="18.5" fill="white" fillOpacity="0.1" />
+                      </svg>
+                      <span
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[14px] leading-[21px] font-normal text-black/[0.64] text-center whitespace-nowrap"
+                        style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
+                      >
+                        <span>{pill.text}</span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Input Bar - 662x63 */}
+              <div
+                className="w-[662px] h-[63px] flex items-center justify-center px-[22px] py-[6px] rounded-[100px] border border-white"
+                style={{
+                  background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.44) 100%)',
+                  boxShadow: '0px 297px 119px rgba(0, 0, 0, 0.01), 0px 167px 100px rgba(0, 0, 0, 0.02), 0px 74px 74px rgba(0, 0, 0, 0.03), 0px 19px 41px rgba(0, 0, 0, 0.04)'
+                }}
+              >
+                <div className="w-full flex items-center justify-between">
+                  {/* Left: Sparkle Icon + "Talk 2 me" */}
+                  <div className="flex items-center gap-3">
+                    {/* Sparkle Icon SVG */}
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <filter id="sparkleBlur" x="-50%" y="-50%" width="200%" height="200%">
+                          <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+                        </filter>
+                        <linearGradient id="sparkleGrad1" x1="8.85509" y1="16.71" x2="8.85509" y2="29.5" gradientUnits="userSpaceOnUse">
+                          <stop stopColor="#283FE4" stopOpacity="0.38" />
+                          <stop offset="1" stopColor="white" stopOpacity="0.38" />
+                        </linearGradient>
+                        <linearGradient id="sparkleGrad2" x1="13.1508" y1="41.999" x2="12.8493" y2="16.0008" gradientUnits="userSpaceOnUse">
+                          <stop stopColor="#283FE4" stopOpacity="0.38" />
+                          <stop offset="1" stopColor="white" stopOpacity="0.6" />
+                        </linearGradient>
+                        <linearGradient id="sparkleGrad3" x1="12.9992" y1="18.5651" x2="12.9992" y2="29.5001" gradientUnits="userSpaceOnUse">
+                          <stop stopColor="white" />
+                          <stop offset="1" stopColor="white" stopOpacity="0" />
+                        </linearGradient>
+                      </defs>
+
+                      {/* Main sparkle shape */}
+                      <path d="M16.6562 25.2121L14.3939 19.5118C13.893 18.2498 12.1067 18.2496 11.6056 19.5116L9.34196 25.2121C9.31836 25.2714 9.27155 25.3182 9.21228 25.3418L3.51087 27.6058C2.24898 28.1069 2.24898 29.8929 3.51087 30.394L9.21228 32.658C9.27155 32.6816 9.31836 32.7284 9.34196 32.7876L11.6055 38.4882C12.1067 39.7502 13.8929 39.75 14.3939 38.4879L16.6562 32.7876C16.6799 32.7282 16.7273 32.6815 16.7868 32.658L22.4888 30.394C23.7507 29.893 23.7507 28.1068 22.4888 27.6058L16.7868 25.3418C16.7273 25.3183 16.6799 25.2716 16.6562 25.2121Z" fill="url(#sparkleGrad2)" transform="scale(0.42) translate(3, -28)" />
+
+                      {/* Blurred background layer */}
+                      <path d="M16.6562 25.2121L14.3939 19.5118C13.893 18.2498 12.1067 18.2496 11.6056 19.5116L9.34196 25.2121C9.31836 25.2714 9.27155 25.3182 9.21228 25.3418L3.51087 27.6058C2.24898 28.1069 2.24898 29.8929 3.51087 30.394L9.21228 32.658C9.27155 32.6816 9.31836 32.7284 9.34196 32.7876L11.6055 38.4882C12.1067 39.7502 13.8929 39.75 14.3939 38.4879L16.6562 32.7876C16.6799 32.7282 16.7273 32.6815 16.7868 32.658L22.4888 30.394C23.7507 29.893 23.7507 28.1068 22.4888 27.6058L16.7868 25.3418C16.7273 25.3183 16.6799 25.2716 16.6562 25.2121Z" fill="url(#sparkleGrad1)" filter="url(#sparkleBlur)" transform="scale(0.42) translate(3, -28)" opacity="0.6" />
+
+                      {/* Top highlight */}
+                      <path d="M16.6562 25.2121L14.3939 19.5118C13.893 18.2498 12.1067 18.2496 11.6056 19.5116L9.34196 25.2121C9.31836 25.2714 9.27155 25.3182 9.21228 25.3418L3.51087 27.6058C2.24898 28.1069 2.24898 29.8929 3.51087 30.394L9.21228 32.658C9.27155 32.6816 9.31836 32.7284 9.34196 32.7876L11.6055 38.4882C12.1067 39.7502 13.8929 39.75 14.3939 38.4879L16.6562 32.7876C16.6799 32.7282 16.7273 32.6815 16.7868 32.658L22.4888 30.394C23.7507 29.893 23.7507 28.1068 22.4888 27.6058L16.7868 25.3418C16.7273 25.3183 16.6799 25.2716 16.6562 25.2121Z" fill="url(#sparkleGrad3)" transform="scale(0.42) translate(3, -28)" />
+                    </svg>
+
+                    <span
+                      className="text-[16px] leading-[24px] font-normal text-black/[0.44]"
+                      style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
+                    >
+                      <span>Talk 2 me</span>
                     </span>
-                  </motion.div>
-                )}
-                
-                <AnimatePresence mode="popLayout">
-                  {messages.map((message) => (
-                    <motion.div
-                      key={message.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                    >
-                      {(message.sender === 'system' || message.sender === 'ai') && (
-                        <div className="flex items-start gap-[14px] max-w-[90%]">
-                          <div className="w-[48px] h-[48px] rounded-full overflow-hidden flex-shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
-                            <img
-                              src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
-                              alt="Raksha"
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <div className="bg-white/80 backdrop-blur-sm rounded-[20px] px-[20px] py-[16px] border border-white/50 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                            <p className="text-[14px] text-[#2d2a3f] leading-[1.6]">
-                              <span>{message.content}</span>
-                            </p>
-                          </div>
-                        </div>
-                      )}
-
-                      {message.sender === 'user' && (
-                        <div className="max-w-[90%]">
-                          {message.type === 'text' && (
-                            <div className="bg-gradient-to-r from-[#4a4ae8] to-[#4a4ae8] rounded-[20px] px-[20px] py-[16px] shadow-[0_4px_16px_rgba(74,74,232,0.25)]">
-                              <p className="text-[14px] text-white leading-[1.6]">
-                                <span>{message.content}</span>
-                              </p>
-                            </div>
-                          )}
-
-                          {message.type === 'card-with-question' && message.attachedProject && (
-                            <div className="flex flex-col items-end gap-[12px] w-full">
-                              {/* Attached Project Card */}
-                              <motion.div
-                                initial={{ opacity: 0, scale: 0.7, rotate: 0 }}
-                                animate={{ opacity: 1, scale: 1, rotate: 4 }}
-                                transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.1 }}
-                                className="relative w-[180px] h-[112px] rounded-[14px] overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.2)] border-[3px] border-white/90"
-                                style={{ transformOrigin: 'bottom right' }}
-                              >
-                                <img 
-                                  src={message.attachedProject.image} 
-                                  alt={message.attachedProject.title}
-                                  className="w-full h-full object-cover"
-                                />
-                              </motion.div>
-
-                              {/* Question Bubble */}
-                              <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3, delay: 0.25 }}
-                                className="bg-gradient-to-r from-[#4a4ae8] to-[#4a4ae8] rounded-[20px] px-[20px] py-[16px] shadow-[0_4px_16px_rgba(74,74,232,0.25)] max-w-[85%]"
-                              >
-                                <p className="text-[14px] text-white leading-[1.6]">
-                                  <span>{message.content}</span>
-                                </p>
-                              </motion.div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-
-                {/* Typing Indicator */}
-                {isAITyping && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex justify-start"
-                  >
-                    <div className="flex items-start gap-[14px]">
-                      <div className="w-[48px] h-[48px] rounded-full overflow-hidden flex-shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
-                        <img
-                          src="https://storage.googleapis.com/storage.magicpath.ai/user/323295203727400960/assets/a162f3c9-9017-4e52-a2b7-d48614b32b0f.jpg"
-                          alt="Raksha"
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="bg-white/80 backdrop-blur-sm rounded-[20px] px-[20px] py-[16px] border border-white/50 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                        <div className="flex gap-1">
-                          <motion.div
-                            className="w-2 h-2 bg-[#6b6883] rounded-full"
-                            animate={{ opacity: [0.3, 1, 0.3] }}
-                            transition={{ duration: 1, repeat: Infinity, delay: 0 }}
-                          />
-                          <motion.div
-                            className="w-2 h-2 bg-[#6b6883] rounded-full"
-                            animate={{ opacity: [0.3, 1, 0.3] }}
-                            transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
-                          />
-                          <motion.div
-                            className="w-2 h-2 bg-[#6b6883] rounded-full"
-                            animate={{ opacity: [0.3, 1, 0.3] }}
-                            transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                <div ref={messagesEndRef} />
-              </div>
-            </div>
-
-            {/* Bottom Section - Input + Clear */}
-            <div className="px-[48px] pb-[48px]">
-              <div className="max-w-[720px]">
-                {/* Input Area */}
-                <div className="relative">
-                  <div className="flex items-center gap-[12px] bg-white/40 backdrop-blur-[20px] rounded-[20px] px-[20px] py-[14px] border border-white/60 shadow-[0_4px_16px_rgba(0,0,0,0.06),_0_1px_3px_rgba(0,0,0,0.04)]">
-                    <Sparkles className="w-[20px] h-[20px] text-[#6b6883] flex-shrink-0" strokeWidth={2} />
-                    <input
-                      type="text"
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                      placeholder="Talk 2 me"
-                      className="flex-1 bg-transparent text-[14px] text-[#2d2a3f] placeholder:text-[#6b6883] focus:outline-none"
-                      aria-label="Message input"
-                    />
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={handleSendMessage}
-                      className="w-[40px] h-[40px] rounded-full bg-white flex items-center justify-center shadow-[0_2px_6px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_10px_rgba(0,0,0,0.12)] transition-all"
-                      aria-label="Send message"
-                    >
-                      <ArrowUp className="w-[20px] h-[20px] text-[#2d2a3f]" strokeWidth={2.5} />
-                    </motion.button>
                   </div>
-                </div>
 
-                {/* Clear Button */}
-                <div className="flex justify-end mt-3">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleClearConversation}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-[14px] bg-white/60 backdrop-blur-sm text-[13px] text-[#6b6883] hover:bg-white/80 transition-all shadow-[0_2px_6px_rgba(0,0,0,0.04)]"
+                  {/* Right: Send Button */}
+                  <button
+                    className="w-[50px] h-[50px] bg-white rounded-[3333px] flex items-center justify-center hover:shadow-lg transition-shadow"
+                    style={{
+                      boxShadow: '-17px 20px 10px rgba(40, 63, 228, 0.01), -10px 11px 9px rgba(40, 63, 228, 0.02), -4px 5px 7px rgba(40, 63, 228, 0.03), -1px 1px 4px rgba(40, 63, 228, 0.04)'
+                    }}
+                    aria-label="Send message"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
-                    <span>Clear</span>
-                  </motion.button>
+                    <ArrowUp className="w-[24px] h-[24px] text-[#283FE4]" strokeWidth={2} />
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
+
+        {/* Project Cards Grid */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="grid grid-cols-4 gap-6 mt-16 pb-20"
+        >
+          {PROJECT_CARDS.map((project) => {
+            return (
+              <div
+                key={project.id}
+                className="group relative bg-white/30 backdrop-blur-sm border border-white/60 rounded-[32px] overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer"
+              >
+                <div className="p-5">
+                  <div className="flex items-start justify-between mb-3">
+                    <h3 className="text-[15px] text-gray-900 font-normal">
+                      <span>{project.title}</span>
+                    </h3>
+                    <button
+                      className="w-[38px] h-[38px] bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/40 transition-colors"
+                      aria-label={`View ${project.title}`}
+                    >
+                      <ArrowUpRight className="w-4 h-4 text-[#4F5CFF]" strokeWidth={2} />
+                    </button>
+                  </div>
+                  <div className={`w-full aspect-[4/3] bg-gradient-to-br ${project.gradient} rounded-[24px] border border-white/40 overflow-hidden`}>
+                    <div className={`w-full h-full bg-gradient-to-br ${project.bgGradient}`} />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </motion.div>
       </div>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@100;200;300;400;500;600;700;800;900&display=swap');
         @import url('https://fonts.cdnfonts.com/css/nexa-bold');
-        
-        body, * {
-          font-family: 'Geist', system-ui, -apple-system, sans-serif;
-        }
-        
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(74, 74, 232, 0.15);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(74, 74, 232, 0.25);
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Nexa+Text:wght@100;200;300;400;500;600;700;800;900&display=swap');
       `}</style>
     </div>
   );
