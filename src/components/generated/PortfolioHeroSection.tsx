@@ -77,12 +77,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const typewriterTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
   const [animatingPillId, setAnimatingPillId] = React.useState<number | null>(null);
   const [latestMessageId, setLatestMessageId] = React.useState<string | null>(null);
+  const [currentSuggestionIndex, setCurrentSuggestionIndex] = React.useState(0);
   const [visibleSuggestions, setVisibleSuggestions] = React.useState<string[]>(() => {
-    // Get 3 random suggestions on initial load
-    const shuffled = [...ALL_SUGGESTIONS].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 3);
+    return ALL_SUGGESTIONS.slice(0, 3);
   });
-  const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const [isNavigating, setIsNavigating] = React.useState(false);
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -144,26 +143,24 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     }
   };
 
-  const handleRefreshSuggestions = () => {
-    if (isRefreshing || animatingPillId !== null) return;
+  const handleNavigateSuggestions = (direction: 'left' | 'right') => {
+    if (isNavigating || animatingPillId !== null) return;
     
-    setIsRefreshing(true);
+    setIsNavigating(true);
     
-    // Get new random suggestions excluding current ones
-    const availableSuggestions = ALL_SUGGESTIONS.filter(s => !visibleSuggestions.includes(s));
-    const shuffled = [...availableSuggestions].sort(() => Math.random() - 0.5);
-    const newSuggestions = shuffled.slice(0, 3);
-    
-    // If we don't have enough new ones, add from all suggestions
-    if (newSuggestions.length < 3) {
-      const allShuffled = [...ALL_SUGGESTIONS].sort(() => Math.random() - 0.5);
-      setVisibleSuggestions(allShuffled.slice(0, 3));
+    // Calculate new index
+    let newIndex = currentSuggestionIndex;
+    if (direction === 'right') {
+      newIndex = (currentSuggestionIndex + 1) % (ALL_SUGGESTIONS.length - 2);
     } else {
-      setVisibleSuggestions(newSuggestions);
+      newIndex = currentSuggestionIndex === 0 ? ALL_SUGGESTIONS.length - 3 : currentSuggestionIndex - 1;
     }
     
-    // Reset refreshing state after animation completes
-    setTimeout(() => setIsRefreshing(false), 400);
+    setCurrentSuggestionIndex(newIndex);
+    setVisibleSuggestions(ALL_SUGGESTIONS.slice(newIndex, newIndex + 3));
+    
+    // Reset navigating state after animation completes
+    setTimeout(() => setIsNavigating(false), 300);
   };
 
   const handlePillClick = async (pillText: string, pillId: number, event: React.MouseEvent<HTMLButtonElement>) => {
@@ -174,19 +171,14 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     
     // Wait for pill to fade out
     setTimeout(async () => {
-      // Replace the used pill with a new random suggestion
-      const usedSuggestions = [...visibleSuggestions];
-      const availableSuggestions = ALL_SUGGESTIONS.filter(s => !usedSuggestions.includes(s));
+      // Get next suggestion from the ALL_SUGGESTIONS array
+      const nextIndex = currentSuggestionIndex + 3 + pillId;
+      const nextSuggestion = ALL_SUGGESTIONS[nextIndex % ALL_SUGGESTIONS.length];
       
-      if (availableSuggestions.length > 0) {
-        const randomIndex = Math.floor(Math.random() * availableSuggestions.length);
-        const newSuggestion = availableSuggestions[randomIndex];
-        
-        // Replace the clicked pill with new suggestion
-        const newSuggestions = [...visibleSuggestions];
-        newSuggestions[pillId] = newSuggestion;
-        setVisibleSuggestions(newSuggestions);
-      }
+      // Replace the clicked pill with next suggestion
+      const newSuggestions = [...visibleSuggestions];
+      newSuggestions[pillId] = nextSuggestion;
+      setVisibleSuggestions(newSuggestions);
       
       setAnimatingPillId(null);
       
@@ -590,7 +582,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       <motion.button 
                         key={suggestion}
                         onClick={(e) => handlePillClick(suggestion, index, e)}
-                        disabled={isLoading || animatingPillId !== null || isRefreshing}
+                        disabled={isLoading || animatingPillId !== null || isNavigating}
                         className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group"
                         style={{
                           background: 'rgba(255, 255, 255, 0.15)',
@@ -599,10 +591,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           border: '1px solid rgba(255, 255, 255, 0.2)',
                           boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
                         }}
-                        initial={{ opacity: 0, scale: 0.95 }}
+                        initial={{ opacity: 0, scale: 0.95, x: 0 }}
                         animate={{
-                          opacity: isRefreshing ? 0 : (isAnimating ? 0 : 1),
-                          scale: isRefreshing ? 0.95 : (isAnimating ? 0.95 : 1)
+                          opacity: isAnimating ? 0 : 1,
+                          scale: isAnimating ? 0.95 : 1,
+                          x: isNavigating ? (index === 0 ? -20 : index === 1 ? -10 : 0) : 0
                         }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{
@@ -628,10 +621,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   })}
                 </AnimatePresence>
                 
-                {/* Refresh Button */}
+                {/* Right Arrow Navigation */}
                 <motion.button
-                  onClick={handleRefreshSuggestions}
-                  disabled={isRefreshing || animatingPillId !== null}
+                  onClick={() => handleNavigateSuggestions('right')}
+                  disabled={isNavigating || animatingPillId !== null}
                   className="relative w-[37px] h-[37px] min-w-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer group flex-shrink-0"
                   style={{
                     background: 'rgba(255, 255, 255, 0.15)',
@@ -641,17 +634,16 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
                     padding: '0'
                   }}
-                  animate={{
-                    rotate: isRefreshing ? 360 : 0
-                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   transition={{
-                    duration: 0.5,
+                    duration: 0.15,
                     ease: [0.4, 0, 0.2, 1]
                   }}
                 >
-                  {/* Refresh Icon SVG */}
+                  {/* Right Arrow Icon */}
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
-                    <path d="M13.65 2.35C12.2 0.9 10.21 0 8 0C3.58 0 0.01 3.58 0.01 8C0.01 12.42 3.58 16 8 16C11.73 16 14.84 13.45 15.73 10H13.65C12.83 12.33 10.61 14 8 14C4.69 14 2 11.31 2 8C2 4.69 4.69 2 8 2C9.66 2 11.14 2.69 12.22 3.78L9 7H16V0L13.65 2.35Z" fill="rgba(0, 0, 0, 0.64)" className="group-hover:fill-[rgba(0,0,0,0.8)] transition-colors duration-200"/>
+                    <path d="M6 12L10 8L6 4" stroke="rgba(0, 0, 0, 0.64)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:stroke-[rgba(0,0,0,0.8)] transition-colors duration-200"/>
                   </svg>
                   
                   {/* Subtle hover glow */}
