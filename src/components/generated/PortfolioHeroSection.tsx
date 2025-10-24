@@ -571,10 +571,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                             setIsPlaceholderHovered(true);
                             setShowAlternateText(true);
                             
-                            // Start typewriter after fade out completes + small delay
+                            // Start typewriter after fade out completes + small delay (8% faster: 300 * 0.92 = 276)
                             typewriterTimeoutRef.current = setTimeout(() => {
                               setStartTypewriter(true);
-                            }, 300);
+                            }, 276);
                           }}
                           onMouseLeave={() => {
                             // Clear timeout on mouse leave
@@ -594,7 +594,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                               className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap block"
                               style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                               animate={{ opacity: showAlternateText ? 0 : 1 }}
-                              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                              transition={{ duration: 0.276, ease: [0.4, 0, 0.2, 1] }}
                             >
                               talk 2 me
                             </motion.span>
@@ -605,7 +605,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                                 initial={{ x: '-100%' }}
                                 animate={{ x: '200%' }}
                                 transition={{ 
-                                  duration: 0.4, 
+                                  duration: 0.368, 
                                   ease: [0.4, 0, 0.2, 1]
                                 }}
                                 style={{
@@ -622,7 +622,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                               style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                               initial={{ width: 0 }}
                               animate={{ width: 'auto' }}
-                              transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
+                              transition={{ duration: 0.644, ease: [0.4, 0, 0.2, 1] }}
                             >
                               raksha can see all our messages
                             </motion.div>
