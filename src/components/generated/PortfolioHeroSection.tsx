@@ -77,8 +77,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   
   // AI typing effect state
   const [typingMessageId, setTypingMessageId] = React.useState<string | null>(null);
+  const [typedChars, setTypedChars] = React.useState(0);
   const typingIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
-  const typingTextRefs = React.useRef<Map<string, HTMLParagraphElement>>(new Map());
   
   // Motion values for smooth continuous animation
   const x = useMotionValue(0);
@@ -171,7 +171,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     };
   }, [isHoveringInput]);
 
-  // AI typing effect using direct DOM manipulation (no re-renders!)
+  // AI typing effect with optimized batching
   React.useEffect(() => {
     if (!typingMessageId) return;
     
@@ -180,9 +180,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     if (!typingMessage || !typingMessage.content) return;
     
     const fullText = typingMessage.content;
-    const textElement = typingTextRefs.current.get(typingMessageId);
-    if (!textElement) return;
-    
     let charIndex = 0;
     
     // Clear any existing typing interval
@@ -190,24 +187,34 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       clearInterval(typingIntervalRef.current);
     }
     
-    // Start typing animation - update DOM directly
-    typingIntervalRef.current = setInterval(() => {
-      charIndex++;
-      if (textElement) {
-        textElement.textContent = fullText.substring(0, charIndex);
+    // Use requestAnimationFrame for smoother updates
+    let lastUpdate = 0;
+    const updateInterval = 4; // 4ms per character
+    
+    const updateTyping = (timestamp: number) => {
+      if (!lastUpdate) lastUpdate = timestamp;
+      const elapsed = timestamp - lastUpdate;
+      
+      if (elapsed >= updateInterval) {
+        charIndex++;
+        setTypedChars(charIndex);
+        lastUpdate = timestamp;
+        
+        if (charIndex >= fullText.length) {
+          setTimeout(() => {
+            setTypingMessageId(null);
+            setTypedChars(0);
+          }, 100);
+          return;
+        }
       }
       
-      if (charIndex >= fullText.length) {
-        if (typingIntervalRef.current) {
-          clearInterval(typingIntervalRef.current);
-          typingIntervalRef.current = null;
-        }
-        // Clear typing state after completion
-        setTimeout(() => {
-          setTypingMessageId(null);
-        }, 100);
+      if (charIndex < fullText.length) {
+        requestAnimationFrame(updateTyping);
       }
-    }, 4); // 4ms per character (80% quicker: 20 * 0.2)
+    };
+    
+    requestAnimationFrame(updateTyping);
     
     return () => {
       if (typingIntervalRef.current) {
@@ -250,6 +257,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       
       // Trigger typing effect
       setTypingMessageId(aiMessage.id);
+      setTypedChars(0);
     } catch (error) {
       // Fallback response
       const fallbackMessage: ChatMessage = {
@@ -263,6 +271,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       
       // Trigger typing effect
       setTypingMessageId(fallbackMessage.id);
+      setTypedChars(0);
     } finally {
       setIsLoading(false);
     }
@@ -311,6 +320,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       
       // Trigger typing effect
       setTypingMessageId(aiMessage.id);
+      setTypedChars(0);
     } catch (error) {
       const fallbackMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -323,6 +333,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       
       // Trigger typing effect
       setTypingMessageId(fallbackMessage.id);
+      setTypedChars(0);
     } finally {
       setIsLoading(false);
       // Clear latest message ID immediately
@@ -600,14 +611,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           transform: 'translate3d(0,0,0)'
                         }}
                       >
-                        <p 
-                          ref={(el) => {
-                            if (el) typingTextRefs.current.set(msg.id, el);
-                          }}
-                          className="text-[14px] leading-[21px] font-extralight" 
-                          style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
-                        >
-                          {msg.content || ''}
+                        <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
+                          {typingMessageId === msg.id ? (msg.content || '').substring(0, typedChars) : (msg.content || '')}
               </p>
             </div>
                     </motion.div>
