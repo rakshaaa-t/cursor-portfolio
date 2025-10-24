@@ -156,9 +156,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       timestamp: Date.now()
     };
     
-    setLatestMessageId(userMessage.id);
     setMessages(prev => [...prev, userMessage]);
-    
     setIsLoading(true);
     
     try {
