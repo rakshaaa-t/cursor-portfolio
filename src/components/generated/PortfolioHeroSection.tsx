@@ -257,8 +257,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               </span>
             </div>
 
-            {/* First Chat Bubble - White - Aligned */}
-            <div className="absolute left-1/2 -translate-x-1/2 -translate-x-[80px] top-[90px]">
+            {/* First Chat Bubble - White - Left aligned within 640px container */}
+            <div className="absolute left-1/2 -translate-x-1/2 -translate-x-[40px] top-[90px]">
               <svg width="560" height="120" viewBox="0 0 560 120" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <filter id="whiteBubbleFilter" x="0" y="0" width="770" height="486" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
@@ -309,7 +309,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               </div>
             </div>
 
-            {/* Second Chat Bubble - Dark - Aligned Right */}
+            {/* Second Chat Bubble - Dark - Right aligned within 640px container */}
             <div className="absolute left-1/2 -translate-x-1/2 translate-x-[80px] top-[215px]">
               <svg width="480" height="75" viewBox="0 0 480 75" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
