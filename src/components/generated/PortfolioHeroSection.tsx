@@ -494,7 +494,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           <h2 className="text-[36px] leading-normal font-extrabold text-[#283FE4] mb-3" style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}>
             <span>End-To-End Product Design, Frontend development and Branding.</span>
           </h2>
-          <p className="text-[20px] leading-normal font-bold" style={{ fontFamily: 'Nexa, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
+          <p className="text-[20px] leading-normal font-bold" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
             <span>Visually stunning apps, softwares and websites with functionality at it's core.</span>
           </p>
           </motion.div>
@@ -668,7 +668,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         disabled={isLoading}
                         className="w-full h-full bg-transparent border-none outline-none text-[14px] font-normal text-black disabled:opacity-50"
                         style={{ 
-                          fontFamily: 'Nexa, system-ui, sans-serif',
+                          fontFamily: 'Nexa Text, system-ui, sans-serif',
                           lineHeight: '24px',
                           padding: 0
                         }}
@@ -678,7 +678,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           <span
                             className="text-[14px] font-normal text-black/[0.44] whitespace-nowrap"
                             style={{ 
-                              fontFamily: 'Nexa, system-ui, sans-serif',
+                              fontFamily: 'Nexa Text, system-ui, sans-serif',
                               lineHeight: '24px',
                               display: 'inline-block'
                             }}
