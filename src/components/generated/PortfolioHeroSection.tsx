@@ -547,19 +547,19 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       </defs>
                     </svg>
 
-                    <div className="relative flex-1 min-w-0 flex items-center">
+                    <div className="relative flex-1 min-w-0 h-[24px] flex items-center">
                       <input
                         type="text"
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyPress={handleKeyPress}
                         disabled={isLoading}
-                        className="w-full bg-transparent border-none outline-none text-[16px] leading-[24px] font-normal text-black disabled:opacity-50"
+                        className="w-full h-full bg-transparent border-none outline-none text-[16px] leading-[24px] font-normal text-black disabled:opacity-50"
                         style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                       />
                       {!inputValue && (
                         <div
-                          className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none flex items-center whitespace-nowrap"
+                          className="absolute inset-0 pointer-events-none flex items-center whitespace-nowrap"
                           onMouseEnter={() => {
                             setIsPlaceholderHovered(true);
                             setShowAlternateText(true);
@@ -570,9 +570,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           }}
                           style={{ pointerEvents: 'auto' }}
                         >
-                          <div className="relative overflow-hidden whitespace-nowrap">
+                          <div className="relative overflow-hidden whitespace-nowrap h-[24px] flex items-center">
                             <motion.span
-                              className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap"
+                              className="text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap block"
                               style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                               animate={{ opacity: showAlternateText ? 0 : 1 }}
                               transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
@@ -598,7 +598,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           </div>
                           
                           <motion.span
-                            className="absolute text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap"
+                            className="absolute text-[16px] leading-[24px] font-normal text-black/[0.44] whitespace-nowrap flex items-center h-[24px]"
                             style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: showAlternateText ? 1 : 0 }}
