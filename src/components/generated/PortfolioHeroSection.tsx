@@ -320,28 +320,26 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             </div>
 
             {/* Second Chat Bubble - Dark - Right aligned within 640px container */}
-            <div className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[215px]">
-              <svg 
-                width="480" 
-                height="75" 
-                viewBox="0 0 480 75" 
-                fill="none" 
-                xmlns="http://www.w3.org/2000/svg" 
-                className="absolute right-0"
-                style={{
-                  filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
-                }}
-              >
-                <path d="M0 30C0 13.4 13.4 0 30 0H445C465 0 480 15 480 37V60H30C13.4 60 0 46.6 0 30Z" fill="black" fillOpacity="0.79" />
-              </svg>
-
-              {/* Text overlay */}
-              <p
-                className="absolute top-[20px] right-[20px] text-[14px] leading-[21px] font-light text-white text-right"
-                style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
-              >
-                <span>Hi raksha can u tell me a bit about yourself</span>
-              </p>
+            <div className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[215px] flex justify-end">
+              <div className="relative inline-block max-w-[560px]">
+                {/* Background bubble with dynamic width */}
+                <div 
+                  className="px-4 py-[20px] rounded-[30px]"
+                  style={{
+                    background: 'rgba(0, 0, 0, 0.79)',
+                    filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
+                  }}
+                >
+                  <p
+                    className="text-[14px] leading-[21px] font-light text-white text-right whitespace-nowrap"
+                    style={{ 
+                      fontFamily: 'Nexa Text, system-ui, sans-serif'
+                    }}
+                  >
+                    Hi raksha can u tell me a bit about yourself
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Bottom Section - Suggestions + Input */}
