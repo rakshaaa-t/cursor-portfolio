@@ -158,13 +158,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       setLatestMessageId(userMessage.id);
       setMessages(prev => [...prev, userMessage]);
       
-      // Auto-scroll to bottom after message is added
-      setTimeout(() => {
-        if (chatContainerRef.current) {
-          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-        }
-      }, 100);
-      
       setIsLoading(true);
       
       try {
@@ -421,7 +414,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               <div 
                 ref={chatContainerRef}
                 className="overflow-y-auto flex flex-col gap-3 pr-3 pb-4 custom-scrollbar flex-1"
-                style={{ scrollBehavior: 'smooth' }}
+                style={{ scrollBehavior: 'smooth', scrollPaddingBottom: '20px' }}
               >
               {/* Initial Welcome Message - Always show */}
               <div className="w-full flex-shrink-0 mb-2">
