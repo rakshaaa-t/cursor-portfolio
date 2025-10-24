@@ -74,7 +74,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [visiblePills, setVisiblePills] = React.useState<string[]>(ALL_SUGGESTIONS);
   const [latestMessageId, setLatestMessageId] = React.useState<string | null>(null);
   const [isHoveringPills, setIsHoveringPills] = React.useState(false);
-  const [isFocused, setIsFocused] = React.useState(false);
   
   // Super fast typing effect (almost instant but visible)
   const [typingMessageId, setTypingMessageId] = React.useState<string | null>(null);
@@ -103,16 +102,14 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
   // Smooth velocity transition based on hover - OPTIMIZED
   useAnimationFrame((time, delta) => {
-    if (isFocused) return; // Pause pills while typing in input
-    
     const targetVelocity = isHoveringPills ? slowVelocityRef.current : baseVelocityRef.current;
     
     // Cap delta to prevent jumps on slow frames
     const cappedDelta = Math.min(delta, 32); // Cap at 2 frames max
     
-    // Faster interpolation for quicker response
+    // Balanced interpolation for smooth response
     const velocityDiff = targetVelocity - currentVelocityRef.current;
-    currentVelocityRef.current += velocityDiff * 0.15; // 15% = faster response
+    currentVelocityRef.current += velocityDiff * 0.08; // Balanced: smooth but responsive
     
     // Move based on current velocity
     const movement = currentVelocityRef.current * (cappedDelta / 1000);
@@ -683,8 +680,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         defaultValue=""
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyPress={handleKeyPress}
-                        onFocus={() => setIsFocused(true)}
-                        onBlur={() => setIsFocused(false)}
                         disabled={isLoading}
                         className="w-full h-full bg-transparent border-none outline-none text-[16px] font-normal text-black disabled:opacity-50"
                         style={{ 
@@ -762,9 +757,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           scale: 1.05,
                           backgroundColor: 'rgba(255, 255, 255, 0.3)'
                         }}
-                        layout
                         transition={{
-                          layout: { duration: 0.3, ease: "easeInOut" }
+                          duration: 0.15,
+                          ease: "easeOut"
                         }}
                       >
                         <span
