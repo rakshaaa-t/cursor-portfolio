@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { sendToAI, getFallbackResponse, type ChatMessage } from "../../lib/ai-chat";
 import { AI_CONFIG } from "../../lib/config";
@@ -74,6 +74,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [animatingPillId, setAnimatingPillId] = React.useState<number | null>(null);
   const [latestMessageId, setLatestMessageId] = React.useState<string | null>(null);
   const [isHoveringPills, setIsHoveringPills] = React.useState(false);
+  const pillsControls = useAnimationControls();
 
   // Auto-scroll to bottom when messages change
   React.useEffect(() => {
@@ -81,6 +82,19 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [messages, isLoading]);
+
+  // Control pill animation speed based on hover
+  React.useEffect(() => {
+    pillsControls.start({
+      x: [-640, 0],
+      transition: {
+        duration: isHoveringPills ? 78 : 48.75,
+        repeat: Infinity,
+        ease: "linear",
+        repeatType: "loop"
+      }
+    });
+  }, [isHoveringPills, pillsControls]);
 
   const handleSendMessage = async (messageText?: string) => {
     const textToSend = messageText || inputValue.trim();
@@ -632,18 +646,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   dragConstraints={{ left: -2000, right: 100 }}
                   dragElastic={0.05}
                   dragTransition={{ bounceStiffness: 300, bounceDamping: 40 }}
-                  animate={{
-                    x: [-640, 0]
-                  }}
-                  transition={{
-                    x: {
-                      duration: isHoveringPills ? 78 : 48.75,
-                      repeat: Infinity,
-                      ease: "linear",
-                      repeatType: "loop"
-                    },
-                    duration: 0.3
-                  }}
+                  animate={pillsControls}
                   style={{ willChange: 'transform', cursor: 'grab' }}
                   whileDrag={{ cursor: 'grabbing' }}
                 >
@@ -659,7 +662,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                             handlePillClick(suggestion, actualIndex, e);
                           }
                         }}
-                        disabled={isLoading || animatingPillId !== null}
+                        disabled={isAnimating}
                         className="relative px-5 py-2 h-[37px] rounded-full flex items-center justify-center disabled:cursor-not-allowed cursor-pointer flex-shrink-0"
                         style={{
                           background: 'rgba(255, 255, 255, 0.2)',
