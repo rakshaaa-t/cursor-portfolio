@@ -75,6 +75,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [latestMessageId, setLatestMessageId] = React.useState<string | null>(null);
   const [isHoveringPills, setIsHoveringPills] = React.useState(false);
   
+  // AI typing effect state
+  const [typingMessageId, setTypingMessageId] = React.useState<string | null>(null);
+  const [typedChars, setTypedChars] = React.useState(0);
+  const typingIntervalRef = React.useRef<NodeJS.Timeout | null>(null);
+  
   // Motion values for smooth continuous animation
   const x = useMotionValue(0);
   const baseVelocityRef = React.useRef(-640 / 48.75); // pixels per second (normal speed)
@@ -161,6 +166,47 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     };
   }, [isHoveringInput]);
 
+  // AI typing effect
+  React.useEffect(() => {
+    if (!typingMessageId) return;
+    
+    // Find the message being typed
+    const typingMessage = messages.find(m => m.id === typingMessageId);
+    if (!typingMessage) return;
+    
+    const fullText = typingMessage.content;
+    let charIndex = 0;
+    
+    // Clear any existing typing interval
+    if (typingIntervalRef.current) {
+      clearInterval(typingIntervalRef.current);
+    }
+    
+    // Start typing animation
+    typingIntervalRef.current = setInterval(() => {
+      charIndex++;
+      setTypedChars(charIndex);
+      
+      if (charIndex >= fullText.length) {
+        if (typingIntervalRef.current) {
+          clearInterval(typingIntervalRef.current);
+          typingIntervalRef.current = null;
+        }
+        // Clear typing state after completion
+        setTimeout(() => {
+          setTypingMessageId(null);
+          setTypedChars(0);
+        }, 100);
+      }
+    }, 30); // 30ms per character
+    
+    return () => {
+      if (typingIntervalRef.current) {
+        clearInterval(typingIntervalRef.current);
+      }
+    };
+  }, [typingMessageId, messages]);
+
   const handleSendMessage = async (messageText?: string) => {
     const textToSend = messageText || inputValue.trim();
     if (!textToSend || isLoading) return;
@@ -192,6 +238,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       };
 
       setMessages(prev => [...prev, aiMessage]);
+      
+      // Trigger typing effect
+      setTypingMessageId(aiMessage.id);
+      setTypedChars(0);
     } catch (error) {
       // Fallback response
       const fallbackMessage: ChatMessage = {
@@ -202,6 +252,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         timestamp: Date.now()
       };
       setMessages(prev => [...prev, fallbackMessage]);
+      
+      // Trigger typing effect
+      setTypingMessageId(fallbackMessage.id);
+      setTypedChars(0);
     } finally {
       setIsLoading(false);
     }
@@ -244,6 +298,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         timestamp: Date.now()
       };
       setMessages(prev => [...prev, aiMessage]);
+      
+      // Trigger typing effect
+      setTypingMessageId(aiMessage.id);
+      setTypedChars(0);
     } catch (error) {
       const fallbackMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -253,10 +311,14 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         timestamp: Date.now()
       };
       setMessages(prev => [...prev, fallbackMessage]);
+      
+      // Trigger typing effect
+      setTypingMessageId(fallbackMessage.id);
+      setTypedChars(0);
     } finally {
       setIsLoading(false);
-      // Clear latest message ID after bounce animation
-      setTimeout(() => setLatestMessageId(null), 300);
+      // Clear latest message ID after animation
+      setTimeout(() => setLatestMessageId(null), 150);
     }
   };
 
@@ -524,7 +586,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         }}
                       >
                         <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
-                          {msg.content}
+                          {typingMessageId === msg.id ? msg.content.substring(0, typedChars) : msg.content}
               </p>
             </div>
                     </div>
@@ -533,27 +595,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     <motion.div 
                       className="max-w-[560px]"
                       initial={latestMessageId === msg.id ? { 
-          opacity: 0,
-                        y: 10,
-                        scale: 0.98
+                        opacity: 0
                       } : false}
-                      animate={latestMessageId === msg.id ? {
-                        opacity: 1,
-                        y: 0,
-                        scale: [0.98, 1.015, 1]
-                      } : {
-          opacity: 1,
-                        y: 0,
-                        scale: 1
+                      animate={{
+                        opacity: 1
                       }}
                       transition={{
-                        opacity: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
-                        y: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
-                        scale: { 
-                          duration: 0.5,
-                          ease: [0.4, 0, 0.2, 1],
-                          times: [0, 0.6, 1]
-                        }
+                        duration: 0.15
                       }}
                     >
                       <div
