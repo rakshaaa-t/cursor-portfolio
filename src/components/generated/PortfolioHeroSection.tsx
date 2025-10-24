@@ -270,7 +270,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 </button>
               );
             })}
-          </div>
+      </div>
 
           {/* Social Icons */}
           <div className="flex items-center gap-[20px] w-[73px] h-[29px] opacity-44">
@@ -316,14 +316,14 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           <p className="text-[18px] leading-[1.5] text-gray-600 font-normal">
             <span>Visually stunning apps, softwares and websites with functionality at it's core.</span>
           </p>
-        </motion.div>
+          </motion.div>
 
         {/* Chat Interface Card - Made Smaller */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="relative w-[800px] h-[480px] mx-auto bg-gradient-to-b from-[#E9E8FF] to-[#EFF4EC] rounded-[44px] overflow-visible"
+          className="relative w-[800px] h-[480px] mx-auto bg-gradient-to-b from-[#E9E8FF] to-[#EFF4EC] rounded-[44px] overflow-visible px-[32px] py-[20px]"
           style={{
             boxShadow: '0px 480px 192px rgba(0, 0, 0, 0.01), 0px 270px 162px rgba(0, 0, 0, 0.02), 0px 120px 120px rgba(0, 0, 0, 0.03), 0px 30px 66px rgba(0, 0, 0, 0.04)'
           }}
@@ -332,9 +332,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           <div className="absolute w-[421px] h-[336px] left-1/2 bottom-[-99px] -translate-x-1/2 translate-x-[236px] bg-[rgba(101,73,255,0.14)] rounded-[4444px] blur-[100px] pointer-events-none" />
           <div className="absolute w-[605px] h-[313px] left-1/2 bottom-[267px] -translate-x-1/2 -translate-x-[172px] bg-gradient-to-r from-[rgba(255,255,255,0.88)] to-[rgba(255,255,255,0.1936)] rounded-[4444px] blur-[100px] pointer-events-none" />
 
-          <div className="relative">
+          <div className="relative h-full">
             {/* Header - "hey i'm raks" | "email : contact@rakshaaa.com" */}
-            <div className="absolute w-[640px] h-[24px] left-1/2 -translate-x-1/2 top-[36px] flex items-end justify-between">
+            <div className="absolute w-[640px] h-[24px] left-[48px] top-0 flex items-end justify-between">
               <div className="flex items-end gap-3">
                 <span
                   className="text-[16px] leading-[24px] font-light text-black"
@@ -344,19 +344,22 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 </span>
               </div>
               <span
-                className="text-[16px] leading-[24px] font-normal text-black/[0.22]"
+                className="text-[16px] leading-[24px] font-normal text-black"
                 style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
               >
-                <span>email : contact@rakshaaa.com</span>
+                <span className="text-black/[0.22]">email : </span><span>contact@rakshaaa.com</span>
               </span>
             </div>
 
             {/* Chat Messages Container - Scrollable */}
             <div 
-              ref={chatContainerRef}
-              className="absolute left-1/2 -translate-x-1/2 w-[640px] top-[75px] h-[280px] overflow-y-auto flex flex-col gap-3 px-2 custom-scrollbar"
-              style={{ scrollBehavior: 'smooth' }}
+              className="absolute left-[48px] w-[640px] top-[44px] h-[276px] flex flex-col"
             >
+              <div 
+                ref={chatContainerRef}
+                className="overflow-y-auto flex flex-col gap-3 pr-[2px] pb-3 custom-scrollbar flex-1"
+                style={{ scrollBehavior: 'smooth' }}
+              >
               {/* Initial Welcome Message - Always show */}
               <div className="w-full flex-shrink-0 mb-2">
                 <div className="flex items-start gap-3 max-w-[560px]">
@@ -449,10 +452,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   </div>
                 </div>
               )}
-            </div>
+        </div>
+      </div>
 
             {/* Bottom Section - Suggestions + Input */}
-            <div className="absolute w-[640px] left-1/2 -translate-x-1/2 top-[340px] flex flex-col items-center gap-[12px]">
+            <div className="absolute w-[640px] left-[48px] bottom-0 flex flex-col items-center gap-[12px]">
               {/* Suggestion Pills - With Glass Effect */}
               <div className="w-full flex items-center justify-center gap-2">
                 {SUGGESTION_PILLS.map((pill) => {
@@ -475,7 +479,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
                       >
                         {pill.text}
-                      </span>
+        </span>
                     </button>
                   );
                 })}
@@ -619,15 +623,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         .custom-scrollbar::-webkit-scrollbar-track {
           background: transparent;
           border-radius: 10px;
-          margin-top: 20px;
-          margin-bottom: 20px;
         }
         
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: rgba(139, 127, 186, 0.3);
           border-radius: 10px;
           transition: background 0.3s ease;
-          min-height: 40px;
         }
         
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -640,6 +641,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           scrollbar-color: rgba(139, 127, 186, 0.3) transparent;
         }
       `}</style>
-    </div>
+      </div>
   );
 };
