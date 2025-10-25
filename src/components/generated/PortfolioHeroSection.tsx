@@ -570,57 +570,70 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="text-center mt-8 mb-12 px-16"
+          className="text-center mx-auto"
+          style={{
+            width: '733px',
+            marginTop: '40px',
+            marginBottom: '40px'
+          }}
         >
-          <h1 className="text-[48px] leading-tight font-bold mb-2" style={{ fontFamily: 'Nexa, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
-            Raksha T
-          </h1>
-          <p className="text-[20px] leading-relaxed mb-6" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
-            aka raks - product designer who codes
-          </p>
-          <p className="text-[18px] leading-relaxed mb-6" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
-            i live in duality: lead design experiences at startups and also code frontend with cursor
-          </p>
-          <div className="mb-8">
-            <span className="text-[18px]" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
-              speak to find out more{' '}
-            </span>
+          <div style={{ 
+            fontFamily: 'Nexa, system-ui, sans-serif',
+            fontStyle: 'normal',
+            fontWeight: 700,
+            fontSize: '22px',
+            lineHeight: '33px',
+            color: 'rgba(41, 41, 41, 0.88)',
+            textAlign: 'center'
+          }}>
+            <h1 className="inline">Raksha T</h1>
+            <br />
+            <span>aka raks - product designer who builds products that work, look good and sell (yes i code too)</span>
+            <br /><br />
+            <span>i live in duality: lead design experiences at startups and also code frontend with cursor</span>
+            <br /><br />
+            <span>speak to find out more </span>
             <a 
               href="https://cal.com/raksha-tated-v2ee58/15min"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block px-6 py-2 rounded-full text-[18px] font-medium transition-all hover:opacity-80"
+              className="inline-block px-6 py-2 rounded-full text-[22px] font-bold transition-all hover:opacity-80"
               style={{ 
-                fontFamily: 'Nexa Text, system-ui, sans-serif',
+                fontFamily: 'Nexa, system-ui, sans-serif',
                 color: '#283FE4',
-                border: '2px solid #283FE4'
+                border: '2px solid #283FE4',
+                verticalAlign: 'middle',
+                marginLeft: '8px',
+                marginRight: '8px'
               }}
             >
               let's talk
             </a>
-          </div>
-          <p className="text-[16px] leading-relaxed" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
-            chat with my portfolio below ↓ or explore projects{' '}
+            <br /><br />
+            <span>chat with my portfolio below ↓ or explore projects </span>
             <button 
               className="text-[#283FE4] underline hover:opacity-80 transition-opacity"
+              style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
               onClick={() => {/* TODO: navigate to projects */}}
             >
               here
             </button>
-          </p>
-          </motion.div>
+          </div>
+        </motion.div>
 
-        {/* Chat Interface Card - Made Smaller */}
-        <motion.div
-          ref={chatCardRef}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="relative w-[800px] h-[480px] mx-auto bg-gradient-to-b from-[#E9E8FF] to-[#EFF4EC] rounded-[44px] overflow-visible"
-          style={{
-            boxShadow: '0px 480px 192px rgba(0, 0, 0, 0.01), 0px 270px 162px rgba(0, 0, 0, 0.02), 0px 120px 120px rgba(0, 0, 0, 0.03), 0px 30px 66px rgba(0, 0, 0, 0.04)'
-          }}
-        >
+        {/* Chat + Cards Container */}
+        <div className="relative w-[800px] h-[480px] mx-auto">
+          {/* Chat Interface Card */}
+          <motion.div
+            ref={chatCardRef}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="relative w-full h-full bg-gradient-to-b from-[#E9E8FF] to-[#EFF4EC] rounded-[44px] overflow-visible z-20"
+            style={{
+              boxShadow: '0px 480px 192px rgba(0, 0, 0, 0.01), 0px 270px 162px rgba(0, 0, 0, 0.02), 0px 120px 120px rgba(0, 0, 0, 0.03), 0px 30px 66px rgba(0, 0, 0, 0.04)'
+            }}
+          >
           {/* Drop Zone Overlay - Shows when dragging a card */}
           {isCardOverChat && (
             <div className="absolute inset-0 z-50 rounded-[44px] bg-blue-500/10 border-2 border-dashed border-blue-500 flex items-center justify-center pointer-events-none">
@@ -852,110 +865,124 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 </div>
               </div>
             </div>
-          </div>
-        </motion.div>
+            </div>
+          </motion.div>
 
-        {/* Draggable Project Cards - Positioned Around Chat */}
-        <AnimatePresence>
-          {PROJECT_CARDS.map((card) => {
-            if (!visibleCards.includes(card.id)) return null;
-            
-            return (
-              <motion.div
-                key={card.id}
-                drag
-                dragMomentum={false}
-                dragElastic={0.1}
-                onDragStart={() => {
-                  setIsDraggingCard(card.id);
-                }}
-                onDrag={(event, info) => {
-                  // Check if card is over chat area
-                  if (chatCardRef.current) {
-                    const chatRect = chatCardRef.current.getBoundingClientRect();
-                    const cardCenterX = info.point.x;
-                    const cardCenterY = info.point.y;
-                    
-                    const isOver = 
-                      cardCenterX >= chatRect.left &&
-                      cardCenterX <= chatRect.right &&
-                      cardCenterY >= chatRect.top &&
-                      cardCenterY <= chatRect.bottom;
-                    
-                    setIsCardOverChat(isOver);
-                  }
-                }}
-                onDragEnd={(event, info) => {
-                  // Check if dropped over chat
-                  if (chatCardRef.current) {
-                    const chatRect = chatCardRef.current.getBoundingClientRect();
-                    const cardCenterX = info.point.x;
-                    const cardCenterY = info.point.y;
-                    
-                    const isDroppedOnChat = 
-                      cardCenterX >= chatRect.left &&
-                      cardCenterX <= chatRect.right &&
-                      cardCenterY >= chatRect.top &&
-                      cardCenterY <= chatRect.bottom;
-                    
-                    if (isDroppedOnChat) {
-                      handleCardDrop(card.id);
+          {/* Draggable Project Cards - Positioned Around Chat, Behind it */}
+          <AnimatePresence>
+            {PROJECT_CARDS.map((card) => {
+              if (!visibleCards.includes(card.id)) return null;
+              
+              return (
+                <motion.div
+                  key={card.id}
+                  drag
+                  dragMomentum={false}
+                  dragElastic={0.1}
+                  onDragStart={() => {
+                    setIsDraggingCard(card.id);
+                  }}
+                  onDrag={(event, info) => {
+                    // Check if card is over chat area
+                    if (chatCardRef.current) {
+                      const chatRect = chatCardRef.current.getBoundingClientRect();
+                      const cardCenterX = info.point.x;
+                      const cardCenterY = info.point.y;
+                      
+                      const isOver = 
+                        cardCenterX >= chatRect.left &&
+                        cardCenterX <= chatRect.right &&
+                        cardCenterY >= chatRect.top &&
+                        cardCenterY <= chatRect.bottom;
+                      
+                      setIsCardOverChat(isOver);
+                    }
+                  }}
+                  onDragEnd={(event, info) => {
+                    // Check if dropped over chat
+                    if (chatCardRef.current) {
+                      const chatRect = chatCardRef.current.getBoundingClientRect();
+                      const cardCenterX = info.point.x;
+                      const cardCenterY = info.point.y;
+                      
+                      const isDroppedOnChat = 
+                        cardCenterX >= chatRect.left &&
+                        cardCenterX <= chatRect.right &&
+                        cardCenterY >= chatRect.top &&
+                        cardCenterY <= chatRect.bottom;
+                      
+                      if (isDroppedOnChat) {
+                        handleCardDrop(card.id);
+                      } else {
+                        setIsDraggingCard(null);
+                        setIsCardOverChat(false);
+                      }
                     } else {
                       setIsDraggingCard(null);
                       setIsCardOverChat(false);
                     }
-                  } else {
-                    setIsDraggingCard(null);
-                    setIsCardOverChat(false);
-                  }
-                }}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ 
-                  opacity: 1, 
-                  scale: 1,
-                  rotate: card.rotation
-                }}
-                exit={{ 
-                  opacity: 0, 
-                  scale: 0.5,
-                  transition: { duration: 0.3 }
-                }}
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
-                  transition: { duration: 0.2 }
-                }}
-                whileDrag={{ 
-                  scale: 1.1, 
-                  rotate: 0,
-                  boxShadow: '0 25px 50px rgba(0, 0, 0, 0.25)',
-                  cursor: 'grabbing',
-                  zIndex: 100
-                }}
-                transition={{ delay: 0.4 + PROJECT_CARDS.findIndex(c => c.id === card.id) * 0.1 }}
-                className="absolute w-[263px] h-[266px] rounded-[44px] border border-white cursor-grab"
-                style={{
-                  ...card.position,
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  backdropFilter: 'blur(20px)',
-                  WebkitBackdropFilter: 'blur(20px)',
-                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-                  zIndex: isDraggingCard === card.id ? 100 : 10,
-                  transformStyle: 'preserve-3d'
-                }}
-              >
-                <div className="w-full h-full flex items-center justify-center p-4">
-                  <img 
-                    src={card.image} 
-                    alt={card.title}
-                    className="w-full h-full object-contain pointer-events-none"
-                    draggable={false}
-                  />
-                </div>
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
+                  }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ 
+                    opacity: 1, 
+                    scale: 1,
+                    rotate: card.rotation
+                  }}
+                  exit={{ 
+          opacity: 0,
+                    scale: 0.5,
+                    transition: { duration: 0.3 }
+                  }}
+                  whileHover={{ 
+                    scale: 1.05,
+                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
+                    transition: { duration: 0.2 }
+                  }}
+                  whileDrag={{ 
+                    scale: 1.1, 
+                    rotate: 0,
+                    boxShadow: '0 25px 50px rgba(0, 0, 0, 0.25)',
+                    cursor: 'grabbing',
+                    zIndex: 100
+                  }}
+                  transition={{ delay: 0.4 + PROJECT_CARDS.findIndex(c => c.id === card.id) * 0.1 }}
+                  className="absolute w-[263px] h-[266px] rounded-[44px] border border-white cursor-grab"
+                  style={{
+                    ...card.position,
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    backdropFilter: 'blur(20px)',
+                    WebkitBackdropFilter: 'blur(20px)',
+                    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+                    zIndex: isDraggingCard === card.id ? 100 : 5,
+                    transformStyle: 'preserve-3d'
+                  }}
+                >
+                  <div className="relative w-full h-full flex flex-col p-4">
+                    {/* Card Title */}
+                    <div className="absolute top-4 left-4 z-10">
+                      <p 
+                        className="text-[14px] font-normal text-black/70"
+                        style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
+                      >
+                        {card.title}
+                      </p>
+                    </div>
+                    
+                    {/* Card Image */}
+                    <div className="w-full h-full flex items-center justify-center">
+                      <img 
+                        src={card.image} 
+                        alt={card.title}
+                        className="w-full h-full object-contain pointer-events-none"
+                        draggable={false}
+                      />
+                    </div>
+                  </div>
+          </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
       </div>
 
       <style>{`
@@ -1020,7 +1047,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               title="Book a meeting with Raksha"
             />
           </div>
-        </div>
+      </div>
       )}
       </div>
   );
