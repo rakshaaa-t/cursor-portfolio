@@ -131,14 +131,18 @@ export async function sendToAI(
   apiKey: string
 ): Promise<AIResponse> {
   try {
+    // Limit conversation history to last 10 messages to save costs
+    const recentHistory = conversationHistory
+      .filter(msg => msg.sender === 'user' || msg.sender === 'ai')
+      .slice(-10); // Only send last 10 messages
+    
     // Prepare conversation history for AI
     const messages = [
       {
         role: 'system',
         content: RAKSHA_CONTEXT
       },
-      ...conversationHistory
-        .filter(msg => msg.sender === 'user' || msg.sender === 'ai')
+      ...recentHistory
         .map(msg => ({
           role: msg.sender === 'user' ? 'user' : 'assistant',
           content: msg.content || ''
@@ -156,9 +160,9 @@ export async function sendToAI(
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini', // Mini version - 60x cheaper and works great for chat
+        model: 'gpt-4o', // Using full version for personality consistency
         messages: messages,
-        max_tokens: 300, // Reduced to save costs
+        max_tokens: 200, // Reduced from 500 to save costs
         temperature: 0.7,
         stream: false
       })
