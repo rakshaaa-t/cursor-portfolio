@@ -625,7 +625,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               wordWrap: 'break-word' 
             }}>
               aka raks - product designer who builds products that work, look good and sell (yes i code too)<br/><br/>
-              i live in duality: lead design experiences at startups and also code frontend with cursor speak to find out more{' '}
+              i live in duality: lead design experiences at startups and also code frontend with cursor  to find out more  →  
             </span>
             <a 
               href="https://cal.com/raksha-tated-v2ee58/15min"
@@ -642,8 +642,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               }}
               className="hover:opacity-80 transition-opacity"
             >
-              let's talk<br/><br/>
+              let's talk
             </a>
+            <br/><br/>
             <span style={{ 
               color: 'rgba(41, 41, 41, 0.88)', 
               fontSize: '18px', 
