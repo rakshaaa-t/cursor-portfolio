@@ -453,27 +453,17 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   // Handle card click for mobile
   const handleCardClick = (cardId: string) => {
     if (isMobile) {
-      // Set clicking state for animation
-      setClickingCard(cardId);
+      // Simple: just handle drop immediately
+      handleCardDrop(cardId);
       
-      // Brief highlight effect on chat
-      setIsCardOverChat(true);
-      
-      // After animation, handle the drop
-      setTimeout(() => {
-        handleCardDrop(cardId);
-        setClickingCard(null);
-        setIsCardOverChat(false);
-      }, 400);
-      
-      // Scroll to chatbox after card starts animating
+      // Scroll to chatbox
       setTimeout(() => {
         chatCardRef.current?.scrollIntoView({ 
           behavior: 'smooth', 
           block: 'start',
           inline: 'nearest'
         });
-      }, 200);
+      }, 100);
     }
   };
 
@@ -967,7 +957,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       )}
 
       {/* Content Container */}
-      <div className={`relative w-full mx-auto ${isMobile ? 'px-4 pt-24' : 'max-w-[1440px] px-8 pt-20'}`}>
+      <div className={`relative w-full mx-auto ${isMobile ? 'px-4 pt-24' : 'max-w-[1440px] px-8 pt-32'}`}>
         {/* Main Heading */}
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
@@ -1079,8 +1069,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               outlineOffset: '-2px'
             }}
           >
-          {/* Drop Zone Overlay - Shows when dragging a card */}
-          {isCardOverChat && (
+          {/* Drop Zone Overlay - Shows when dragging a card (desktop only) */}
+          {!isMobile && isCardOverChat && (
             <div 
               className="absolute inset-0 z-50 rounded-[44px] bg-blue-500/10 border-2 border-dashed border-blue-500 flex items-center justify-center pointer-events-none"
               style={{
@@ -1474,41 +1464,32 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   
                   const alternateRotation = index % 2 === 0 ? -15 : 15;
                   
-                  const isClicking = clickingCard === card.id;
-                  
                   return (
                     <motion.div
                       key={card.id}
                       onClick={() => handleCardClick(card.id)}
                       initial={{ opacity: 0, y: 20 }}
-                      animate={isClicking ? { 
-          opacity: 0,
-                        y: -200,
-                        scale: 0.6,
-                        rotate: 0,
-                        transition: { duration: 0.4, ease: "easeInOut" }
-                      } : { 
+                      animate={{ 
           opacity: 1,
                         y: 0,
                         rotate: alternateRotation
                       }}
                       exit={{ 
                         opacity: 0,
-                        scale: 0.5,
-                        transition: { duration: 0.3 }
+                        scale: 0.8,
+                        transition: { duration: 0.2 }
                       }}
                       whileTap={{ 
                         scale: 0.95,
                         transition: { duration: 0.1 }
                       }}
-                      transition={{ delay: 0.4 + index * 0.1 }}
-                      className="w-[263px] h-[266px] rounded-[44px] border border-white cursor-pointer active:scale-95"
+                      transition={{ delay: 0.2 + index * 0.1 }}
+                      className="w-[263px] h-[266px] rounded-[44px] border border-white cursor-pointer"
                       style={{
                         background: 'rgba(255, 255, 255, 0.30)',
                         backdropFilter: 'blur(20px)',
                         WebkitBackdropFilter: 'blur(20px)',
-                        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-                        pointerEvents: isClicking ? 'none' : 'auto'
+                        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)'
                       }}
                     >
                       {/* Card Title */}
@@ -1605,6 +1586,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         className="relative z-10"
         style={{
           width: '100%',
+          maxWidth: '100%',
           padding: '22px',
           display: 'flex',
           flexDirection: 'column',
@@ -1612,7 +1594,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           alignItems: 'center',
           gap: '20px',
           marginTop: isMobile ? '60px' : '220px',
-          marginBottom: isMobile ? '100px' : '0'
+          marginBottom: isMobile ? '100px' : '0',
+          minWidth: 0
         }}
       >
         {/* Top Section - Title */}
@@ -1662,7 +1645,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             justifyContent: 'flex-start',
             alignItems: isMobile ? 'center' : 'flex-end',
             gap: isMobile ? '40px' : '80px',
-            alignSelf: 'stretch'
+            alignSelf: 'stretch',
+            width: '100%',
+            maxWidth: '100%',
+            minWidth: 0
           }}
         >
           {/* Social Links */}
