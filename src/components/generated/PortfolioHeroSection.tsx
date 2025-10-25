@@ -976,8 +976,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             transition={isMobile ? undefined : { delay: 0.1 }}
             className={isMobile ? 'text-center mx-auto' : 'text-left'}
             style={{
-              width: isMobile ? '100%' : '733px',
-              maxWidth: isMobile ? '100%' : '733px',
+              width: isMobile ? '100%' : '1040.8px',
+              maxWidth: isMobile ? '100%' : '1040.8px',
               marginTop: isMobile ? '20px' : '40px',
               marginBottom: isMobile ? '20px' : '40px'
             }}
