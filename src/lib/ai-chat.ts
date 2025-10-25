@@ -156,9 +156,9 @@ export async function sendToAI(
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'gpt-4o', // Full version for better personality consistency
+        model: 'gpt-4o-mini', // Mini version - 60x cheaper and works great for chat
         messages: messages,
-        max_tokens: 500,
+        max_tokens: 300, // Reduced to save costs
         temperature: 0.7,
         stream: false
       })
