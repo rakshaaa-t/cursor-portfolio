@@ -1,19 +1,35 @@
 // Detailed Case Studies - Inject When Triggered
 
 export const OVA_DEEP_DIVE = `
-ova was a period tracking app for hannah at cryptiq. most period trackers made teens uncomfortable with sexual wellness content and sold user data. i designed it privacy-first with a companion vibe, not clinical. created the "ova" character (egg-shaped, warm, gender-neutral) to explain cycles gently. challenge was balancing approachable vs medically trustworthy.
+ova was a period tracking app for hannah at cryptiq. most period trackers made teens uncomfortable with sexual wellness content and sold user data.
+
+i designed it privacy-first with a companion vibe, not clinical. created the "ova" character (egg-shaped, warm, gender-neutral) to explain cycles gently. the character approach worked because it made learning about your body feel less intimidating - more like a friend teaching you than a doctor lecturing.
+
+challenge was balancing approachable vs medically trustworthy. had to make sure the tone was warm without being patronizing, and educational without being scary.
 `;
 
 export const GREEX_DEEP_DIVE = `
-greex was a defi trading platform for raj karan (ex-binance leadership). strategy-based options and futures trading. i led design for 2 months working with their dev team. made complex financial data viz understandable for regular traders, not just crypto nerds. product was ready to launch but investors backed out due to market issues.
+greex was a defi trading platform for raj karan (ex-binance leadership). strategy-based options and futures trading.
+
+i led design for 2 months working with their dev team. the hard part was making complex financial data viz actually understandable. most defi platforms are built for crypto nerds, so everything is jargon-heavy and overwhelming. i focused on simplifying the trading interface and making data hierarchies clearer.
+
+product was ready to launch but investors backed out due to market issues. frustrating but that's startups.
 `;
 
 export const IOC_DEEP_DIVE = `
-ioc was vendor management for indian oil corporation through doodleblue agency. their 29-page legacy system was a mess. i simplified it for 4 user types (do officer, engineer, vendor, contractor) who all needed to work together. challenge was hiding backend complexity while covering all use cases for different user groups.
+ioc was vendor management for indian oil corporation through doodleblue agency. their 29-page legacy system was a mess - literally 29 pages of forms and confusing workflows.
+
+i simplified it for 4 user types (do officer, engineer, vendor, contractor) who all needed to work together. had to understand how each role used the system and what they actually needed vs what the old system forced them to do.
+
+challenge was hiding backend complexity while covering all use cases. couldn't just make it "simple" by removing features - had to make complexity feel manageable.
 `;
 
 export const DEALDOC_DEEP_DIVE = `
-dealdoc was deal management for investors (sunny and arash). audited their platform, redesigned homepage, added ai command center with suggestion pills. simplified navigation and made deal workflows easier. went developer-first with the ui. challenge was understanding investor workflows which was different from my previous work.
+dealdoc was deal management for investors (sunny and arash). they had a working product but it felt clunky. i audited their platform, redesigned homepage, added ai command center with suggestion pills.
+
+went developer-first with the ui - clean, minimal, keyboard shortcuts, fast navigation. simplified deal workflows so investors could move through their pipeline quicker.
+
+challenge was understanding investor workflows since i hadn't worked in that space before. had to learn how they actually use deal management tools day-to-day.
 `;
 
 export const DESIGN_PROCESS_DETAILS = `
