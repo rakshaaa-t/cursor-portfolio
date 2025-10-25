@@ -1253,7 +1253,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         {/* Top Section - Title */}
         <div 
           style={{
-            height: '318px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'flex-start',
@@ -1280,6 +1279,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               fontSize: '200px',
               fontFamily: 'Neulis Cursive, cursive',
               fontWeight: '500',
+              lineHeight: '200px',
               wordWrap: 'break-word'
             }}
           >
@@ -1312,7 +1312,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               style={{
                 textAlign: 'center',
                 color: '#9F94AD',
-                fontSize: '16px',
+                fontSize: '14px',
                 fontFamily: 'Geist Mono, monospace',
                 fontWeight: '500',
                 textDecoration: 'underline',
@@ -1329,7 +1329,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               style={{
                 textAlign: 'center',
                 color: '#9F94AD',
-                fontSize: '16px',
+                fontSize: '14px',
                 fontFamily: 'Geist Mono, monospace',
                 fontWeight: '500',
                 textDecoration: 'underline',
@@ -1346,7 +1346,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               style={{
                 textAlign: 'center',
                 color: '#9F94AD',
-                fontSize: '16px',
+                fontSize: '14px',
                 fontFamily: 'Geist Mono, monospace',
                 fontWeight: '500',
                 textDecoration: 'underline',
@@ -1363,7 +1363,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               style={{
                 textAlign: 'center',
                 color: '#9F94AD',
-                fontSize: '16px',
+                fontSize: '14px',
                 fontFamily: 'Geist Mono, monospace',
                 fontWeight: '500',
                 textDecoration: 'underline',
@@ -1378,7 +1378,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               style={{
                 textAlign: 'center',
                 color: '#9F94AD',
-                fontSize: '16px',
+                fontSize: '14px',
                 fontFamily: 'Geist Mono, monospace',
                 fontWeight: '500',
                 textDecoration: 'underline',
@@ -1395,7 +1395,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             <span 
               style={{
                 color: '#A599B6',
-                fontSize: '16px',
+                fontSize: '14px',
                 fontFamily: 'Geist Mono, monospace',
                 fontWeight: '500',
                 wordWrap: 'break-word'
@@ -1407,7 +1407,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               href="#" 
               style={{
                 color: '#A599B6',
-                fontSize: '16px',
+                fontSize: '14px',
                 fontFamily: 'Geist Mono, monospace',
                 fontWeight: '500',
                 textDecoration: 'underline',
