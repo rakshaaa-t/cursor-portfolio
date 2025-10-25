@@ -180,7 +180,7 @@ const PROJECT_CARDS = [
     id: 'dealdoc',
     title: 'dealdoc : deal management',
     image: 'https://res.cloudinary.com/dky01erho/image/upload/v1761388291/656_3x_shots_so_qced29.png',
-    message: 'what did the clients request for exactly?',
+    message: "what did you like most about dealdoc's redesign",
     position: { left: '978.86px', top: '341.07px' },
     rotation: -15
   }
