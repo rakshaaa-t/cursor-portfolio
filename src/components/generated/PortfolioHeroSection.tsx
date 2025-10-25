@@ -128,28 +128,36 @@ const ALL_SUGGESTIONS = [
 
 const PROJECT_CARDS = [
   {
-    id: 1,
-    title: "ova : period tracking app",
-    gradient: "from-blue-100 via-purple-100 to-pink-100",
-    bgGradient: "from-blue-200 to-purple-200"
+    id: 'ova',
+    title: 'ova : period tracking app',
+    image: 'https://res.cloudinary.com/dky01erho/image/upload/v1761388415/Slide_4_3_-_1_2_zr9r7i.png',
+    message: 'what did designing ova teach you',
+    position: { top: '15%', left: '-8%' },
+    rotation: -15
   },
   {
-    id: 2,
-    title: "greex : defi trading platform",
-    gradient: "from-gray-800 to-gray-900",
-    bgGradient: "from-gray-700 to-black"
+    id: 'ioc',
+    title: 'ioc : vendor management',
+    image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525270/190_2x_shots_so_gytftu.png',
+    message: 'what was the most challenging part about ioc',
+    position: { bottom: '10%', left: '-8%' },
+    rotation: 15
   },
   {
-    id: 3,
-    title: "ioc : vendor management app",
-    gradient: "from-white to-gray-100",
-    bgGradient: "from-gray-50 to-gray-200"
+    id: 'greex',
+    title: 'greex : defi trading',
+    image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525138/172_2x_shots_so_plr79y.png',
+    message: 'whats was ur process for greex',
+    position: { top: '15%', right: '-8%' },
+    rotation: 15
   },
   {
-    id: 4,
-    title: "dealdoc : deal management...",
-    gradient: "from-blue-400 to-blue-600",
-    bgGradient: "from-blue-500 to-blue-700"
+    id: 'dealdoc',
+    title: 'dealdoc : deal management',
+    image: 'https://res.cloudinary.com/dky01erho/image/upload/v1761388291/656_3x_shots_so_qced29.png',
+    message: 'what did the clients request for exactly?',
+    position: { bottom: '10%', right: '-8%' },
+    rotation: -15
   }
 ] as const;
 
@@ -161,6 +169,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const chatContainerRef = React.useRef<HTMLDivElement>(null);
   const [visiblePills, setVisiblePills] = React.useState<string[]>(ALL_SUGGESTIONS);
   const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
+  const [visibleCards, setVisibleCards] = React.useState<string[]>(PROJECT_CARDS.map(c => c.id));
+  const [isDraggingCard, setIsDraggingCard] = React.useState<string | null>(null);
+  const [isCardOverChat, setIsCardOverChat] = React.useState(false);
+  const chatCardRef = React.useRef<HTMLDivElement>(null);
   
   // Input ref for instant typing response
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -306,6 +318,62 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           id: (Date.now() + 1).toString(),
           type: 'text',
           content: getFallbackResponse(pillText),
+          sender: 'ai',
+          timestamp: Date.now()
+        };
+        addMessage(fallbackMessage);
+      }
+    } finally {
+      setIsLoading(false);
+      abortControllerRef.current = null;
+    }
+  };
+
+  // Handle card drop into chat
+  const handleCardDrop = async (cardId: string) => {
+    const card = PROJECT_CARDS.find(c => c.id === cardId);
+    if (!card || isLoading) return;
+
+    // Hide the card
+    setVisibleCards(prev => prev.filter(id => id !== cardId));
+    setIsDraggingCard(null);
+    setIsCardOverChat(false);
+
+    // Cancel any pending API call
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = new AbortController();
+
+    // Add user message with card thumbnail
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      type: 'text',
+      content: card.message,
+      sender: 'user',
+      timestamp: Date.now()
+    };
+
+    addMessage(userMessage);
+    setIsLoading(true);
+
+    try {
+      const response = await sendToAI(card.message, messages, AI_CONFIG.API_KEY);
+      const aiMessage: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        type: 'text',
+        content: response.message,
+        sender: 'ai',
+        timestamp: Date.now()
+      };
+
+      addMessage(aiMessage);
+    } catch (error: any) {
+      if (error?.name !== 'AbortError') {
+        const fallbackMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          type: 'text',
+          content: getFallbackResponse(card.message),
           sender: 'ai',
           timestamp: Date.now()
         };
@@ -544,6 +612,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
         {/* Chat Interface Card - Made Smaller */}
         <motion.div
+          ref={chatCardRef}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -552,6 +621,14 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             boxShadow: '0px 480px 192px rgba(0, 0, 0, 0.01), 0px 270px 162px rgba(0, 0, 0, 0.02), 0px 120px 120px rgba(0, 0, 0, 0.03), 0px 30px 66px rgba(0, 0, 0, 0.04)'
           }}
         >
+          {/* Drop Zone Overlay - Shows when dragging a card */}
+          {isCardOverChat && (
+            <div className="absolute inset-0 z-50 rounded-[44px] bg-blue-500/10 border-2 border-dashed border-blue-500 flex items-center justify-center pointer-events-none">
+              <p className="text-[18px] font-medium text-blue-600" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
+                Drop to ask about this project
+              </p>
+            </div>
+          )}
           {/* Inner Background Blurs */}
           <div className="absolute w-[421px] h-[336px] left-1/2 bottom-[-99px] -translate-x-1/2 translate-x-[236px] bg-[rgba(101,73,255,0.14)] rounded-[4444px] blur-[60px] pointer-events-none" />
           <div className="absolute w-[605px] h-[313px] left-1/2 bottom-[267px] -translate-x-1/2 -translate-x-[172px] bg-gradient-to-r from-[rgba(255,255,255,0.88)] to-[rgba(255,255,255,0.1936)] rounded-[4444px] blur-[60px] pointer-events-none" />
@@ -778,39 +855,107 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           </div>
         </motion.div>
 
-        {/* Project Cards Grid */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="grid grid-cols-4 gap-6 mt-16 pb-20"
-        >
-          {PROJECT_CARDS.map((project) => {
+        {/* Draggable Project Cards - Positioned Around Chat */}
+        <AnimatePresence>
+          {PROJECT_CARDS.map((card) => {
+            if (!visibleCards.includes(card.id)) return null;
+            
             return (
-              <div
-                key={project.id}
-                className="group relative bg-white/40 border border-white/60 rounded-[32px] overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer"
+              <motion.div
+                key={card.id}
+                drag
+                dragMomentum={false}
+                dragElastic={0.1}
+                onDragStart={() => {
+                  setIsDraggingCard(card.id);
+                }}
+                onDrag={(event, info) => {
+                  // Check if card is over chat area
+                  if (chatCardRef.current) {
+                    const chatRect = chatCardRef.current.getBoundingClientRect();
+                    const cardCenterX = info.point.x;
+                    const cardCenterY = info.point.y;
+                    
+                    const isOver = 
+                      cardCenterX >= chatRect.left &&
+                      cardCenterX <= chatRect.right &&
+                      cardCenterY >= chatRect.top &&
+                      cardCenterY <= chatRect.bottom;
+                    
+                    setIsCardOverChat(isOver);
+                  }
+                }}
+                onDragEnd={(event, info) => {
+                  // Check if dropped over chat
+                  if (chatCardRef.current) {
+                    const chatRect = chatCardRef.current.getBoundingClientRect();
+                    const cardCenterX = info.point.x;
+                    const cardCenterY = info.point.y;
+                    
+                    const isDroppedOnChat = 
+                      cardCenterX >= chatRect.left &&
+                      cardCenterX <= chatRect.right &&
+                      cardCenterY >= chatRect.top &&
+                      cardCenterY <= chatRect.bottom;
+                    
+                    if (isDroppedOnChat) {
+                      handleCardDrop(card.id);
+                    } else {
+                      setIsDraggingCard(null);
+                      setIsCardOverChat(false);
+                    }
+                  } else {
+                    setIsDraggingCard(null);
+                    setIsCardOverChat(false);
+                  }
+                }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ 
+                  opacity: 1, 
+                  scale: 1,
+                  rotate: card.rotation
+                }}
+                exit={{ 
+                  opacity: 0, 
+                  scale: 0.5,
+                  transition: { duration: 0.3 }
+                }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
+                  transition: { duration: 0.2 }
+                }}
+                whileDrag={{ 
+                  scale: 1.1, 
+                  rotate: 0,
+                  boxShadow: '0 25px 50px rgba(0, 0, 0, 0.25)',
+                  cursor: 'grabbing',
+                  zIndex: 100
+                }}
+                transition={{ delay: 0.4 + PROJECT_CARDS.findIndex(c => c.id === card.id) * 0.1 }}
+                className="absolute w-[263px] h-[266px] rounded-[44px] border border-white cursor-grab"
+                style={{
+                  ...card.position,
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  backdropFilter: 'blur(20px)',
+                  WebkitBackdropFilter: 'blur(20px)',
+                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+                  zIndex: isDraggingCard === card.id ? 100 : 10,
+                  transformStyle: 'preserve-3d'
+                }}
               >
-                <div className="p-5">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-[15px] text-gray-900 font-normal">
-                      <span>{project.title}</span>
-                    </h3>
-                    <button
-                      className="w-[38px] h-[38px] bg-white/30 rounded-full flex items-center justify-center group-hover:bg-white/50 transition-colors"
-                      aria-label={`View ${project.title}`}
-                    >
-                      <ArrowUpRight className="w-4 h-4 text-[#4F5CFF]" strokeWidth={2} />
-                    </button>
-                  </div>
-                  <div className={`w-full aspect-[4/3] bg-gradient-to-br ${project.gradient} rounded-[24px] border border-white/40 overflow-hidden`}>
-                    <div className={`w-full h-full bg-gradient-to-br ${project.bgGradient}`} />
-                  </div>
+                <div className="w-full h-full flex items-center justify-center p-4">
+                  <img 
+                    src={card.image} 
+                    alt={card.title}
+                    className="w-full h-full object-contain pointer-events-none"
+                    draggable={false}
+                  />
                 </div>
-              </div>
+              </motion.div>
             );
           })}
-        </motion.div>
+        </AnimatePresence>
       </div>
 
       <style>{`
