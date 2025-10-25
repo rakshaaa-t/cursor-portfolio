@@ -958,7 +958,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       )}
 
       {/* Content Container */}
-      <div className={`relative w-full mx-auto ${isMobile ? 'px-4 pt-24' : 'max-w-[1440px] px-8 pt-32'}`}>
+      <div className={`relative w-full mx-auto ${isMobile ? 'px-4 pt-24' : 'max-w-[1440px] px-8 pt-36'}`}>
         {/* Main Heading */}
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
@@ -1645,10 +1645,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           style={{
             display: 'flex',
             flexDirection: isMobile ? 'column' : 'row',
-            justifyContent: 'flex-start',
-            alignItems: isMobile ? 'center' : 'flex-end',
+            justifyContent: 'center',
+            alignItems: 'center',
             gap: isMobile ? '40px' : '80px',
-            alignSelf: 'stretch',
             width: '100%',
             maxWidth: '100%',
             minWidth: 0
