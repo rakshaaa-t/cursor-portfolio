@@ -967,20 +967,21 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       )}
 
       {/* Content Container */}
-      <div className={`relative w-full mx-auto ${isMobile ? 'px-4 pt-24' : 'max-w-[1440px] px-8 pt-36'}`}>
-        {/* Main Heading */}
-        <motion.div
-          initial={isMobile ? false : { opacity: 0, scale: 0.98 }}
-          animate={isMobile ? false : { opacity: 1, scale: 1 }}
-          transition={isMobile ? undefined : { delay: 0.1 }}
-          className={isMobile ? 'text-center mx-auto' : 'text-left mx-auto'}
-          style={{
-            width: isMobile ? '100%' : '733px',
-            maxWidth: isMobile ? '100%' : '733px',
-            marginTop: isMobile ? '20px' : '40px',
-            marginBottom: isMobile ? '20px' : '40px'
-          }}
-        >
+      <div className={`relative w-full ${isMobile ? 'px-4 pt-24' : 'pt-36'}`}>
+        <div className={isMobile ? '' : 'flex justify-center w-full'}>
+          {/* Main Heading */}
+          <motion.div
+            initial={isMobile ? false : { opacity: 0, scale: 0.98 }}
+            animate={isMobile ? false : { opacity: 1, scale: 1 }}
+            transition={isMobile ? undefined : { delay: 0.1 }}
+            className={isMobile ? 'text-center mx-auto' : 'text-left'}
+            style={{
+              width: isMobile ? '100%' : '733px',
+              maxWidth: isMobile ? '100%' : '733px',
+              marginTop: isMobile ? '20px' : '40px',
+              marginBottom: isMobile ? '20px' : '40px'
+            }}
+          >
           <div style={{ width: '100%' }}>
             <span style={{ 
               color: isMobile ? 'rgba(41, 41, 41, 0.88)' : '#303034', 
@@ -1049,6 +1050,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             </button>
           </div>
           </motion.div>
+        </div>
 
         {/* Chat + Cards Container - Sized to fit cards around chat - scaled 80% */}
         <div ref={cardsContainerRef} className="relative mx-auto" style={isMobile ? { width: '100%', maxWidth: '348px' } : { width: '1040.8px', height: '485.6px' }}>
