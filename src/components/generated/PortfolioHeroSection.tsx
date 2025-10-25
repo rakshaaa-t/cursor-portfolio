@@ -1089,7 +1089,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     backdropFilter: 'blur(20px)',
                     WebkitBackdropFilter: 'blur(20px)',
                     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-                    zIndex: isDraggingCard === card.id ? 100 : 30,
+                    zIndex: isDraggingCard === card.id ? 100 : 10,
                     transformStyle: 'preserve-3d'
                   }}
                 >
