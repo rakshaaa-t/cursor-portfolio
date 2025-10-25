@@ -1232,6 +1232,190 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         }
       `}</style>
 
+      {/* Footer */}
+      <div 
+        style={{
+          width: '100%',
+          padding: '22px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          gap: '20px',
+          marginTop: '120px'
+        }}
+      >
+        {/* Top Section - Title */}
+        <div 
+          style={{
+            height: '318px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            gap: '12px'
+          }}
+        >
+          <div 
+            style={{
+              textAlign: 'center',
+              color: '#9F94AD',
+              fontSize: '44px',
+              fontFamily: 'Neulis Cursive, cursive',
+              fontStyle: 'italic',
+              fontWeight: '500',
+              wordWrap: 'break-word'
+            }}
+          >
+            lovely to see you here!
+          </div>
+          <div 
+            style={{
+              color: 'white',
+              fontSize: '200px',
+              fontFamily: 'Neulis Cursive, cursive',
+              fontWeight: '500',
+              wordWrap: 'break-word'
+            }}
+          >
+            raks
+          </div>
+        </div>
+
+        {/* Bottom Section - Links and Credits */}
+        <div 
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-start',
+            alignItems: 'flex-end',
+            gap: '80px'
+          }}
+        >
+          {/* Social Links */}
+          <div 
+            style={{
+              width: '463px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
+          >
+            <a 
+              href="https://linkedin.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{
+                textAlign: 'center',
+                color: '#9F94AD',
+                fontSize: '16px',
+                fontFamily: 'Geist Mono, monospace',
+                fontWeight: '500',
+                textDecoration: 'underline',
+                wordWrap: 'break-word',
+                cursor: 'pointer'
+              }}
+            >
+              Linkedin
+            </a>
+            <a 
+              href="https://twitter.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{
+                textAlign: 'center',
+                color: '#9F94AD',
+                fontSize: '16px',
+                fontFamily: 'Geist Mono, monospace',
+                fontWeight: '500',
+                textDecoration: 'underline',
+                wordWrap: 'break-word',
+                cursor: 'pointer'
+              }}
+            >
+              X
+            </a>
+            <a 
+              href="https://contra.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{
+                textAlign: 'center',
+                color: '#9F94AD',
+                fontSize: '16px',
+                fontFamily: 'Geist Mono, monospace',
+                fontWeight: '500',
+                textDecoration: 'underline',
+                wordWrap: 'break-word',
+                cursor: 'pointer'
+              }}
+            >
+              Contra
+            </a>
+            <a 
+              href="https://medium.com" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{
+                textAlign: 'center',
+                color: '#9F94AD',
+                fontSize: '16px',
+                fontFamily: 'Geist Mono, monospace',
+                fontWeight: '500',
+                textDecoration: 'underline',
+                wordWrap: 'break-word',
+                cursor: 'pointer'
+              }}
+            >
+              Medium
+            </a>
+            <a 
+              href="mailto:hey@raksha.design"
+              style={{
+                textAlign: 'center',
+                color: '#9F94AD',
+                fontSize: '16px',
+                fontFamily: 'Geist Mono, monospace',
+                fontWeight: '500',
+                textDecoration: 'underline',
+                wordWrap: 'break-word',
+                cursor: 'pointer'
+              }}
+            >
+              hey@raksha.design
+            </a>
+          </div>
+
+          {/* Credits */}
+          <div style={{ textAlign: 'center' }}>
+            <span 
+              style={{
+                color: '#A599B6',
+                fontSize: '16px',
+                fontFamily: 'Geist Mono, monospace',
+                fontWeight: '500',
+                wordWrap: 'break-word'
+              }}
+            >
+              Designed and coded by me and cursor → 
+            </span>
+            <a 
+              href="#" 
+              style={{
+                color: '#A599B6',
+                fontSize: '16px',
+                fontFamily: 'Geist Mono, monospace',
+                fontWeight: '500',
+                textDecoration: 'underline',
+                wordWrap: 'break-word',
+                cursor: 'pointer'
+              }}
+            >
+              View process
+            </a>
+          </div>
+        </div>
+      </div>
+
       {/* Cal.com Embedded Modal */}
       {isCalendarOpen && (
         <div 
