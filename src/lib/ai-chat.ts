@@ -120,9 +120,6 @@ export async function sendToAI(
   conversationHistory: ChatMessage[],
   apiKey: string
 ): Promise<AIResponse> {
-  console.log('API Key received:', apiKey ? `${apiKey.substring(0, 20)}...` : 'EMPTY OR UNDEFINED');
-  console.log('Full env check:', import.meta.env.VITE_OPENAI_API_KEY ? 'ENV VAR EXISTS' : 'ENV VAR IS UNDEFINED');
-  
   try {
     // Prepare conversation history for AI
     const messages = [
