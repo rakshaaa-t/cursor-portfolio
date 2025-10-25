@@ -978,7 +978,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             width: isMobile ? '100%' : '733px',
             maxWidth: isMobile ? '100%' : '733px',
             marginTop: isMobile ? '20px' : '40px',
-            marginBottom: isMobile ? '20px' : '40px'
+            marginBottom: isMobile ? '20px' : '40px',
+            marginLeft: isMobile ? 'auto' : '0',
+            marginRight: isMobile ? 'auto' : '0'
           }}
         >
           <div style={{ width: '100%' }}>
@@ -1514,8 +1516,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           }}
                         >
                           {card.title}
-                        </p>
-                      </div>
+              </p>
+            </div>
 
                       {/* Card Image */}
                       <div 
@@ -1541,7 +1543,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           draggable={false}
                         />
                       </div>
-                    </motion.div>
+          </motion.div>
                   );
                 })}
               </AnimatePresence>
