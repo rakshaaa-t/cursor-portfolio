@@ -1062,7 +1062,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               borderRadius: '44px',
               outline: '2px white solid',
               outlineOffset: '-2px',
-              height: '483px',
+              height: '420px',
               position: 'relative'
             } : {
               left: '203.2px',
@@ -1423,7 +1423,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   >
                     <div
                       style={{
-                        color: 'rgba(0, 0, 0, 0.8)',
+                        color: 'rgba(0, 0, 0, 0.6)',
                         fontSize: '14px',
                         fontFamily: 'Nexa, system-ui, sans-serif',
                         fontWeight: '400',
@@ -1522,7 +1522,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       >
                         <p 
                           style={{
-                            color: 'white',
+                            color: 'rgba(0, 0, 0, 0.6)',
                             fontSize: '14px',
                             fontFamily: 'Nexa, system-ui, sans-serif',
                             fontWeight: '400',
