@@ -982,7 +982,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           <div style={{ width: '100%' }}>
             <span style={{ 
               color: 'rgba(41, 41, 41, 0.88)', 
-              fontSize: '22px', 
+              fontSize: isMobile ? '16px' : '22px', 
               fontFamily: 'Nexa, system-ui, sans-serif', 
               fontWeight: 700, 
               wordWrap: 'break-word' 
@@ -991,7 +991,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             </span>
             <span style={{ 
               color: 'rgba(41, 41, 41, 0.88)', 
-              fontSize: '18px', 
+              fontSize: isMobile ? '14px' : '18px', 
               fontFamily: 'Outfit, system-ui, sans-serif', 
               fontWeight: 300, 
               wordWrap: 'break-word' 
@@ -1005,7 +1005,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               rel="noopener noreferrer"
               style={{ 
                 color: 'rgba(41, 41, 41, 0.88)', 
-                fontSize: '18px', 
+                fontSize: isMobile ? '14px' : '18px', 
                 fontFamily: 'Outfit, system-ui, sans-serif', 
                 fontWeight: 300, 
                 textDecoration: 'underline', 
@@ -1019,7 +1019,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             <br/><br/>
             <span style={{ 
               color: 'rgba(41, 41, 41, 0.88)', 
-              fontSize: '18px', 
+              fontSize: isMobile ? '14px' : '18px', 
               fontFamily: 'Outfit, system-ui, sans-serif', 
               fontWeight: 300, 
               wordWrap: 'break-word' 
@@ -1029,7 +1029,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             <button 
               style={{ 
                 color: 'rgba(41, 41, 41, 0.88)', 
-                fontSize: '18px', 
+                fontSize: isMobile ? '14px' : '18px', 
                 fontFamily: 'Outfit, system-ui, sans-serif', 
                 fontWeight: 300, 
                 textDecoration: 'underline', 
