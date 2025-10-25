@@ -456,13 +456,16 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       // Simple: just handle drop immediately
       handleCardDrop(cardId);
       
-      // Scroll to chatbox
+      // Scroll to chatbox with offset to account for fixed header
       setTimeout(() => {
-        chatCardRef.current?.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start',
-          inline: 'nearest'
-        });
+        if (chatCardRef.current) {
+          const element = chatCardRef.current;
+          const headerHeight = 80; // Mobile header blur height
+          const yOffset = -headerHeight - 20; // Extra 20px padding
+          const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
       }, 100);
     }
   };
