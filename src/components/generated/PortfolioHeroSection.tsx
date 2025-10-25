@@ -1020,18 +1020,18 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     setIsDraggingCard(card.id);
                   }}
                   onDrag={(event, info) => {
-                    // Check if card is over chat area
-                    if (chatCardRef.current && event.currentTarget) {
+                    // Check if card is over chat area using cursor position
+                    if (chatCardRef.current) {
                       const chatRect = chatCardRef.current.getBoundingClientRect();
-                      const cardRect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+                      const cursorX = info.point.x;
+                      const cursorY = info.point.y;
                       
-                      // Check if ANY part of card overlaps with chat
-                      const isOver = !(
-                        cardRect.right < chatRect.left ||
-                        cardRect.left > chatRect.right ||
-                        cardRect.bottom < chatRect.top ||
-                        cardRect.top > chatRect.bottom
-                      );
+                      // Check if cursor is inside chat area
+                      const isOver = 
+                        cursorX >= chatRect.left &&
+                        cursorX <= chatRect.right &&
+                        cursorY >= chatRect.top &&
+                        cursorY <= chatRect.bottom;
                       
                       setIsCardOverChat(isOver);
                     }
