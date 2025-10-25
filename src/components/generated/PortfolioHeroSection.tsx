@@ -421,14 +421,18 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       {/* Background Blurs - REDUCED blur for better performance */}
       <div className="absolute w-[1472px] h-[761px] -left-[227px] top-[281px] bg-[rgba(0,132,255,0.1)] rounded-[4444px] blur-[80px] pointer-events-none z-[-2]" />
       <div className="absolute w-[1629px] h-[842px] right-[-300px] bottom-[-200px] bg-white rounded-[4444px] blur-[80px] pointer-events-none z-[-2]" />
+      
+      {/* White blur behind chatbox */}
+      <div className="absolute w-[800px] h-[600px] left-1/2 -translate-x-1/2 top-[350px] bg-white rounded-[4444px] blur-[100px] pointer-events-none z-[-1]" />
 
-      {/* Nav Background Blur Area - invisible blur only */}
+      {/* Nav Background Blur Area - seamless blur */}
       <div 
         className="fixed top-0 left-0 right-0 z-40 pointer-events-none"
         style={{
           height: '108px',
           backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)'
+          WebkitBackdropFilter: 'blur(20px)',
+          background: 'transparent'
         }}
       />
 
@@ -442,9 +446,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             paddingRight: '12px',
             paddingTop: '4px',
             paddingBottom: '4px',
-            background: 'rgba(255, 255, 255, 0.01)',
-            backdropFilter: 'blur(11px)',
-            WebkitBackdropFilter: 'blur(11px)'
+            background: 'transparent',
+            backdropFilter: 'none',
+            WebkitBackdropFilter: 'none'
           }}
         >
           {/* Logo - "raks" */}
