@@ -1,4 +1,7 @@
 // AI Chat functionality for Raksha's portfolio
+import { RAKSHA_CORE_PROMPT } from './prompts/core-prompt';
+import { getRelevantContext, isInterviewQuestion } from './prompts/context-injector';
+
 export interface ChatMessage {
   id: string;
   type: 'text' | 'card-with-question' | 'greeting';
@@ -18,8 +21,8 @@ export interface AIResponse {
   error?: string;
 }
 
-// Raksha - Simple Direct Personality
-const RAKSHA_CONTEXT = `
+// Legacy context - DEPRECATED, now using modular prompts
+const RAKSHA_CONTEXT_LEGACY = `
 CRITICAL: never use em dashes (—). use commas or periods instead.
 
 i'm raksha. i built this site. i'm a product designer from india, late twenties, leo. i travel between my hometown, mumbai and bangalore. i have one sibling in seattle. matcha keeps me sane.
@@ -136,11 +139,21 @@ export async function sendToAI(
       .filter(msg => msg.sender === 'user' || msg.sender === 'ai')
       .slice(-10); // Only send last 10 messages
     
+    // Get relevant case studies based on message content
+    const additionalContext = getRelevantContext(message, recentHistory);
+    
+    // Determine if this is an interview-style question (needs more detailed response)
+    const isInterview = isInterviewQuestion(message);
+    const maxTokens = isInterview ? 400 : 250;
+    
+    // Combine core prompt with any injected case studies
+    const systemPrompt = RAKSHA_CORE_PROMPT + additionalContext;
+    
     // Prepare conversation history for AI
     const messages = [
       {
         role: 'system',
-        content: RAKSHA_CONTEXT
+        content: systemPrompt
       },
       ...recentHistory
         .map(msg => ({
@@ -162,7 +175,7 @@ export async function sendToAI(
       body: JSON.stringify({
         model: 'gpt-4o', // Using full version for personality consistency
         messages: messages,
-        max_tokens: 200, // Reduced from 500 to save costs
+        max_tokens: maxTokens, // Dynamic: 250 for casual, 400 for interview questions
         temperature: 0.7,
         stream: false
       })
