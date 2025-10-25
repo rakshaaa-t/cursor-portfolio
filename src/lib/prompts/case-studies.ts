@@ -17,19 +17,43 @@ product was ready to launch but investors backed out due to market issues. frust
 `;
 
 export const IOC_DEEP_DIVE = `
-ioc was vendor management for indian oil corporation through doodleblue agency. their 29-page legacy system was a mess - literally 29 pages of forms and confusing workflows.
+oh ioc! that was intense. worked on it late 2024 through doodleblue with karthik and the ioc team.
 
-i simplified it for 4 user types (do officer, engineer, vendor, contractor) who all needed to work together. had to understand how each role used the system and what they actually needed vs what the old system forced them to do.
+their legacy vendor management system was this nightmare 29-page document - literally so much complex data and confusing workflows. had to simplify it for 4 different user types (do officer, engineer, vendor, contractor) who all needed to work together.
 
-challenge was hiding backend complexity while covering all use cases. couldn't just make it "simple" by removing features - had to make complexity feel manageable.
+the interesting part was understanding how each role actually used the system vs what the old system forced them to do. couldn't just strip features to make it "simple" - had to make the complexity feel manageable.
+
+honestly working with enterprise clients like ioc taught me a lot about balancing user needs with rigid backend systems. there's very little room for experimentation when you're dealing with government workflows.
 `;
 
 export const DEALDOC_DEEP_DIVE = `
-dealdoc was deal management for investors (sunny and arash). they had a working product but it felt clunky. i audited their platform, redesigned homepage, added ai command center with suggestion pills.
+dealdoc was fun! worked with arash and sunny (founders from sf) early 2025.
 
-went developer-first with the ui - clean, minimal, keyboard shortcuts, fast navigation. simplified deal workflows so investors could move through their pipeline quicker.
+they had a working deal management product but wanted to level it up. i audited their platform, redesigned the homepage, and added this ai command center with suggestion pills to make deal workflows smoother.
 
-challenge was understanding investor workflows since i hadn't worked in that space before. had to learn how they actually use deal management tools day-to-day.
+the interesting part was making the ai functionality feel seamless - not like a forced feature but actually useful for investors moving through their pipeline. went developer-first with the ui: clean, minimal, keyboard shortcuts, fast navigation.
+
+honestly i didn't know deal management could be so complex. learning about startup handovers and how investors actually track deals was fascinating. totally different world from consumer products.
+`;
+
+export const ENA_DEEP_DIVE = `
+ENA was a nurse management platform i worked on late 2024 through doodleblue. us client, focused on nurse practitioner courses and student flows.
+
+healthcare design is so specific - you can't just experiment and see what works. everything has to be precise to user needs because you're dealing with education and certifications. one wrong flow and students can't access their courses properly.
+
+had to design the course structure and how students move through their nurse practitioner training. it's interesting how different healthcare design is from consumer products - way less room for dynamic experimentation, everything needs to be rock solid.
+
+honestly taught me a lot about designing for high-stakes environments where mistakes actually matter.
+`;
+
+export const DOODLEBLUE_LEADERSHIP = `
+doodleblue was my first lead position - end of 2024. nishitha (founder) trusted me to lead a team of 12 designers.
+
+i handled ioc, ena, and inam as clients while also building out a design coe (center of excellence) - basically training junior designers on cohesive design process and basic rules for client work.
+
+the interesting part was realizing i had to perfect my own process before i could teach it. felt like real responsibility for the first time. had to make sure my approach was solid enough to scale across the team.
+
+honestly it was challenging but good. taught me that management isn't just about delegating - it's about having a clear process that other people can actually follow.
 `;
 
 export const DESIGN_PROCESS_DETAILS = `

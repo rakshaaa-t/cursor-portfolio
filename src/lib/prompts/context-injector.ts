@@ -5,6 +5,8 @@ import {
   GREEX_DEEP_DIVE,
   IOC_DEEP_DIVE,
   DEALDOC_DEEP_DIVE,
+  ENA_DEEP_DIVE,
+  DOODLEBLUE_LEADERSHIP,
   DESIGN_PROCESS_DETAILS,
   CAREER_HISTORY
 } from './case-studies';
@@ -17,8 +19,10 @@ interface KeywordTriggers {
 const KEYWORD_TRIGGERS: KeywordTriggers = {
   ova: ['ova', 'period', 'cryptiq', 'hannah', 'period tracking'],
   greex: ['greex', 'defi', 'crypto', 'trading', 'raj', 'binance', 'options', 'futures'],
-  ioc: ['ioc', 'indian oil', 'vendor', 'doodleblue', 'vendor management'],
+  ioc: ['ioc', 'indian oil', 'vendor', 'vendor management', 'karthik'],
   dealdoc: ['dealdoc', 'deal management', 'investor', 'sunny', 'arash', 'deal pipeline'],
+  ena: ['ena', 'nurse', 'healthcare', 'nurse practitioner', 'medical'],
+  doodleblue: ['doodleblue', 'lead', 'team', 'management', 'nishitha', 'coe', 'leadership'],
   process: ['process', 'approach', 'methodology', 'how do you', 'design process', 'workflow', 'framework'],
   career: ['career', 'experience', 'past roles', 'bewakoof', 'background', 'work history', 'previous']
 };
@@ -28,6 +32,8 @@ const CASE_STUDY_MAP: { [key: string]: string } = {
   greex: GREEX_DEEP_DIVE,
   ioc: IOC_DEEP_DIVE,
   dealdoc: DEALDOC_DEEP_DIVE,
+  ena: ENA_DEEP_DIVE,
+  doodleblue: DOODLEBLUE_LEADERSHIP,
   process: DESIGN_PROCESS_DETAILS,
   career: CAREER_HISTORY
 };
