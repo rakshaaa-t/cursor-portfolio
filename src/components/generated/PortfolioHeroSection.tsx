@@ -698,7 +698,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           >
           {/* Drop Zone Overlay - Shows when dragging a card */}
           {isCardOverChat && (
-            <div className="absolute inset-0 z-50 rounded-[44px] bg-blue-500/10 border-2 border-dashed border-blue-500 flex items-center justify-center pointer-events-none">
+            <div 
+              className="absolute inset-0 z-50 rounded-[44px] bg-blue-500/10 border-2 border-dashed border-blue-500 flex items-center justify-center pointer-events-none"
+              style={{
+                backdropFilter: 'blur(8px)',
+                WebkitBackdropFilter: 'blur(8px)'
+              }}
+            >
               <p className="text-[18px] font-medium text-blue-600" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
                 Drop to ask about this project
               </p>
