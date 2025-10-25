@@ -419,8 +419,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   return (
     <div className="relative w-full min-h-screen bg-[#D8D4E8] overflow-hidden">
       {/* Background Blurs - REDUCED blur for better performance */}
-      <div className="absolute w-[1472px] h-[761px] -left-[227px] top-[281px] bg-[rgba(0,132,255,0.1)] rounded-[4444px] blur-[80px] pointer-events-none z-0" />
-      <div className="absolute w-[1629px] h-[842px] left-[474px] top-[517px] bg-white rounded-[4444px] blur-[80px] pointer-events-none z-0" />
+      <div className="absolute w-[1472px] h-[761px] -left-[227px] top-[281px] bg-[rgba(0,132,255,0.1)] rounded-[4444px] blur-[80px] pointer-events-none z-[-2]" />
+      <div className="absolute w-[1629px] h-[842px] right-[-300px] bottom-[-200px] bg-white rounded-[4444px] blur-[80px] pointer-events-none z-[-2]" />
 
       {/* Nav Background Blur Area - invisible blur only */}
       <div 
@@ -1243,7 +1243,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           justifyContent: 'flex-start',
           alignItems: 'center',
           gap: '20px',
-          marginTop: '120px'
+          marginTop: '220px'
         }}
       >
         {/* Top Section - Title */}
