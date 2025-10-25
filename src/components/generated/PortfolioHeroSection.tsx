@@ -198,6 +198,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   const [isDraggingCard, setIsDraggingCard] = React.useState<string | null>(null);
   const [isCardOverChat, setIsCardOverChat] = React.useState(false);
   const chatCardRef = React.useRef<HTMLDivElement>(null);
+  const cardsContainerRef = React.useRef<HTMLDivElement>(null);
   
   // Input ref for instant typing response
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -744,7 +745,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           </motion.div>
 
         {/* Chat + Cards Container - Sized to fit cards around chat - scaled 80% */}
-        <div className="relative mx-auto" style={{ width: '1040.8px', height: '485.6px' }}>
+        <div ref={cardsContainerRef} className="relative mx-auto" style={{ width: '1040.8px', height: '485.6px' }}>
           {/* Chat Interface Card */}
           <motion.div
             ref={chatCardRef}
@@ -1016,9 +1017,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   drag
                   dragMomentum={false}
                   dragElastic={0.1}
-                  dragConstraints={{
-                    top: -200
-                  }}
+                  dragConstraints={cardsContainerRef}
                   onDragStart={() => {
                     setIsDraggingCard(card.id);
                   }}
