@@ -476,18 +476,16 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       {/* White blur behind chatbox */}
       <div className="absolute w-[800px] h-[600px] left-1/2 -translate-x-1/2 top-[350px] bg-white rounded-[4444px] blur-[100px] pointer-events-none z-[-1]" />
 
-      {/* Nav Background Blur Area - seamless blur (desktop only) */}
-      {!isMobile && (
-        <div 
-          className="fixed top-0 left-0 right-0 z-40 pointer-events-none"
-          style={{
-            height: '108px',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            background: 'transparent'
-          }}
-        />
-      )}
+      {/* Nav Background Blur Area - seamless blur */}
+      <div 
+        className="fixed top-0 left-0 right-0 z-40 pointer-events-none"
+        style={{
+          height: isMobile ? '80px' : '108px',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          background: 'transparent'
+        }}
+      />
 
       {/* Navigation */}
       {isMobile ? (
@@ -1583,21 +1581,23 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
       {/* Footer */}
       <div 
-        className="relative z-10"
-        style={{
-          width: '100%',
-          maxWidth: '100%',
-          padding: '22px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-          gap: '20px',
-          marginTop: isMobile ? '60px' : '220px',
-          marginBottom: isMobile ? '100px' : '0',
-          minWidth: 0
-        }}
+        className="relative z-10 flex justify-center w-full"
       >
+        <div 
+          style={{
+            width: '100%',
+            maxWidth: isMobile ? '100%' : '1200px',
+            padding: '22px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            gap: '20px',
+            marginTop: isMobile ? '60px' : '220px',
+            marginBottom: isMobile ? '100px' : '0',
+            minWidth: 0
+          }}
+        >
         {/* Top Section - Title */}
         <div 
           style={{
@@ -1776,6 +1776,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               View process 
             </a>
           </div>
+        </div>
         </div>
       </div>
 
