@@ -488,8 +488,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     flex: '1 1 0',
                     height: '60px',
                     padding: '18px',
-                    background: isActive ? '#283FE4' : 'rgba(255, 255, 255, 0.32)',
-                    boxShadow: isActive ? '1px 2px 4px rgba(0, 0, 0, 0.10)' : 'none',
+                    background: isActive ? '#283FE4' : '#666666',
+                    boxShadow: '1px 2px 4px rgba(0, 0, 0, 0.10)',
                     overflow: 'hidden',
                     borderRadius: '4444px',
                     outline: isActive ? '1px white solid' : 'none',
@@ -542,20 +542,20 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           <feGaussianBlur stdDeviation="2" result="effect1_foregroundBlur_371_216"/>
                         </filter>
                         <linearGradient id={`paint0_linear_371_216_${index}`} x1="10" y1="1" x2="10" y2="19" gradientUnits="userSpaceOnUse">
-                          <stop stopColor="white"/>
-                          <stop offset="1" stopColor="white" stopOpacity="0.34"/>
+                          <stop stopColor={isActive ? "white" : "#2B2B2B"}/>
+                          <stop offset="1" stopColor={isActive ? "white" : "rgba(0, 0, 0, 0.34)"} stopOpacity={isActive ? "0.34" : "1"}/>
                         </linearGradient>
                         <linearGradient id={`paint1_linear_371_216_${index}`} x1="10" y1="1" x2="10" y2="19" gradientUnits="userSpaceOnUse">
-                          <stop stopColor="white"/>
-                          <stop offset="1" stopColor="white" stopOpacity="0.34"/>
+                          <stop stopColor={isActive ? "white" : "#CECECE"}/>
+                          <stop offset="1" stopColor={isActive ? "white" : "rgba(0, 0, 0, 0.34)"} stopOpacity={isActive ? "0.34" : "1"}/>
                         </linearGradient>
                         <linearGradient id={`paint2_linear_371_216_${index}`} x1="15.5" y1="7.25" x2="15.5" y2="21.75" gradientUnits="userSpaceOnUse">
-                          <stop stopColor="white" stopOpacity="0.6"/>
-                          <stop offset="1" stopColor="white" stopOpacity="0.6"/>
+                          <stop stopColor={isActive ? "white" : "rgba(255, 255, 255, 0.78)"} stopOpacity={isActive ? "0.6" : "1"}/>
+                          <stop offset="1" stopColor={isActive ? "white" : "rgba(0, 0, 0, 0.60)"} stopOpacity={isActive ? "0.6" : "1"}/>
                         </linearGradient>
                         <linearGradient id={`paint3_linear_371_216_${index}`} x1="15.5" y1="7.25" x2="15.5" y2="15.647" gradientUnits="userSpaceOnUse">
-                          <stop stopColor="white"/>
-                          <stop offset="1" stopColor="white" stopOpacity="0"/>
+                          <stop stopColor={isActive ? "white" : "rgba(255, 255, 255, 0.66)"}/>
+                          <stop offset="1" stopColor={isActive ? "white" : "rgba(255, 255, 255, 0)"} stopOpacity="0"/>
                         </linearGradient>
                         <clipPath id="clip0_371_216">
                           <rect width="24" height="24" fill="white"/>
