@@ -1484,8 +1484,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       onClick={() => handleCardClick(card.id)}
                       initial={false}
                       animate={{ rotate: alternateRotation }}
-                      exit={false}
-                      whileTap={false}
                       transition={{ duration: 0 }}
                       className="w-[263px] h-[266px] rounded-[44px] border border-white cursor-pointer"
                       style={{
@@ -1542,7 +1540,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           }}
                           draggable={false}
                         />
-                      </div>
+            </div>
           </motion.div>
                   );
                 })}
