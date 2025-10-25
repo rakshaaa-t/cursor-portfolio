@@ -1190,13 +1190,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           onClick={() => setIsCalendarOpen(false)}
         >
           <div 
-            className="relative w-[90%] max-w-[1000px] h-[90vh] bg-white rounded-[24px] shadow-2xl overflow-hidden"
+            className="relative w-[90%] max-w-[1000px] h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close Button */}
+            {/* Close Button - Outside iframe container */}
             <button
               onClick={() => setIsCalendarOpen(false)}
-              className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-black/10 hover:bg-black/20 transition-colors"
+              className="absolute -top-12 right-0 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 hover:bg-white transition-colors shadow-lg"
               aria-label="Close calendar"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1208,7 +1208,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             {/* Cal.com Embed */}
             <iframe
               src="https://cal.com/raksha-tated-v2ee58/15min"
-              className="w-full h-full border-0"
+              className="w-full h-full border-0 rounded-[24px] shadow-2xl bg-white"
               allow="camera; microphone; autoplay; display-capture"
               title="Book a meeting with Raksha"
             />
