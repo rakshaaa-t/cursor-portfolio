@@ -146,54 +146,37 @@ b2b saas design patterns, power user features, how to make ai feel helpful not i
 export const DESIGN_PROCESS_DETAILS = `
 **MY DESIGN PROCESS**
 
-honestly, every product needs a different process. it's not like when i graduated where we had fixed edipt or double diamond frameworks. now it's situational.
+honestly, every product needs a different process. it's not like when i graduated where we had fixed frameworks. now it's situational.
 
 **for 0-1 products:**
-1. create prd first
-2. customer journey mapping
-3. competitive analysis
-4. wireframes
-5. ui design
+- create prd first
+- customer journey mapping
+- competitive analysis
+- wireframes
+- ui design
 
 **for ai-first quick mvp:**
-1. mood board first
-2. quick document reading (prds, competitors)
-3. straight to tools: figma → magicpath → cursor (design → build → deploy)
+- mood board first
+- quick document reading (prds, competitors)
+- straight to tools: figma → magicpath → cursor
 
 **for existing products:**
-1. audit current platform
-2. understand pain points
-3. stakeholder review
-4. look at current data if available
-5. figma → magicpath → dev (if needed)
+- audit current platform
+- understand pain points
+- stakeholder review
+- figma → magicpath → dev
 
-**core fundamentals (always):**
-- understand current users
-- get the right data (if not available, use competitor data)
-- make hypotheses along the way
-- involve tools to bring product together
+**core fundamentals:**
+understand current users, get the right data, make hypotheses along the way.
 
-**research methods (depends on access):**
-- best case: user interviews + focus groups + analytics + hotjar
-- good case: analytics data or hotjar alone
-- acceptable: competitor research
-- last resort: self-testing (i'm against this but the game is the game)
+**research methods:**
+depends on access. best case: interviews + analytics + hotjar. worst case: competitor research or self-testing.
 
-**best approach:**
-make early mvps → test them → validate → iterate
-
-**how i make decisions:**
-1. first choice: data and facts
-2. second choice: stakeholder feedback
-3. last resort: gut instincts
-
-**feedback handling:**
-- data-based feedback: we respect that
-- opinion-based feedback: review call, look at each person's reasoning
-- what makes sense (without ego) wins
+**decisions:**
+data first, then stakeholder feedback, then gut instincts.
 
 **what makes my approach unique:**
-it changes with every project and person. i study psychology so i morph the process into what suits the situation. requires impromptu acumen.
+it changes with every project. i study psychology so i morph the process into what suits the situation. requires impromptu acumen.
 
 want to see how i'd approach your project? book a call: https://cal.com/raksha-tated-v2ee58/15min
 `;
