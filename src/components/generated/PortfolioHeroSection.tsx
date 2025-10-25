@@ -1021,32 +1021,34 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   }}
                   onDrag={(event, info) => {
                     // Check if card is over chat area
-                    if (chatCardRef.current) {
+                    if (chatCardRef.current && event.currentTarget) {
                       const chatRect = chatCardRef.current.getBoundingClientRect();
-                      const cardCenterX = info.point.x;
-                      const cardCenterY = info.point.y;
+                      const cardRect = (event.currentTarget as HTMLElement).getBoundingClientRect();
                       
-                      const isOver = 
-                        cardCenterX >= chatRect.left &&
-                        cardCenterX <= chatRect.right &&
-                        cardCenterY >= chatRect.top &&
-                        cardCenterY <= chatRect.bottom;
+                      // Check if ANY part of card overlaps with chat
+                      const isOver = !(
+                        cardRect.right < chatRect.left ||
+                        cardRect.left > chatRect.right ||
+                        cardRect.bottom < chatRect.top ||
+                        cardRect.top > chatRect.bottom
+                      );
                       
                       setIsCardOverChat(isOver);
                     }
                   }}
                   onDragEnd={(event, info) => {
                     // Check if dropped over chat
-                    if (chatCardRef.current) {
+                    if (chatCardRef.current && event.currentTarget) {
                       const chatRect = chatCardRef.current.getBoundingClientRect();
-                      const cardCenterX = info.point.x;
-                      const cardCenterY = info.point.y;
+                      const cardRect = (event.currentTarget as HTMLElement).getBoundingClientRect();
                       
-                      const isDroppedOnChat = 
-                        cardCenterX >= chatRect.left &&
-                        cardCenterX <= chatRect.right &&
-                        cardCenterY >= chatRect.top &&
-                        cardCenterY <= chatRect.bottom;
+                      // Check if ANY part of card overlaps with chat
+                      const isDroppedOnChat = !(
+                        cardRect.right < chatRect.left ||
+                        cardRect.left > chatRect.right ||
+                        cardRect.bottom < chatRect.top ||
+                        cardRect.top > chatRect.bottom
+                      );
                       
                       if (isDroppedOnChat) {
                         handleCardDrop(card.id);
