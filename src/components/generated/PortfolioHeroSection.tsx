@@ -59,7 +59,7 @@ const ChunkyText = ({ content }: { content: string }) => {
     if (visibleLength < content.length) {
       const timer = setTimeout(() => {
         setVisibleLength(prev => Math.min(prev + chunkSize, content.length));
-      }, 60); // Show each chunk quickly (60ms)
+      }, 66); // Show each chunk quickly (66ms - 10% slower than 60ms)
       return () => clearTimeout(timer);
     }
   }, [visibleLength, content.length]);
