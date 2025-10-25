@@ -975,30 +975,31 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         >
           <div style={{ width: '100%' }}>
             <span style={{ 
-              color: 'rgba(41, 41, 41, 0.88)', 
+              color: isMobile ? 'rgba(41, 41, 41, 0.88)' : '#303034', 
               fontSize: isMobile ? '16px' : '22px', 
               fontFamily: 'Nexa, system-ui, sans-serif', 
               fontWeight: 700, 
               wordWrap: 'break-word' 
             }}>
-              Raksha T<br/>
+              Raksha T<br/>{!isMobile && <br/>}
             </span>
             <span style={{ 
-              color: 'rgba(41, 41, 41, 0.88)', 
+              color: isMobile ? 'rgba(41, 41, 41, 0.88)' : '#303034', 
               fontSize: isMobile ? '14px' : '18px', 
               fontFamily: 'Outfit, system-ui, sans-serif', 
               fontWeight: 300, 
               wordWrap: 'break-word' 
             }}>
-              aka raks - product designer who builds products that work, look good and sell (yes i code too)<br/><br/>
-              i live in duality: lead design experiences at startups and also code frontend with cursor  to find out more  →  
+              aka raks - product designer who builds products that work, look good and sell (yes i code too)<br/>
+              i live in duality: lead design experiences at startups and also code frontend with cursor{' '}<br/>
+              {!isMobile && ' '}to find out more  →  
             </span>
             <a 
               href="https://cal.com/raksha-tated-v2ee58/15min"
               target="_blank"
               rel="noopener noreferrer"
               style={{ 
-                color: 'rgba(41, 41, 41, 0.88)', 
+                color: isMobile ? 'rgba(41, 41, 41, 0.88)' : '#303034', 
                 fontSize: isMobile ? '14px' : '18px', 
                 fontFamily: 'Outfit, system-ui, sans-serif', 
                 fontWeight: 300, 
@@ -1012,7 +1013,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             </a>
             <br/><br/>
             <span style={{ 
-              color: 'rgba(41, 41, 41, 0.88)', 
+              color: isMobile ? 'rgba(41, 41, 41, 0.88)' : '#303034', 
               fontSize: isMobile ? '14px' : '18px', 
               fontFamily: 'Outfit, system-ui, sans-serif', 
               fontWeight: 300, 
@@ -1022,7 +1023,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             </span>
             <button 
               style={{ 
-                color: 'rgba(41, 41, 41, 0.88)', 
+                color: isMobile ? 'rgba(41, 41, 41, 0.88)' : '#303034', 
                 fontSize: isMobile ? '14px' : '18px', 
                 fontFamily: 'Outfit, system-ui, sans-serif', 
                 fontWeight: 300, 
