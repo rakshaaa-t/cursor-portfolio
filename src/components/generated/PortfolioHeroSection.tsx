@@ -69,7 +69,7 @@ const MessageBubble = React.memo(({ msg }: { msg: ChatMessage }) => {
             boxShadow: '0 4px 12px rgba(40, 63, 228, 0.08)'
           }}
         >
-          <div className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
+          <div className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}>
             {formatMessageText(msg.content || '')}
           </div>
         </div>
@@ -111,7 +111,7 @@ const MessageBubble = React.memo(({ msg }: { msg: ChatMessage }) => {
           boxShadow: '0 4px 12px rgba(40, 63, 228, 0.08)'
         }}
       >
-        <p className="text-[14px] leading-[21px] font-light" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
+        <p className="text-[14px] leading-[21px] font-light" style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}>
           {msg.content}
         </p>
       </div>
@@ -826,7 +826,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 WebkitBackdropFilter: 'blur(8px)'
               }}
             >
-              <p className="text-[18px] font-medium text-blue-600" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
+              <p className="text-[18px] font-medium text-blue-600" style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}>
                 Drop to ask about this project
               </p>
             </div>
@@ -872,7 +872,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       filter: 'drop-shadow(0 15px 34px rgba(40, 63, 228, 0.04)) drop-shadow(0 62px 62px rgba(40, 63, 228, 0.03)) drop-shadow(0 139px 84px rgba(40, 63, 228, 0.02)) drop-shadow(0 248px 99px rgba(40, 63, 228, 0.01)) drop-shadow(0 387px 108px rgba(40, 63, 228, 0.00))'
                     }}
                   >
-                    <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
+                    <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}>
                       you can ask me here about my design process, my past projects or just get to know me better!
                     </p>
                   </div>
@@ -904,7 +904,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         boxShadow: '0 4px 12px rgba(40, 63, 228, 0.08)'
                       }}
                     >
-                      <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
+                      <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}>
                         ...
               </p>
             </div>
@@ -990,7 +990,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         disabled={isLoading}
                         className="w-full h-full bg-transparent border-none outline-none text-[14px] font-normal text-black disabled:opacity-50"
                         style={{ 
-                          fontFamily: 'Nexa Text, system-ui, sans-serif',
+                          fontFamily: 'Nexa, system-ui, sans-serif',
                           lineHeight: '24px',
                           padding: 0
                         }}
@@ -1000,7 +1000,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                           <span
                             className="text-[14px] font-normal text-black/[0.44] whitespace-nowrap"
                             style={{ 
-                              fontFamily: 'Nexa Text, system-ui, sans-serif',
+                              fontFamily: 'Nexa, system-ui, sans-serif',
                               lineHeight: '24px',
                               display: 'inline-block'
                             }}
@@ -1044,7 +1044,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       >
                         <span
                           className="text-[13px] leading-[20px] font-normal text-black/[0.64] whitespace-nowrap text-center"
-                          style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
+                          style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
                         >
                           {suggestion}
         </span>
