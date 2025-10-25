@@ -144,41 +144,26 @@ b2b saas design patterns, power user features, how to make ai feel helpful not i
 `;
 
 export const DESIGN_PROCESS_DETAILS = `
-**MY DESIGN PROCESS**
+honestly every product needs a different process. not fixed frameworks anymore, it's situational.
 
-honestly, every product needs a different process. it's not like when i graduated where we had fixed frameworks. now it's situational.
+for 0-1 products:
+- prd → customer journey → competitive analysis → wireframes → ui
 
-**for 0-1 products:**
-- create prd first
-- customer journey mapping
-- competitive analysis
-- wireframes
-- ui design
+for ai-first mvps:
+- mood board → quick docs → straight to figma → magicpath → cursor
 
-**for ai-first quick mvp:**
-- mood board first
-- quick document reading (prds, competitors)
-- straight to tools: figma → magicpath → cursor
+for existing products:
+- audit → understand pain points → stakeholder review → design → dev
 
-**for existing products:**
-- audit current platform
-- understand pain points
-- stakeholder review
-- figma → magicpath → dev
+core fundamentals: understand users, get data, make hypotheses.
 
-**core fundamentals:**
-understand current users, get the right data, make hypotheses along the way.
+research depends on access. best case: interviews + analytics. worst case: competitor research.
 
-**research methods:**
-depends on access. best case: interviews + analytics + hotjar. worst case: competitor research or self-testing.
+decisions: data first, then stakeholder feedback, then gut.
 
-**decisions:**
-data first, then stakeholder feedback, then gut instincts.
+what makes it unique: it changes every project. i study psychology so i adapt the process to fit the situation.
 
-**what makes my approach unique:**
-it changes with every project. i study psychology so i morph the process into what suits the situation. requires impromptu acumen.
-
-want to see how i'd approach your project? book a call: https://cal.com/raksha-tated-v2ee58/15min
+if you want to see how i'd approach your project specifically, book a call: https://cal.com/raksha-tated-v2ee58/15min
 `;
 
 export const CAREER_HISTORY = `
