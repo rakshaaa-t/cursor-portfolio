@@ -1018,15 +1018,39 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     transformStyle: 'preserve-3d'
                   }}
                 >
-                  {/* Card Image - Fills entire card with 4:3 aspect ratio */}
-                  <div
+                  {/* Card Title - Clean text at top */}
+                  <div 
                     style={{
-                      width: '100%',
-                      height: '100%',
                       position: 'absolute',
                       top: 0,
                       left: 0,
-                      borderRadius: '44px',
+                      right: 0,
+                      padding: '20px 24px',
+                      zIndex: 10
+                    }}
+                  >
+                    <div
+                      style={{
+                        color: 'rgba(0, 0, 0, 0.8)',
+                        fontSize: '14px',
+                        fontFamily: 'Nexa, system-ui, sans-serif',
+                        fontWeight: '400',
+                        wordWrap: 'break-word'
+                      }}
+                    >
+                      {card.title}
+                    </div>
+                  </div>
+                  
+                  {/* Card Image - Fills bottom portion */}
+                  <div
+                    style={{
+                      width: '100%',
+                      height: 'calc(100% - 60px)',
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      borderRadius: '0 0 44px 44px',
                       overflow: 'hidden'
                     }}
                   >
@@ -1043,37 +1067,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       draggable={false}
                     />
                   </div>
-                  
-                  {/* Glass overlay for title at top */}
-                  <div 
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      padding: '16px 20px',
-                      background: 'rgba(0, 0, 0, 0.25)',
-                      backdropFilter: 'blur(10px)',
-                      WebkitBackdropFilter: 'blur(10px)',
-                      borderTopLeftRadius: '44px',
-                      borderTopRightRadius: '44px',
-                      zIndex: 10
-                    }}
-                  >
-                    <div
-                      style={{
-                        color: 'white',
-                        fontSize: '14px',
-                        fontFamily: 'Nexa, system-ui, sans-serif',
-                        fontWeight: '400',
-                        wordWrap: 'break-word',
-                        textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)'
-                      }}
-                    >
-                      {card.title}
-                    </div>
-                  </div>
-          </motion.div>
+                </motion.div>
               );
             })}
           </AnimatePresence>
