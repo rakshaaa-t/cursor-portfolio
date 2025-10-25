@@ -54,15 +54,22 @@ const formatMessageText = (text: string) => {
 const ChunkyText = ({ content }: { content: string }) => {
   const [visibleLength, setVisibleLength] = React.useState(0);
   const chunkSize = 15; // Show ~15 characters at a time (roughly 2-3 words)
+  const isMobileDevice = typeof window !== 'undefined' && window.innerWidth <= 768;
 
   React.useEffect(() => {
+    // On mobile, show text instantly to avoid performance issues
+    if (isMobileDevice) {
+      setVisibleLength(content.length);
+      return;
+    }
+    
     if (visibleLength < content.length) {
       const timer = setTimeout(() => {
         setVisibleLength(prev => Math.min(prev + chunkSize, content.length));
       }, 66); // Show each chunk quickly (66ms - 10% slower than 60ms)
       return () => clearTimeout(timer);
     }
-  }, [visibleLength, content.length]);
+  }, [visibleLength, content.length, isMobileDevice]);
 
   const visibleContent = content.slice(0, visibleLength);
 

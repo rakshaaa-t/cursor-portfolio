@@ -17,48 +17,81 @@
     <style>
       @font-face {
         font-family: 'Nexa';
-        src: url('https://storage.googleapis.com/magicpath-fonts/Nexa-Bold.otf') format('opentype');
+        src: local('Nexa Bold'), local('Nexa-Bold'),
+             url('https://storage.googleapis.com/magicpath-fonts/Nexa-Bold.otf') format('opentype');
         font-weight: 700;
         font-style: normal;
-        font-display: swap;
+        font-display: block;
       }
       @font-face {
         font-family: 'Nexa Text';
-        src: url('https://storage.googleapis.com/magicpath-fonts/NexaText-Regular.otf') format('opentype');
+        src: local('Nexa Text'), local('NexaText-Regular'),
+             url('https://storage.googleapis.com/magicpath-fonts/NexaText-Regular.otf') format('opentype');
         font-weight: 400;
         font-style: normal;
-        font-display: swap;
+        font-display: block;
       }
       @font-face {
         font-family: 'Neulis Cursive';
-        src: url('https://storage.googleapis.com/magicpath-fonts/Neulis-Cursive.otf') format('opentype');
+        src: local('Neulis Cursive'),
+             url('https://storage.googleapis.com/magicpath-fonts/Neulis-Cursive.otf') format('opentype');
         font-weight: 500;
         font-style: italic;
-        font-display: swap;
+        font-display: block;
       }
       @font-face {
         font-family: 'Geist Mono';
-        src: url('https://storage.googleapis.com/magicpath-fonts/GeistMono-Regular.otf') format('opentype');
+        src: local('Geist Mono'),
+             url('https://storage.googleapis.com/magicpath-fonts/GeistMono-Regular.otf') format('opentype');
         font-weight: 500;
         font-style: normal;
-        font-display: swap;
+        font-display: block;
       }
       
       /* Mobile optimizations */
       * {
         -webkit-tap-highlight-color: transparent;
         -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+      
+      input, textarea, button, a {
+        -webkit-user-select: text;
+        user-select: text;
       }
       
       body {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         touch-action: pan-y;
+        overscroll-behavior: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      
+      #root {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
       }
       
       /* Prevent input zoom on iOS */
       input, textarea, select {
         font-size: 16px !important;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+      }
+      
+      /* Hardware acceleration for better performance */
+      .modal, .fixed {
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0);
+        will-change: auto;
       }
     </style>
     <meta name="description" content="Raksha leads Product and Brand Design for startups, big thinkers and game changers. 6+ years of industry experience and 55+ clients so far." />
