@@ -66,6 +66,6 @@ export const CAREER_HISTORY = `
 - established products (1-100 stage)
 - lead/founding/senior position
 - want to be part of design + build process
-- prefer companies over solo freelance now
+- prefer companies over solo independent work now
 `;
 
