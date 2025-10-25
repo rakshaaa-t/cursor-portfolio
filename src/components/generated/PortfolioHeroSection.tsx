@@ -484,9 +484,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         className="fixed top-0 left-0 right-0 z-40 pointer-events-none"
         style={{
           height: isMobile ? '80px' : '108px',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          background: 'transparent'
+          backdropFilter: isMobile ? 'blur(10px)' : 'blur(20px)',
+          WebkitBackdropFilter: isMobile ? 'blur(10px)' : 'blur(20px)',
+          background: 'transparent',
+          willChange: 'auto'
         }}
       />
 
@@ -1241,9 +1242,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyPress={handleKeyPress}
                         disabled={isLoading}
-                        className="w-full h-full bg-transparent border-none outline-none text-[14px] font-normal text-black disabled:opacity-50"
+                        className="w-full h-full bg-transparent border-none outline-none font-normal text-black disabled:opacity-50"
                         style={{ 
                           fontFamily: 'Outfit, system-ui, sans-serif',
+                          fontSize: '16px',
                           lineHeight: '24px',
                           padding: 0
                         }}
