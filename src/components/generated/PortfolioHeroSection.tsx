@@ -477,7 +477,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       <div 
         className="fixed top-0 left-0 right-0 z-40 pointer-events-none"
         style={{
-          height: '108px',
+          height: isMobile ? '80px' : '108px',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
           background: 'transparent'
@@ -511,7 +511,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               }}
             >
               raks
-            </div>
+          </div>
 
             {/* Social Icons (Mobile) */}
             <div 
@@ -584,7 +584,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               }}
             >
               raks
-            </div>
+      </div>
 
           {/* Navigation Icons */}
           <div 
@@ -952,7 +952,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       )}
 
       {/* Content Container */}
-      <div className={`relative w-full mx-auto ${isMobile ? 'px-4 pt-16' : 'max-w-[1440px] px-8 pt-20'}`}>
+      <div className={`relative w-full mx-auto ${isMobile ? 'px-4 pt-24' : 'max-w-[1440px] px-8 pt-20'}`}>
         {/* Main Heading */}
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
@@ -1049,7 +1049,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               borderRadius: '44px',
               outline: '2px white solid',
               outlineOffset: '-2px',
-              minHeight: '544px'
+              height: '483px',
+              position: 'relative'
             } : {
               left: '203.2px',
               top: '23.2px',
@@ -1075,7 +1076,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               <p className="text-[18px] font-medium text-blue-600" style={{ fontFamily: 'Outfit, system-ui, sans-serif' }}>
                 Drop to ask about this project
               </p>
-            </div>
+              </div>
           )}
           {/* Inner Background Blurs */}
           <div className="absolute w-[421px] h-[336px] left-1/2 bottom-[-99px] -translate-x-1/2 translate-x-[236px] bg-[rgba(101,73,255,0.14)] rounded-[4444px] blur-[60px] pointer-events-none" />
@@ -1092,7 +1093,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             
             {/* Chat Messages Container - Scrollable */}
             <div 
-              className={`absolute left-1/2 -translate-x-1/2 top-[32px] h-[320px] flex flex-col ${isMobile ? 'w-[304px]' : 'w-[560px]'}`}
+              className={`absolute left-1/2 -translate-x-1/2 top-[32px] flex flex-col ${isMobile ? 'w-[304px] h-[240px]' : 'w-[560px] h-[320px]'}`}
             >
               <div 
                 ref={chatContainerRef}
@@ -1161,7 +1162,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       </div>
 
             {/* Bottom Section - Input + Suggestions */}
-            <div className={`absolute left-1/2 -translate-x-1/2 bottom-[40px] flex flex-col items-center gap-[12px] ${isMobile ? 'w-[304px]' : 'w-[560px]'}`}>
+            <div className={`absolute left-1/2 -translate-x-1/2 flex flex-col items-center gap-[12px] ${isMobile ? 'w-[304px] bottom-[16px]' : 'w-[560px] bottom-[40px]'}`}>
               {/* Input Bar with Backdrop Blur */}
               <div
                 className="w-full h-[56px] flex items-center justify-center px-[22px] py-[4px] rounded-[100px] border border-white/40 backdrop-blur-xl"
@@ -1369,7 +1370,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       rotate: card.rotation
                     }}
                     exit={{ 
-                      opacity: 0,
+          opacity: 0,
                       scale: 0.5,
                       transition: { duration: 0.3 }
                     }}
@@ -1464,7 +1465,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       onClick={() => handleCardClick(card.id)}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ 
-                        opacity: 1, 
+          opacity: 1,
                         y: 0,
                         rotate: alternateRotation
                       }}
@@ -1781,7 +1782,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             {/* Close Button - Top right, aligned with modal */}
             <button
               onClick={() => setIsCalendarOpen(false)}
-              className="absolute top-0 -right-12 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 hover:bg-white transition-colors shadow-lg"
+              className={`absolute z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 hover:bg-white transition-colors shadow-lg ${isMobile ? 'top-4 right-4' : 'top-0 -right-12'}`}
               aria-label="Close calendar"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1797,7 +1798,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               allow="camera; microphone; autoplay; display-capture"
               title="Book a meeting with Raksha"
             />
-          </div>
+      </div>
       </div>
       )}
       </div>
