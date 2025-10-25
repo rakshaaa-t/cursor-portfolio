@@ -1021,29 +1021,35 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     src={card.image} 
                     alt={card.title}
                     style={{
-                      width: '309.96px',
-                      height: '276.76px',
+                      width: '100%',
+                      height: 'calc(100% - 10px)',
                       left: 0,
-                      top: '48.29px',
+                      top: '10px',
                       position: 'absolute',
                       borderRadius: '44px',
-                      outline: '1px white solid'
+                      objectFit: 'cover',
+                      objectPosition: 'center'
                     }}
                     className="pointer-events-none"
                     draggable={false}
                   />
                   
-                  {/* Card Title - Overlaid on top */}
+                  {/* Card Title - Overlaid on top with background for readability */}
                   <div 
                     style={{
-                      left: card.id === 'ova' ? '33.86px' : card.id === 'ioc' ? '50.74px' : card.id === 'greex' ? '92.91px' : '30.05px',
-                      top: card.id === 'ova' ? '37px' : card.id === 'ioc' ? '21.17px' : card.id === 'greex' ? '28px' : '27.23px',
+                      left: '20px',
+                      top: '20px',
                       position: 'absolute',
                       color: 'black',
                       fontSize: '14px',
                       fontFamily: 'Nexa, system-ui, sans-serif',
                       fontWeight: '400',
-                      wordWrap: 'break-word'
+                      wordWrap: 'break-word',
+                      zIndex: 10,
+                      background: 'rgba(255, 255, 255, 0.7)',
+                      padding: '4px 8px',
+                      borderRadius: '8px',
+                      backdropFilter: 'blur(4px)'
                     }}
                   >
                     {card.title}
