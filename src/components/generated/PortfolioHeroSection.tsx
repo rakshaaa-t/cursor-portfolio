@@ -78,7 +78,7 @@ const MessageBubble = React.memo(({ msg }: { msg: ChatMessage }) => {
   }
   
   return (
-    <div className="max-w-[560px]">
+    <div className="max-w-[560px] flex flex-col items-end">
       {/* Card Thumbnail - if message includes card */}
       {msg.card && (
         <div 
@@ -88,7 +88,7 @@ const MessageBubble = React.memo(({ msg }: { msg: ChatMessage }) => {
           }}
         >
           <div 
-            className="w-[100px] h-[100px] rounded-[20px] border border-white overflow-hidden"
+            className="w-[100px] h-[100px] rounded-[20px] border border-white overflow-hidden relative"
             style={{
               background: 'rgba(255, 255, 255, 0.08)',
               backdropFilter: 'blur(20px)',
@@ -1004,8 +1004,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     scale: 1.1, 
                     rotate: 0,
                     boxShadow: '0 25px 50px rgba(0, 0, 0, 0.25)',
-                    cursor: 'grabbing',
-                    zIndex: 100
+                    cursor: 'grabbing'
                   }}
                   transition={{ delay: 0.4 + PROJECT_CARDS.findIndex(c => c.id === card.id) * 0.1 }}
                   className="absolute w-[263px] h-[266px] rounded-[44px] border border-white cursor-grab"
@@ -1053,7 +1052,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       left: 0,
                       right: 0,
                       padding: '16px 20px',
-                      background: 'rgba(255, 255, 255, 0.15)',
+                      background: 'rgba(0, 0, 0, 0.25)',
                       backdropFilter: 'blur(10px)',
                       WebkitBackdropFilter: 'blur(10px)',
                       borderTopLeftRadius: '44px',
@@ -1063,12 +1062,12 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   >
                     <div
                       style={{
-                        color: 'black',
+                        color: 'white',
                         fontSize: '14px',
                         fontFamily: 'Nexa, system-ui, sans-serif',
                         fontWeight: '400',
                         wordWrap: 'break-word',
-                        textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)'
+                        textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)'
                       }}
                     >
                       {card.title}
