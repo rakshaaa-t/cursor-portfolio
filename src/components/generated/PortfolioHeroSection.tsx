@@ -421,6 +421,16 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       <div className="absolute w-[1472px] h-[761px] -left-[227px] top-[281px] bg-[rgba(0,132,255,0.1)] rounded-[4444px] blur-[80px] pointer-events-none" />
       <div className="absolute w-[1629px] h-[842px] left-[474px] top-[617px] bg-white rounded-[4444px] blur-[80px] pointer-events-none" />
 
+      {/* Nav Background Blur Area */}
+      <div 
+        className="fixed top-0 left-0 right-0 z-40 h-[120px] pointer-events-none"
+        style={{
+          background: 'linear-gradient(180deg, rgba(216, 212, 232, 0.95) 0%, rgba(216, 212, 232, 0.7) 50%, rgba(216, 212, 232, 0) 100%)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)'
+        }}
+      />
+
       {/* Navigation */}
       <nav className="fixed left-1/2 -translate-x-1/2 top-[20px] z-50 w-full h-[68px]">
         <div 
@@ -431,9 +441,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             paddingRight: '12px',
             paddingTop: '4px',
             paddingBottom: '4px',
-            background: 'rgba(255, 255, 255, 0.01)',
-            backdropFilter: 'blur(11px)',
-            WebkitBackdropFilter: 'blur(11px)'
+            background: 'rgba(255, 255, 255, 0.15)',
+            backdropFilter: 'blur(40px)',
+            WebkitBackdropFilter: 'blur(40px)',
+            boxShadow: '0px 4px 24px rgba(0, 0, 0, 0.06)',
+            borderRadius: '100px'
           }}
         >
           {/* Logo - "raks" */}
@@ -1004,6 +1016,9 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   drag
                   dragMomentum={false}
                   dragElastic={0.1}
+                  dragConstraints={{
+                    top: -200
+                  }}
                   onDragStart={() => {
                     setIsDraggingCard(card.id);
                   }}
