@@ -943,8 +943,6 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   dragElastic={0.1}
                   dragConstraints={{
                     top: -180,
-                    left: -150,
-                    right: 150,
                     bottom: 300
                   }}
                   onDragStart={() => {
