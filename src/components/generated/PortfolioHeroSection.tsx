@@ -1050,7 +1050,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       position: 'absolute',
                       bottom: 0,
                       left: 0,
-                      borderRadius: '0 0 44px 44px',
+                      borderRadius: '20px 20px 44px 44px',
                       overflow: 'hidden'
                     }}
                   >
@@ -1067,7 +1067,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       draggable={false}
                     />
                   </div>
-                </motion.div>
+          </motion.div>
               );
             })}
           </AnimatePresence>
