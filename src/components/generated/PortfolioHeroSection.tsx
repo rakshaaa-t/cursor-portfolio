@@ -157,7 +157,7 @@ const PROJECT_CARDS = [
     title: 'ova : period tracking app',
     image: 'https://res.cloudinary.com/dky01erho/image/upload/v1761388415/Slide_4_3_-_1_2_zr9r7i.png',
     message: 'what did designing ova teach you',
-    position: { left: '0px', top: '92.12px' },
+    position: { left: '0px', top: '73.7px' },
     rotation: -15
   },
   {
@@ -165,7 +165,7 @@ const PROJECT_CARDS = [
     title: 'ioc : vendor management',
     image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525270/190_2x_shots_so_gytftu.png',
     message: 'what was the most challenging part about ioc',
-    position: { left: '52.70px', top: '318.18px' },
+    position: { left: '42.16px', top: '254.54px' },
     rotation: 5
   },
   {
@@ -173,7 +173,7 @@ const PROJECT_CARDS = [
     title: 'greex : defi trading',
     image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525138/172_2x_shots_so_plr79y.png',
     message: 'whats was ur process for greex',
-    position: { left: '1038.80px', top: '0px' },
+    position: { left: '831.04px', top: '0px' },
     rotation: 15
   },
   {
@@ -181,7 +181,7 @@ const PROJECT_CARDS = [
     title: 'dealdoc : deal management',
     image: 'https://res.cloudinary.com/dky01erho/image/upload/v1761388291/656_3x_shots_so_qced29.png',
     message: "what did you like most about dealdoc's redesign",
-    position: { left: '978.86px', top: '341.07px' },
+    position: { left: '783.09px', top: '272.86px' },
     rotation: -15
   }
 ] as const;
@@ -594,7 +594,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       </nav>
 
       {/* Content Container */}
-      <div className="relative w-full max-w-[1440px] mx-auto px-8 pt-32">
+      <div className="relative w-full max-w-[1440px] mx-auto px-8 pt-20">
         {/* Main Heading */}
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
@@ -674,8 +674,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           </div>
           </motion.div>
 
-        {/* Chat + Cards Container - Sized to fit cards around chat */}
-        <div className="relative mx-auto" style={{ width: '1301px', height: '607px' }}>
+        {/* Chat + Cards Container - Sized to fit cards around chat - scaled 80% */}
+        <div className="relative mx-auto" style={{ width: '1040.8px', height: '485.6px' }}>
           {/* Chat Interface Card */}
           <motion.div
             ref={chatCardRef}
@@ -684,10 +684,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             transition={{ delay: 0.2 }}
             className="absolute overflow-hidden z-20"
             style={{
-              left: '254px',
-              top: '29px',
-              width: '754px',
-              height: '544px',
+              left: '203.2px',
+              top: '23.2px',
+              width: '603.2px',
+              height: '435.2px',
               position: 'absolute',
               background: 'linear-gradient(180deg, #E9E8FF 0%, #EFF4EC 100%)',
               boxShadow: '0px 30px 66px rgba(0, 0, 0, 0.04)',
@@ -1007,7 +1007,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     cursor: 'grabbing'
                   }}
                   transition={{ delay: 0.4 + PROJECT_CARDS.findIndex(c => c.id === card.id) * 0.1 }}
-                  className="absolute w-[263px] h-[266px] rounded-[44px] border border-white cursor-grab"
+                  className="absolute w-[210.4px] h-[212.8px] rounded-[44px] border border-white cursor-grab"
                   style={{
                     ...card.position,
                     background: 'rgba(255, 255, 255, 0.30)',
