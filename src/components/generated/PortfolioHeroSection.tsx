@@ -607,49 +607,72 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             marginBottom: '40px'
           }}
         >
-          <div style={{ 
-            fontFamily: 'Nexa, system-ui, sans-serif',
-            fontStyle: 'normal',
-            fontWeight: 700,
-            fontSize: '22px',
-            lineHeight: '33px',
-            color: 'rgba(41, 41, 41, 0.88)',
-            textAlign: 'center'
-          }}>
-            <h1 className="inline">Raksha T</h1>
-            <br />
-            <span>aka raks - product designer who builds products that work, look good and sell (yes i code too)</span>
-            <br /><br />
-            <span>i live in duality: lead design experiences at startups and also code frontend with cursor</span>
-            <br /><br />
-            <span>speak to find out more </span>
+          <div style={{ width: '100%' }}>
+            <span style={{ 
+              color: 'rgba(41, 41, 41, 0.88)', 
+              fontSize: '22px', 
+              fontFamily: 'Nexa, system-ui, sans-serif', 
+              fontWeight: 700, 
+              wordWrap: 'break-word' 
+            }}>
+              Raksha T<br/>
+            </span>
+            <span style={{ 
+              color: 'rgba(41, 41, 41, 0.88)', 
+              fontSize: '18px', 
+              fontFamily: 'Outfit, system-ui, sans-serif', 
+              fontWeight: 300, 
+              wordWrap: 'break-word' 
+            }}>
+              aka raks - product designer who builds products that work, look good and sell (yes i code too)<br/><br/>
+              i live in duality: lead design experiences at startups and also code frontend with cursor speak to find out more{' '}
+            </span>
             <a 
               href="https://cal.com/raksha-tated-v2ee58/15min"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block px-6 py-2 rounded-full text-[22px] font-bold transition-all hover:opacity-80"
               style={{ 
-                fontFamily: 'Nexa, system-ui, sans-serif',
-                color: '#283FE4',
-                border: '2px solid #283FE4',
-                verticalAlign: 'middle',
-                marginLeft: '8px',
-                marginRight: '8px'
+                color: 'rgba(41, 41, 41, 0.88)', 
+                fontSize: '18px', 
+                fontFamily: 'Outfit, system-ui, sans-serif', 
+                fontWeight: 300, 
+                textDecoration: 'underline', 
+                wordWrap: 'break-word',
+                cursor: 'pointer'
               }}
+              className="hover:opacity-80 transition-opacity"
             >
-              let's talk
+              let's talk<br/><br/>
             </a>
-            <br /><br />
-            <span>chat with my portfolio below ↓ or explore projects </span>
+            <span style={{ 
+              color: 'rgba(41, 41, 41, 0.88)', 
+              fontSize: '18px', 
+              fontFamily: 'Outfit, system-ui, sans-serif', 
+              fontWeight: 300, 
+              wordWrap: 'break-word' 
+            }}>
+              chat with my portfolio below ↓ or explore projects{' '}
+            </span>
             <button 
-              className="text-[#283FE4] underline hover:opacity-80 transition-opacity"
-              style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}
+              style={{ 
+                color: 'rgba(41, 41, 41, 0.88)', 
+                fontSize: '18px', 
+                fontFamily: 'Outfit, system-ui, sans-serif', 
+                fontWeight: 300, 
+                textDecoration: 'underline', 
+                wordWrap: 'break-word',
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                cursor: 'pointer'
+              }}
+              className="hover:opacity-80 transition-opacity"
               onClick={() => {/* TODO: navigate to projects */}}
             >
               here
             </button>
           </div>
-          </motion.div>
+        </motion.div>
 
         {/* Chat + Cards Container - Sized to fit cards around chat */}
         <div className="relative mx-auto" style={{ width: '1301px', height: '607px' }}>
