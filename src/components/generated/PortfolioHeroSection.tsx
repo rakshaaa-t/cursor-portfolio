@@ -672,7 +672,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               here
             </button>
           </div>
-        </motion.div>
+          </motion.div>
 
         {/* Chat + Cards Container - Sized to fit cards around chat */}
         <div className="relative mx-auto" style={{ width: '1301px', height: '607px' }}>
@@ -1019,45 +1019,62 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     transformStyle: 'preserve-3d'
                   }}
                 >
-                  {/* Card Image - Fills card from top with space for title */}
-                  <img 
-                    src={card.image} 
-                    alt={card.title}
+                  {/* Card Image - Fills entire card with 4:3 aspect ratio */}
+                  <div
                     style={{
                       width: '100%',
-                      height: 'calc(100% - 10px)',
+                      height: '100%',
+                      position: 'absolute',
+                      top: 0,
                       left: 0,
-                      top: '10px',
-                      position: 'absolute',
                       borderRadius: '44px',
-                      objectFit: 'cover',
-                      objectPosition: 'center'
-                    }}
-                    className="pointer-events-none"
-                    draggable={false}
-                  />
-                  
-                  {/* Card Title - Overlaid on top with background for readability */}
-                  <div 
-                    style={{
-                      left: '20px',
-                      top: '20px',
-                      position: 'absolute',
-                      color: 'black',
-                      fontSize: '14px',
-                      fontFamily: 'Nexa, system-ui, sans-serif',
-                      fontWeight: '400',
-                      wordWrap: 'break-word',
-                      zIndex: 10,
-                      background: 'rgba(255, 255, 255, 0.7)',
-                      padding: '4px 8px',
-                      borderRadius: '8px',
-                      backdropFilter: 'blur(4px)'
+                      overflow: 'hidden'
                     }}
                   >
-                    {card.title}
+                    <img 
+                      src={card.image} 
+                      alt={card.title}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: 'center'
+                      }}
+                      className="pointer-events-none"
+                      draggable={false}
+                    />
                   </div>
-                </motion.div>
+                  
+                  {/* Glass overlay for title at top */}
+                  <div 
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      padding: '16px 20px',
+                      background: 'rgba(255, 255, 255, 0.15)',
+                      backdropFilter: 'blur(10px)',
+                      WebkitBackdropFilter: 'blur(10px)',
+                      borderTopLeftRadius: '44px',
+                      borderTopRightRadius: '44px',
+                      zIndex: 10
+                    }}
+                  >
+                    <div
+                      style={{
+                        color: 'black',
+                        fontSize: '14px',
+                        fontFamily: 'Nexa, system-ui, sans-serif',
+                        fontWeight: '400',
+                        wordWrap: 'break-word',
+                        textShadow: '0 1px 2px rgba(255, 255, 255, 0.5)'
+                      }}
+                    >
+                      {card.title}
+                    </div>
+                  </div>
+          </motion.div>
               );
             })}
           </AnimatePresence>
