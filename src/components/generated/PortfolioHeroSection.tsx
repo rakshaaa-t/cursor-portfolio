@@ -504,11 +504,41 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           transition={{ delay: 0.1 }}
           className="text-center mt-8 mb-12 px-16"
         >
-          <h2 className="text-[36px] leading-normal font-extrabold text-[#283FE4] mb-3" style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}>
-            <span>End-To-End Product Design, Frontend development and Branding.</span>
-          </h2>
-          <p className="text-[20px] leading-normal font-bold" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
-            <span>Visually stunning apps, softwares and websites with functionality at it's core.</span>
+          <h1 className="text-[48px] leading-tight font-bold mb-2" style={{ fontFamily: 'Nexa, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
+            Raksha T
+          </h1>
+          <p className="text-[20px] leading-relaxed mb-6" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
+            aka raks - product designer who codes
+          </p>
+          <p className="text-[18px] leading-relaxed mb-6" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
+            i live in duality: lead design experiences at startups and also code frontend with cursor
+          </p>
+          <div className="mb-8">
+            <span className="text-[18px]" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
+              speak to find out more{' '}
+            </span>
+            <a 
+              href="https://cal.com/raksha-tated-v2ee58/15min"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-6 py-2 rounded-full text-[18px] font-medium transition-all hover:opacity-80"
+              style={{ 
+                fontFamily: 'Nexa Text, system-ui, sans-serif',
+                color: '#283FE4',
+                border: '2px solid #283FE4'
+              }}
+            >
+              let's talk
+            </a>
+          </div>
+          <p className="text-[16px] leading-relaxed" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif', color: 'rgba(41, 41, 41, 0.88)' }}>
+            chat with my portfolio below ↓ or explore projects{' '}
+            <button 
+              className="text-[#283FE4] underline hover:opacity-80 transition-opacity"
+              onClick={() => {/* TODO: navigate to projects */}}
+            >
+              here
+            </button>
           </p>
           </motion.div>
 
