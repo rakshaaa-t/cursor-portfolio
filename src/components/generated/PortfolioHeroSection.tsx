@@ -8,32 +8,45 @@ import { AI_CONFIG } from "../../lib/config";
 
 export interface RakshaPortfolioProps {}
 
-// Helper function to convert URLs in text to clickable links
-const linkifyText = (text: string) => {
+// Helper function to format text with links, line breaks, and bullet points
+const formatMessageText = (text: string) => {
   const urlRegex = /(https?:\/\/[^\s<>()]+)/g;
-  const parts = text.split(urlRegex);
+  const lines = text.split('\n');
   
-  return parts.map((part, index) => {
-    if (part.match(urlRegex)) {
-      // Remove trailing punctuation that's not part of the URL
-      const cleanUrl = part.replace(/[.,;:!?)]+$/, '');
-      const trailingPunct = part.slice(cleanUrl.length);
-      
-      return (
-        <React.Fragment key={index}>
-          <a
-            href={cleanUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[#283FE4] underline hover:text-[#4F5CFF] transition-colors"
-          >
-            {cleanUrl}
-          </a>
-          {trailingPunct}
-        </React.Fragment>
-      );
-    }
-    return part;
+  return lines.map((line, lineIndex) => {
+    // Split line by URLs
+    const parts = line.split(urlRegex);
+    
+    const formattedLine = parts.map((part, partIndex) => {
+      if (part.match(urlRegex)) {
+        // Remove trailing punctuation that's not part of the URL
+        const cleanUrl = part.replace(/[.,;:!?)]+$/, '');
+        const trailingPunct = part.slice(cleanUrl.length);
+        
+        return (
+          <React.Fragment key={`${lineIndex}-${partIndex}`}>
+            <a
+              href={cleanUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#283FE4] underline hover:text-[#4F5CFF] transition-colors"
+            >
+              {cleanUrl}
+            </a>
+            {trailingPunct}
+          </React.Fragment>
+        );
+      }
+      return part;
+    });
+    
+    // Add line break after each line except the last
+    return (
+      <React.Fragment key={lineIndex}>
+        {formattedLine}
+        {lineIndex < lines.length - 1 && <br />}
+      </React.Fragment>
+    );
   });
 };
 
@@ -56,9 +69,9 @@ const MessageBubble = React.memo(({ msg }: { msg: ChatMessage }) => {
             boxShadow: '0 4px 12px rgba(40, 63, 228, 0.08)'
           }}
         >
-          <p className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
-            {linkifyText(msg.content || '')}
-          </p>
+          <div className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}>
+            {formatMessageText(msg.content || '')}
+          </div>
         </div>
       </div>
     );
