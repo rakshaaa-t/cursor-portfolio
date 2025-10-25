@@ -79,6 +79,31 @@ const MessageBubble = React.memo(({ msg }: { msg: ChatMessage }) => {
   
   return (
     <div className="max-w-[560px]">
+      {/* Card Thumbnail - if message includes card */}
+      {msg.card && (
+        <div 
+          className="mb-3 inline-block"
+          style={{
+            transform: `rotate(${msg.card.id === 'ova' ? '-15deg' : msg.card.id === 'ioc' ? '5deg' : msg.card.id === 'greex' ? '15deg' : '-15deg'})`
+          }}
+        >
+          <div 
+            className="w-[100px] h-[100px] rounded-[20px] border border-white overflow-hidden"
+            style={{
+              background: 'rgba(255, 255, 255, 0.08)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)'
+            }}
+          >
+            <img 
+              src={msg.card.image} 
+              alt={msg.card.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      )}
+      
       <div
         className="px-[22px] py-[20px] bg-black/[0.79] text-white"
         style={{
@@ -132,7 +157,7 @@ const PROJECT_CARDS = [
     title: 'ova : period tracking app',
     image: 'https://res.cloudinary.com/dky01erho/image/upload/v1761388415/Slide_4_3_-_1_2_zr9r7i.png',
     message: 'what did designing ova teach you',
-    position: { top: '15%', left: '-8%' },
+    position: { left: '0px', top: '92.12px' },
     rotation: -15
   },
   {
@@ -140,15 +165,15 @@ const PROJECT_CARDS = [
     title: 'ioc : vendor management',
     image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525270/190_2x_shots_so_gytftu.png',
     message: 'what was the most challenging part about ioc',
-    position: { bottom: '10%', left: '-8%' },
-    rotation: 15
+    position: { left: '52.70px', top: '318.18px' },
+    rotation: 5
   },
   {
     id: 'greex',
     title: 'greex : defi trading',
     image: 'https://res.cloudinary.com/dky01erho/image/upload/v1760525138/172_2x_shots_so_plr79y.png',
     message: 'whats was ur process for greex',
-    position: { top: '15%', right: '-8%' },
+    position: { left: '1038.80px', top: '0px' },
     rotation: 15
   },
   {
@@ -156,7 +181,7 @@ const PROJECT_CARDS = [
     title: 'dealdoc : deal management',
     image: 'https://res.cloudinary.com/dky01erho/image/upload/v1761388291/656_3x_shots_so_qced29.png',
     message: 'what did the clients request for exactly?',
-    position: { bottom: '10%', right: '-8%' },
+    position: { left: '978.86px', top: '341.07px' },
     rotation: -15
   }
 ] as const;
@@ -348,8 +373,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     // Add user message with card thumbnail
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
-      type: 'text',
+      type: 'card-with-question',
       content: card.message,
+      card: {
+        id: card.id,
+        image: card.image,
+        title: card.title
+      },
       sender: 'user',
       timestamp: Date.now()
     };
@@ -619,19 +649,25 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               here
             </button>
           </div>
-        </motion.div>
+          </motion.div>
 
-        {/* Chat + Cards Container */}
-        <div className="relative w-[800px] h-[480px] mx-auto">
+        {/* Chat + Cards Container - Sized to fit cards around chat */}
+        <div className="relative mx-auto" style={{ width: '1301px', height: '607px' }}>
           {/* Chat Interface Card */}
           <motion.div
             ref={chatCardRef}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="relative w-full h-full bg-gradient-to-b from-[#E9E8FF] to-[#EFF4EC] rounded-[44px] overflow-visible z-20"
+            className="absolute rounded-[44px] overflow-visible z-20"
             style={{
-              boxShadow: '0px 480px 192px rgba(0, 0, 0, 0.01), 0px 270px 162px rgba(0, 0, 0, 0.02), 0px 120px 120px rgba(0, 0, 0, 0.03), 0px 30px 66px rgba(0, 0, 0, 0.04)'
+              left: '254px',
+              top: '29px',
+              width: '754px',
+              height: '544px',
+              background: 'linear-gradient(180deg, #E9E8FF 0%, #EFF4EC 100%)',
+              boxShadow: '0px 30px 66px rgba(0, 0, 0, 0.04)',
+              border: '2px solid white'
             }}
           >
           {/* Drop Zone Overlay - Shows when dragging a card */}
@@ -949,11 +985,11 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   className="absolute w-[263px] h-[266px] rounded-[44px] border border-white cursor-grab"
                   style={{
                     ...card.position,
-                    background: 'rgba(255, 255, 255, 0.08)',
+                    background: 'rgba(255, 255, 255, 0.30)',
                     backdropFilter: 'blur(20px)',
                     WebkitBackdropFilter: 'blur(20px)',
                     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-                    zIndex: isDraggingCard === card.id ? 100 : 5,
+                    zIndex: isDraggingCard === card.id ? 100 : 10,
                     transformStyle: 'preserve-3d'
                   }}
                 >
