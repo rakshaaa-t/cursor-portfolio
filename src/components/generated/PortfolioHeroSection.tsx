@@ -1016,28 +1016,39 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     transformStyle: 'preserve-3d'
                   }}
                 >
-                  <div className="relative w-full h-full flex flex-col p-4">
-                    {/* Card Title */}
-                    <div className="absolute top-4 left-4 z-10">
-                      <p 
-                        className="text-[14px] font-normal text-black/70"
-                        style={{ fontFamily: 'Nexa Text, system-ui, sans-serif' }}
-                      >
-                        {card.title}
-                      </p>
-                    </div>
-                    
-                    {/* Card Image */}
-                    <div className="w-full h-full flex items-center justify-center">
-                      <img 
-                        src={card.image} 
-                        alt={card.title}
-                        className="w-full h-full object-contain pointer-events-none"
-                        draggable={false}
-                      />
-                    </div>
+                  {/* Card Image - Fills card from top with space for title */}
+                  <img 
+                    src={card.image} 
+                    alt={card.title}
+                    style={{
+                      width: '309.96px',
+                      height: '276.76px',
+                      left: 0,
+                      top: '48.29px',
+                      position: 'absolute',
+                      borderRadius: '44px',
+                      outline: '1px white solid'
+                    }}
+                    className="pointer-events-none"
+                    draggable={false}
+                  />
+                  
+                  {/* Card Title - Overlaid on top */}
+                  <div 
+                    style={{
+                      left: card.id === 'ova' ? '33.86px' : card.id === 'ioc' ? '50.74px' : card.id === 'greex' ? '92.91px' : '30.05px',
+                      top: card.id === 'ova' ? '37px' : card.id === 'ioc' ? '21.17px' : card.id === 'greex' ? '28px' : '27.23px',
+                      position: 'absolute',
+                      color: 'black',
+                      fontSize: '14px',
+                      fontFamily: 'Nexa, system-ui, sans-serif',
+                      fontWeight: '400',
+                      wordWrap: 'break-word'
+                    }}
+                  >
+                    {card.title}
                   </div>
-          </motion.div>
+                </motion.div>
               );
             })}
           </AnimatePresence>
