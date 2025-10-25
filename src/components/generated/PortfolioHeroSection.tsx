@@ -424,7 +424,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       {/* Navigation */}
       <nav className="fixed left-1/2 -translate-x-1/2 top-[20px] z-50 w-full h-[68px]">
         <div 
-          className="flex items-center justify-start gap-[563px] h-full"
+          className="flex items-center justify-center gap-[563px] h-full"
           style={{
             width: '100%',
             paddingLeft: '12px',
@@ -605,9 +605,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
 
           {/* Social Icons */}
           <div 
-            className="flex items-center justify-space-between"
+            className="flex items-center gap-[16px]"
             style={{
-              width: '73px',
               opacity: 0.44
             }}
           >
