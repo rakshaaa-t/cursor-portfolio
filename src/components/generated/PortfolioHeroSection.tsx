@@ -807,9 +807,14 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               >
                 <div className="w-full flex items-center justify-between gap-3">
                   {/* Left: Sparkle Icon + Input */}
-                  <div className="flex items-center gap-3 flex-1" style={{ alignItems: 'center' }}>
-                    {/* Sparkle Icon SVG */}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <div className="flex items-center gap-3 flex-1 group" style={{ alignItems: 'center' }}>
+                    {/* Sparkle Icon SVG - with shine effect container */}
+                    <div className="relative overflow-hidden">
+                      <div 
+                        className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none"
+                        style={{ transform: 'translateX(-100%)' }}
+                      />
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" className="relative z-10">
                       <g clipPath="url(#clip0_371_175)">
                         <mask id="mask0_371_175" style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
                           <path d="M24 0H0V24H24V0Z" fill="white"/>
@@ -856,9 +861,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         </clipPath>
                       </defs>
                     </svg>
+                    </div>
 
                     <div 
-                      className="relative flex-1 min-w-0 h-[24px] flex items-center"
+                      className="relative flex-1 min-w-0 h-[24px] flex items-center overflow-hidden"
                     >
                       <input
                         ref={inputRef}
@@ -875,9 +881,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                         }}
                       />
                       {!inputValue && (
-                        <div className="absolute inset-0 pointer-events-none flex items-center justify-start whitespace-nowrap">
+                        <div className="absolute inset-0 pointer-events-none flex items-center justify-start whitespace-nowrap overflow-hidden">
+                          <div 
+                            className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"
+                            style={{ transform: 'translateX(-100%)' }}
+                          />
                           <span
-                            className="text-[14px] font-normal text-black/[0.44] whitespace-nowrap"
+                            className="text-[14px] font-normal text-black/[0.44] whitespace-nowrap relative z-10"
                             style={{ 
                               fontFamily: 'Nexa Text, system-ui, sans-serif',
                               lineHeight: '24px',
