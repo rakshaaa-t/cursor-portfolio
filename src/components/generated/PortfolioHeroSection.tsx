@@ -1013,7 +1013,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     cursor: 'grabbing'
                   }}
                   transition={{ delay: 0.4 + PROJECT_CARDS.findIndex(c => c.id === card.id) * 0.1 }}
-                  className="absolute w-[210.4px] h-[212.8px] rounded-[44px] border border-white cursor-grab"
+                  className="absolute w-[263px] h-[266px] rounded-[44px] border border-white cursor-grab"
                   style={{
                     ...card.position,
                     background: 'rgba(255, 255, 255, 0.30)',
