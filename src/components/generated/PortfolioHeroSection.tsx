@@ -1037,18 +1037,18 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     }
                   }}
                   onDragEnd={(event, info) => {
-                    // Check if dropped over chat
-                    if (chatCardRef.current && event.currentTarget) {
+                    // Check if dropped over chat - use cursor position for reliability
+                    if (chatCardRef.current) {
                       const chatRect = chatCardRef.current.getBoundingClientRect();
-                      const cardRect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+                      const cursorX = info.point.x;
+                      const cursorY = info.point.y;
                       
-                      // Check if ANY part of card overlaps with chat
-                      const isDroppedOnChat = !(
-                        cardRect.right < chatRect.left ||
-                        cardRect.left > chatRect.right ||
-                        cardRect.bottom < chatRect.top ||
-                        cardRect.top > chatRect.bottom
-                      );
+                      // Check if cursor is inside chat area when dropped
+                      const isDroppedOnChat = 
+                        cursorX >= chatRect.left &&
+                        cursorX <= chatRect.right &&
+                        cursorY >= chatRect.top &&
+                        cursorY <= chatRect.bottom;
                       
                       if (isDroppedOnChat) {
                         handleCardDrop(card.id);
