@@ -1193,10 +1193,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             className="relative w-[90%] max-w-[1000px] h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close Button - Outside iframe container */}
+            {/* Close Button - Top right, aligned with modal */}
             <button
               onClick={() => setIsCalendarOpen(false)}
-              className="absolute -top-12 right-0 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 hover:bg-white transition-colors shadow-lg"
+              className="absolute top-0 -right-12 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/90 hover:bg-white transition-colors shadow-lg"
               aria-label="Close calendar"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
