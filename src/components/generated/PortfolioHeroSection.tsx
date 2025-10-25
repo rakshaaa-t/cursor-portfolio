@@ -229,6 +229,16 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
   // Abort controller ref for cleanup
   const abortControllerRef = React.useRef<AbortController | null>(null);
 
+  // Mobile detection
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Limit message history to prevent memory leak
   const MAX_MESSAGES = 20;
   const addMessage = React.useCallback((newMessage: ChatMessage) => {
@@ -439,6 +449,21 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
     }
   };
 
+  // Handle card click for mobile
+  const handleCardClick = (cardId: string) => {
+    if (isMobile) {
+      handleCardDrop(cardId);
+      // Scroll to chatbox
+      setTimeout(() => {
+        chatCardRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start',
+          inline: 'nearest'
+        });
+      }, 100);
+    }
+  };
+
   return (
     <div className="relative w-full min-h-screen bg-[#D8D4E8] overflow-hidden">
       {/* Background Blurs - REDUCED blur for better performance */}
@@ -460,33 +485,106 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       />
 
       {/* Navigation */}
-      <nav className="fixed left-1/2 -translate-x-1/2 top-[20px] z-50 w-full h-[68px]">
-        <div 
-          className="flex items-center justify-center gap-[563px] h-full"
-          style={{
-            width: '100%',
-            paddingLeft: '12px',
-            paddingRight: '12px',
-            paddingTop: '4px',
-            paddingBottom: '4px',
-            background: 'transparent',
-            backdropFilter: 'none',
-            WebkitBackdropFilter: 'none'
-          }}
-        >
-          {/* Logo - "raks" */}
+      {isMobile ? (
+        /* Mobile Header */
+        <nav className="fixed left-0 right-0 top-0 z-50 w-full">
           <div 
+            className="flex items-center justify-center h-full"
             style={{
-              textAlign: 'center',
-              color: 'white',
-              fontSize: '36px',
-              fontFamily: 'Neulis Cursive, system-ui, sans-serif',
-              fontWeight: '500',
-              wordWrap: 'break-word'
+              width: '100%',
+              padding: '12px',
+              gap: '200px',
+              justifyContent: 'center',
+              alignItems: 'center',
+              display: 'flex'
             }}
           >
-            raks
+            {/* Logo - "raks" */}
+            <div 
+              style={{
+                textAlign: 'center',
+                color: 'white',
+                fontSize: '36px',
+                fontFamily: 'Neulis Cursive, system-ui, sans-serif',
+                fontWeight: '500',
+                wordWrap: 'break-word'
+              }}
+            >
+              raks
+            </div>
+
+            {/* Social Icons (Mobile) */}
+            <div 
+              className="flex items-center gap-[16px]"
+              style={{
+                opacity: 0.44
+              }}
+            >
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                style={{
+                  width: '29px',
+                  height: '29px',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+              >
+                <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.9583 3.625C23.5993 3.625 24.214 3.87961 24.6672 4.33283C25.1204 4.78604 25.375 5.40073 25.375 6.04167V22.9583C25.375 23.5993 25.1204 24.214 24.6672 24.6672C24.214 25.1204 23.5993 25.375 22.9583 25.375H6.04167C5.40073 25.375 4.78604 25.1204 4.33283 24.6672C3.87961 24.214 3.625 23.5993 3.625 22.9583V6.04167C3.625 5.40073 3.87961 4.78604 4.33283 4.33283C4.78604 3.87961 5.40073 3.625 6.04167 3.625H22.9583ZM22.3542 22.3542V15.95C22.3542 14.9053 21.9391 13.9033 21.2004 13.1646C20.4617 12.4259 19.4597 12.0108 18.415 12.0108C17.3879 12.0108 16.1917 12.6392 15.6117 13.5817V12.2404H12.2404V22.3542H15.6117V16.3971C15.6117 15.4667 16.3608 14.7054 17.2913 14.7054C17.7399 14.7054 18.1702 14.8836 18.4874 15.2009C18.8047 15.5181 18.9829 15.9484 18.9829 16.3971V22.3542H22.3542ZM8.31333 10.3433C8.85172 10.3433 9.36806 10.1295 9.74876 9.74876C10.1295 9.36806 10.3433 8.85172 10.3433 8.31333C10.3433 7.18958 9.43708 6.27125 8.31333 6.27125C7.77174 6.27125 7.25233 6.4864 6.86936 6.86936C6.4864 7.25233 6.27125 7.77174 6.27125 8.31333C6.27125 9.43708 7.18958 10.3433 8.31333 10.3433ZM9.99292 22.3542V12.2404H6.64583V22.3542H9.99292Z" fill="var(--color-dark-900, #020617)" />
+                </svg>
+              </a>
+
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="X (Twitter)"
+                style={{
+                  width: '24px',
+                  height: '24px',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M21.5859 21.375L14.0885 10.4471L14.1013 10.4574L20.8613 2.625H18.6023L13.0954 9L8.72227 2.625H2.79766L9.79723 12.8276L9.79638 12.8267L2.41406 21.375H4.67309L10.7955 14.2824L15.6613 21.375H21.5859ZM7.82719 4.32954L18.3466 19.6705H16.5564L6.02852 4.32954H7.82719Z" fill="var(--color-dark-900, #020617)" />
+                </svg>
+              </a>
+            </div>
           </div>
+        </nav>
+      ) : (
+        /* Desktop Navigation */
+        <nav className="fixed left-1/2 -translate-x-1/2 top-[20px] z-50 w-full h-[68px]">
+          <div 
+            className="flex items-center justify-center gap-[563px] h-full"
+            style={{
+              width: '100%',
+              paddingLeft: '12px',
+              paddingRight: '12px',
+              paddingTop: '4px',
+              paddingBottom: '4px',
+              background: 'transparent',
+              backdropFilter: 'none',
+              WebkitBackdropFilter: 'none'
+            }}
+          >
+            {/* Logo - "raks" */}
+            <div 
+              style={{
+                textAlign: 'center',
+                color: 'white',
+                fontSize: '36px',
+                fontFamily: 'Neulis Cursive, system-ui, sans-serif',
+                fontWeight: '500',
+                wordWrap: 'break-word'
+              }}
+            >
+              raks
+            </div>
 
           {/* Navigation Icons */}
           <div 
@@ -735,9 +833,126 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           </div>
         </div>
       </nav>
+      )}
+
+      {/* Bottom Navigation Bar (Mobile Only) */}
+      {isMobile && (
+        <div 
+          className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-4"
+          style={{
+            background: 'rgba(255, 255, 255, 0.01)',
+            backdropFilter: 'blur(1px)',
+            WebkitBackdropFilter: 'blur(1px)'
+          }}
+        >
+          <div 
+            className="flex items-start justify-center gap-[28px]"
+            style={{
+              width: '100%'
+            }}
+          >
+            {NAV_ITEMS.map((item, index) => {
+              const isActive = activeNav === item.id;
+              const isCalendar = item.id === "calendar";
+              
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    if (isCalendar) {
+                      setIsCalendarOpen(true);
+                    } else {
+                      setActiveNav(item.id);
+                    }
+                  }}
+                  className="relative flex items-center justify-center transition-all duration-300"
+                  style={{
+                    flex: '1 1 0',
+                    height: '60px',
+                    padding: '18px',
+                    background: isActive ? '#283FE4' : 'rgba(255, 255, 255, 0.64)',
+                    boxShadow: isActive ? '1px 2px 4px rgba(0, 0, 0, 0.10)' : 'none',
+                    overflow: 'hidden',
+                    borderRadius: '4444px',
+                    outline: isActive ? '1px white solid' : 'none',
+                    position: 'relative'
+                  }}
+                  aria-label={item.label}
+                >
+                  {/* Glow effect for active chat icon */}
+                  {isActive && index === 0 && (
+                    <div 
+                      style={{
+                        width: '30px',
+                        height: '25px',
+                        left: 0,
+                        top: '-2px',
+                        position: 'absolute',
+                        background: 'white',
+                        boxShadow: '44px 44px 44px',
+                        filter: 'blur(22px)'
+                      }}
+                    />
+                  )}
+
+                  {/* Chat Icon */}
+                  {index === 0 && (
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" className="relative z-10">
+                      <g clipPath="url(#clip0_371_216_mobile)">
+                        <mask id="mask0_371_216_mobile" style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+                          <path d="M24 0H0V24H24V0Z" fill="white"/>
+                          <path d="M22.75 14.4971C22.75 15.8083 22.3947 17.0325 21.7881 18.0918C21.4381 18.7473 22.0797 20.0133 22.5303 20.4648C22.7394 20.6742 22.8061 20.9874 22.7002 21.2637C22.5942 21.5399 22.3354 21.7282 22.04 21.7441C21.3651 21.7806 20.6264 21.6475 19.9893 21.4619C19.536 21.3299 19.098 21.1595 18.7354 20.9775C17.7323 21.4798 16.6207 21.7461 15.499 21.7461C11.4948 21.7459 8.2502 18.5019 8.25 14.5C8.25 10.498 11.4977 7.25 15.501 7.25C19.5037 7.25018 22.75 10.4949 22.75 14.4971Z" fill="black"/>
+                        </mask>
+                        <g mask="url(#mask0_371_216_mobile)">
+                          <path d="M1 9.99348C1.00003 11.624 1.44063 13.1472 2.19626 14.4646C2.38601 14.9255 2.27792 15.4945 2.15636 15.9568C1.97097 16.6619 1.62172 17.3398 1.21379 17.7485C1.0104 17.9522 0.945503 18.2561 1.04846 18.525C1.1515 18.7939 1.40329 18.9771 1.69077 18.9927C2.51536 19.0372 3.42875 18.8742 4.22582 18.6419C4.83702 18.4638 5.42053 18.2318 5.88387 17.9889C7.15411 18.645 8.57122 18.9955 10.0009 18.9955C14.9719 18.9954 18.9997 14.9668 19 9.99728C19 5.05316 15.0118 1.04141 10.0779 1C5.1088 1.00007 1 5.02371 1 9.99348Z" fill="url(#paint0_linear_371_216_mobile)"/>
+                        </g>
+                        <path d="M22.75 14.4971C22.75 15.8083 22.3947 17.0325 21.7881 18.0918C21.4381 18.7473 22.0797 20.0133 22.5303 20.4648C22.7394 20.6742 22.8061 20.9874 22.7002 21.2637C22.5942 21.5399 22.3354 21.7282 22.04 21.7441C21.3651 21.7806 20.6264 21.6475 19.9893 21.4619C19.536 21.3299 19.098 21.1595 18.7354 20.9775C17.7323 21.4798 16.6207 21.7461 15.499 21.7461C11.4948 21.7459 8.2502 18.5019 8.25 14.5C8.25 10.498 11.4977 7.25 15.501 7.25C19.5037 7.25018 22.75 10.4949 22.75 14.4971Z" fill="url(#paint2_linear_371_216_mobile)"/>
+                        <path d="M22 14.4971C22 11.0214 19.2686 8.18279 15.835 8.00879L15.501 8C11.9118 8 9 10.9122 9 14.5C9.0002 18.0874 11.9088 20.9959 15.499 20.9961V21.7461C11.4948 21.7459 8.2502 18.5019 8.25 14.5C8.25 10.498 11.4977 7.25 15.501 7.25C19.5037 7.25018 22.75 10.4949 22.75 14.4971C22.75 15.8083 22.3947 17.0325 21.7881 18.0918C21.4381 18.7473 22.0797 20.0133 22.5303 20.4648C22.7394 20.6742 22.8061 20.9874 22.7002 21.2637C22.5942 21.5399 22.3354 21.7282 22.04 21.7441C21.3651 21.7806 20.6264 21.6475 19.9893 21.4619C19.536 21.3299 19.098 21.1595 18.7354 20.9775C17.7323 21.4798 16.6207 21.7461 15.499 21.7461V20.9961C16.5025 20.9961 17.4992 20.7574 18.3994 20.3066C18.6109 20.2007 18.8599 20.2016 19.0713 20.3076C19.389 20.467 19.7847 20.6214 20.1992 20.7422C20.7163 20.8928 21.2777 20.9965 21.7852 21L22 20.9951C21.684 20.6784 21.3597 20.1509 21.1582 19.6211C21.0549 19.3495 20.9707 19.0451 20.9453 18.7373C20.9203 18.4343 20.9483 18.0728 21.127 17.7383L21.1377 17.7188C21.6146 16.886 21.9171 15.9424 21.9854 14.9336L22 14.4971Z" fill="url(#paint3_linear_371_216_mobile)"/>
+                      </g>
+                      <defs>
+                        <linearGradient id="paint0_linear_371_216_mobile" x1="10" y1="1" x2="10" y2="19" gradientUnits="userSpaceOnUse">
+                          <stop stopColor={isActive ? "white" : "#2B2B2B"}/>
+                          <stop offset="1" stopColor={isActive ? "white" : "rgba(0, 0, 0, 0.34)"} stopOpacity={isActive ? "0.34" : "1"}/>
+                        </linearGradient>
+                        <linearGradient id="paint2_linear_371_216_mobile" x1="15.5" y1="7.25" x2="15.5" y2="21.75" gradientUnits="userSpaceOnUse">
+                          <stop stopColor={isActive ? "white" : "rgba(255, 255, 255, 0.78)"} stopOpacity={isActive ? "0.6" : "1"}/>
+                          <stop offset="1" stopColor={isActive ? "white" : "rgba(0, 0, 0, 0.60)"} stopOpacity={isActive ? "0.6" : "1"}/>
+                        </linearGradient>
+                        <linearGradient id="paint3_linear_371_216_mobile" x1="15.5" y1="7.25" x2="15.5" y2="15.647" gradientUnits="userSpaceOnUse">
+                          <stop stopColor={isActive ? "white" : "rgba(255, 255, 255, 0.66)"}/>
+                          <stop offset="1" stopColor={isActive ? "white" : "rgba(255, 255, 255, 0)"} stopOpacity="0"/>
+                        </linearGradient>
+                        <clipPath id="clip0_371_216_mobile">
+                          <rect width="24" height="24" fill="white"/>
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  )}
+
+                  {/* Inbox Icon (simplified for mobile) */}
+                  {index === 1 && (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M22.3989 14.9955L21.1412 7.04961C20.9136 5.61186 20.7999 4.89299 20.4453 4.35306C20.1327 3.87717 19.6912 3.50015 19.1724 3.26581C18.5837 3 17.8558 3 16.4002 3L7.60059 3C6.14502 3 5.4171 3 4.82842 3.26594C4.30957 3.5002 3.86807 3.87731 3.55548 4.35319C3.20094 4.89306 3.08721 5.61195 2.85962 7.04973L1.60205 14.9962C3.97778 16.0307 6.82488 18.0001 9.50027 18.0001L14.5003 18C17.1756 18 20.0231 16.0302 22.3989 14.9955Z" fill={isActive ? "rgba(255, 255, 255, 0.60)" : "#575757"} />
+                      <path d="M17.1818 21C18.8751 21 19.7217 21 20.3979 20.7478C21.4849 20.3424 22.3424 19.4849 22.7478 18.3979C23 17.7217 23 16.8751 23 15.1818C23 14.5469 23 14.2294 22.9054 13.9758C22.7534 13.5682 22.4318 13.2466 22.0242 13.0946C21.7706 13 21.4531 13 20.8182 13H17.8563C17.5432 13 17.3867 13 17.2446 13.0432C17.1188 13.0814 17.0018 13.144 16.9002 13.2275C16.7855 13.3217 16.6987 13.452 16.525 13.7125L15.475 15.2875C15.3013 15.548 15.2145 15.6783 15.0998 15.7725C14.9982 15.856 14.8812 15.9186 14.7554 15.9568C14.6133 16 14.4568 16 14.1437 16H9.85632C9.54316 16 9.38667 16 9.24463 15.9568C9.11877 15.9186 9.00183 15.856 8.90015 15.7725C8.78546 15.6783 8.69873 15.548 8.52502 15.2875L7.47498 13.7125C7.30127 13.452 7.21454 13.3217 7.09985 13.2275C6.99817 13.144 6.88123 13.0814 6.75537 13.0432C6.61333 13 6.45684 13 6.14368 13H3.18182C2.54684 13 2.22944 13 1.97583 13.0946C1.56821 13.2466 1.24663 13.5682 1.09461 13.9758C1 14.2294 1 14.5469 1 15.1818C1 16.8751 1 17.7217 1.25219 18.3979C1.65762 19.4849 2.51508 20.3424 3.60213 20.7478C4.27827 21 5.12493 21 6.81818 21H17.1818Z" fill={isActive ? "rgba(227, 227, 229, 0.60)" : "rgba(227, 227, 229, 0.60)"} />
+                    </svg>
+                  )}
+
+                  {/* Calendar Icon (simplified for mobile) */}
+                  {index === 2 && (
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6.4775 15.4951C7.5821 15.4951 8.4775 16.3905 8.4775 17.4951C8.4775 18.5997 7.5821 19.4951 6.4775 19.4951C5.37293 19.4951 4.4775 18.5997 4.4775 17.4951C4.4775 16.3905 5.37293 15.4951 6.4775 15.4951ZM12 15.4951C13.1046 15.4951 14 16.3905 14 17.4951C14 18.5997 13.1046 19.4951 12 19.4951C10.8954 19.4951 10 18.5997 10 17.4951C10 16.3905 10.8954 15.4951 12 15.4951ZM17.5234 15.4951C18.6278 15.4954 19.5234 16.3907 19.5234 17.4951C19.5234 18.5995 18.6278 19.4949 17.5234 19.4951C16.4189 19.4951 15.5234 18.5997 15.5234 17.4951C15.5234 16.3905 16.4189 15.4951 17.5234 15.4951ZM17 1C17.5523 1 18 1.44772 18 2V3.04C18.7846 3.08784 19.3414 3.1935 19.8164 3.4355C20.5689 3.819 21.181 4.43108 21.5645 5.18359C22.0004 6.03924 22 7.16022 22 9.40039V11H18.8428C19.259 11.3665 19.5234 11.9018 19.5234 12.5C19.5234 13.6044 18.6278 14.4997 17.5234 14.5C16.4189 14.5 15.5234 13.6046 15.5234 12.5C15.5234 11.9018 15.7869 11.3665 16.2031 11H13.3193C13.7357 11.3665 14 11.9017 14 12.5C14 13.6046 13.1046 14.5 12 14.5C10.8954 14.5 10 13.6046 10 12.5C10 11.9017 10.2643 11.3665 10.6807 11H7.79688C8.21318 11.3665 8.4775 11.9017 8.4775 12.5C8.4775 13.6046 7.5821 14.5 6.4775 14.5C5.37293 14.5 4.4775 13.6046 4.4775 12.5C4.4775 11.9017 4.74182 11.3665 5.15816 11H2V9.40039C2 7.16022 1.99963 6.03924 2.43555 5.18359C2.819 4.43108 3.43108 3.819 4.18359 3.4355C4.65859 3.1935 5.21543 3.08784 6 3.04V2C6 1.44772 6.44772 1 7 1C7.55228 1 8 1.44772 8 2V3.001C8.12943 3.00092 8.26276 3 8.40039 3H11V2C11 1.44772 11.4477 1 12 1C12.5523 1 13 1.44772 13 2V3H15.5996C15.7372 3 15.8706 3.00092 16 3.001V2C16 1.44772 16.4477 1 17 1Z" fill={isActive ? "rgba(255, 255, 255, 0.60)" : "#575757"} />
+                      <path d="M15.5996 7C17.8398 7 18.9608 6.99963 19.8164 7.4356C20.5689 7.819 21.181 8.43108 21.5645 9.18359C22.0004 10.0392 22 11.1602 22 13.4004V15.5996C22 17.8398 22.0004 18.9608 21.5645 19.8164C21.181 20.5689 20.5689 21.181 19.8164 21.5645C18.9608 22.0004 17.8398 22 15.5996 22H8.40039C6.16022 22 5.03924 22.0004 4.18359 21.5645C3.43108 21.181 2.819 20.5689 2.43555 19.8164C1.99963 18.9608 2 17.8398 2 15.5996V13.4004C2 11.1602 1.99963 10.0392 2.43555 9.18359C2.819 8.43108 3.43108 7.819 4.18359 7.4356C5.03924 6.99963 6.16022 7 8.40039 7H15.5996Z" fill={isActive ? "rgba(227, 227, 229, 0.60)" : "rgba(227, 227, 229, 0.60)"} />
+                    </svg>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Content Container */}
-      <div className="relative w-full max-w-[1440px] mx-auto px-8 pt-20">
+      <div className={`relative w-full mx-auto ${isMobile ? 'px-4 pt-16' : 'max-w-[1440px] px-8 pt-20'}`}>
         {/* Main Heading */}
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
@@ -745,9 +960,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           transition={{ delay: 0.1 }}
           className="text-center mx-auto"
           style={{
-            width: '733px',
-            marginTop: '40px',
-            marginBottom: '40px'
+            width: isMobile ? '100%' : '733px',
+            maxWidth: isMobile ? '100%' : '733px',
+            marginTop: isMobile ? '20px' : '40px',
+            marginBottom: isMobile ? '20px' : '40px'
           }}
         >
           <div style={{ width: '100%' }}>
@@ -819,15 +1035,22 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           </motion.div>
 
         {/* Chat + Cards Container - Sized to fit cards around chat - scaled 80% */}
-        <div ref={cardsContainerRef} className="relative mx-auto" style={{ width: '1040.8px', height: '485.6px' }}>
+        <div ref={cardsContainerRef} className="relative mx-auto" style={isMobile ? { width: '100%', maxWidth: '348px' } : { width: '1040.8px', height: '485.6px' }}>
           {/* Chat Interface Card */}
           <motion.div
             ref={chatCardRef}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="absolute overflow-hidden z-20"
-            style={{
+            className={isMobile ? "relative overflow-hidden w-full" : "absolute overflow-hidden z-20"}
+            style={isMobile ? {
+              background: 'linear-gradient(180deg, #E9E8FF 0%, #EFF4EC 100%)',
+              boxShadow: '0px 30px 66px rgba(0, 0, 0, 0.04)',
+              borderRadius: '44px',
+              outline: '2px white solid',
+              outlineOffset: '-2px',
+              minHeight: '544px'
+            } : {
               left: '203.2px',
               top: '23.2px',
               width: '603.2px',
@@ -869,7 +1092,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             
             {/* Chat Messages Container - Scrollable */}
             <div 
-              className="absolute left-1/2 -translate-x-1/2 w-[560px] top-[32px] h-[320px] flex flex-col"
+              className={`absolute left-1/2 -translate-x-1/2 top-[32px] h-[320px] flex flex-col ${isMobile ? 'w-[304px]' : 'w-[560px]'}`}
             >
               <div 
                 ref={chatContainerRef}
@@ -938,7 +1161,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       </div>
 
             {/* Bottom Section - Input + Suggestions */}
-            <div className="absolute w-[560px] left-1/2 -translate-x-1/2 bottom-[40px] flex flex-col items-center gap-[12px]">
+            <div className={`absolute left-1/2 -translate-x-1/2 bottom-[40px] flex flex-col items-center gap-[12px] ${isMobile ? 'w-[304px]' : 'w-[560px]'}`}>
               {/* Input Bar with Backdrop Blur */}
               <div
                 className="w-full h-[56px] flex items-center justify-center px-[22px] py-[4px] rounded-[100px] border border-white/40 backdrop-blur-xl"
@@ -1080,97 +1303,99 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             </div>
           </motion.div>
 
-          {/* Draggable Project Cards - Positioned Around Chat, Behind it */}
-          <AnimatePresence>
-            {PROJECT_CARDS.map((card) => {
-              if (!visibleCards.includes(card.id)) return null;
-              
-              return (
-                <motion.div
-                  key={card.id}
-                  drag
-                  dragMomentum={false}
-                  dragElastic={0.1}
-                  dragConstraints={false}
-                  onDragStart={() => {
-                    setIsDraggingCard(card.id);
-                  }}
-                  onDrag={(event, info) => {
-                    // Check if card is over chat area using cursor position
-                    if (chatCardRef.current) {
-                      const chatRect = chatCardRef.current.getBoundingClientRect();
-                      const cursorX = info.point.x;
-                      const cursorY = info.point.y;
-                      
-                      // Check if cursor is inside chat area
-                      const isOver = 
-                        cursorX >= chatRect.left &&
-                        cursorX <= chatRect.right &&
-                        cursorY >= chatRect.top &&
-                        cursorY <= chatRect.bottom;
-                      
-                      setIsCardOverChat(isOver);
-                    }
-                  }}
-                  onDragEnd={(event, info) => {
-                    // Check if dropped over chat - use cursor position for reliability
-                    if (chatCardRef.current) {
-                      const chatRect = chatCardRef.current.getBoundingClientRect();
-                      const cursorX = info.point.x;
-                      const cursorY = info.point.y;
-                      
-                      // Check if cursor is inside chat area when dropped
-                      const isDroppedOnChat = 
-                        cursorX >= chatRect.left &&
-                        cursorX <= chatRect.right &&
-                        cursorY >= chatRect.top &&
-                        cursorY <= chatRect.bottom;
-                      
-                      if (isDroppedOnChat) {
-                        handleCardDrop(card.id);
+          {/* Project Cards - Desktop: Draggable around chat, Mobile: Stacked below chat with click */}
+          {!isMobile ? (
+            /* Desktop Draggable Cards */
+            <AnimatePresence>
+              {PROJECT_CARDS.map((card) => {
+                if (!visibleCards.includes(card.id)) return null;
+                
+                return (
+                  <motion.div
+                    key={card.id}
+                    drag
+                    dragMomentum={false}
+                    dragElastic={0.1}
+                    dragConstraints={false}
+                    onDragStart={() => {
+                      setIsDraggingCard(card.id);
+                    }}
+                    onDrag={(event, info) => {
+                      // Check if card is over chat area using cursor position
+                      if (chatCardRef.current) {
+                        const chatRect = chatCardRef.current.getBoundingClientRect();
+                        const cursorX = info.point.x;
+                        const cursorY = info.point.y;
+                        
+                        // Check if cursor is inside chat area
+                        const isOver = 
+                          cursorX >= chatRect.left &&
+                          cursorX <= chatRect.right &&
+                          cursorY >= chatRect.top &&
+                          cursorY <= chatRect.bottom;
+                        
+                        setIsCardOverChat(isOver);
+                      }
+                    }}
+                    onDragEnd={(event, info) => {
+                      // Check if dropped over chat - use cursor position for reliability
+                      if (chatCardRef.current) {
+                        const chatRect = chatCardRef.current.getBoundingClientRect();
+                        const cursorX = info.point.x;
+                        const cursorY = info.point.y;
+                        
+                        // Check if cursor is inside chat area when dropped
+                        const isDroppedOnChat = 
+                          cursorX >= chatRect.left &&
+                          cursorX <= chatRect.right &&
+                          cursorY >= chatRect.top &&
+                          cursorY <= chatRect.bottom;
+                        
+                        if (isDroppedOnChat) {
+                          handleCardDrop(card.id);
+                        } else {
+                          setIsDraggingCard(null);
+                          setIsCardOverChat(false);
+                        }
                       } else {
                         setIsDraggingCard(null);
                         setIsCardOverChat(false);
                       }
-                    } else {
-                      setIsDraggingCard(null);
-                      setIsCardOverChat(false);
-                    }
-                  }}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ 
-                    opacity: 1, 
-                    scale: 1,
-                    rotate: card.rotation
-                  }}
-                  exit={{ 
-          opacity: 0,
-                    scale: 0.5,
-                    transition: { duration: 0.3 }
-                  }}
-                  whileHover={{ 
-                    scale: 1.05,
-                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
-                    transition: { duration: 0.2 }
-                  }}
-                  whileDrag={{ 
-                    scale: 1.1, 
-                    rotate: 0,
-                    boxShadow: '0 25px 50px rgba(0, 0, 0, 0.25)',
-                    cursor: 'grabbing'
-                  }}
-                  transition={{ delay: 0.4 + PROJECT_CARDS.findIndex(c => c.id === card.id) * 0.1 }}
-                  className="absolute w-[263px] h-[266px] rounded-[44px] border border-white cursor-grab"
-                  style={{
-                    ...card.position,
-                    background: 'rgba(255, 255, 255, 0.30)',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
-                    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-                    zIndex: isDraggingCard === card.id ? 100 : 10,
-                    transformStyle: 'preserve-3d'
-                  }}
-                >
+                    }}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ 
+                      opacity: 1, 
+                      scale: 1,
+                      rotate: card.rotation
+                    }}
+                    exit={{ 
+                      opacity: 0,
+                      scale: 0.5,
+                      transition: { duration: 0.3 }
+                    }}
+                    whileHover={{ 
+                      scale: 1.05,
+                      boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
+                      transition: { duration: 0.2 }
+                    }}
+                    whileDrag={{ 
+                      scale: 1.1, 
+                      rotate: 0,
+                      boxShadow: '0 25px 50px rgba(0, 0, 0, 0.25)',
+                      cursor: 'grabbing'
+                    }}
+                    transition={{ delay: 0.4 + PROJECT_CARDS.findIndex(c => c.id === card.id) * 0.1 }}
+                    className="absolute w-[263px] h-[266px] rounded-[44px] border border-white cursor-grab"
+                    style={{
+                      ...card.position,
+                      background: 'rgba(255, 255, 255, 0.30)',
+                      backdropFilter: 'blur(20px)',
+                      WebkitBackdropFilter: 'blur(20px)',
+                      boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+                      zIndex: isDraggingCard === card.id ? 100 : 10,
+                      transformStyle: 'preserve-3d'
+                    }}
+                  >
                   {/* Card Title - Clean text at top */}
                   <div 
                     style={{
@@ -1220,10 +1445,101 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                       draggable={false}
                     />
                   </div>
-          </motion.div>
+                </motion.div>
               );
             })}
           </AnimatePresence>
+          ) : (
+            /* Mobile Click Cards - Stacked vertically */
+            <div className="flex flex-col gap-6 mt-8 items-center">
+              <AnimatePresence>
+                {PROJECT_CARDS.map((card, index) => {
+                  if (!visibleCards.includes(card.id)) return null;
+                  
+                  const alternateRotation = index % 2 === 0 ? -15 : 15;
+                  
+                  return (
+                    <motion.div
+                      key={card.id}
+                      onClick={() => handleCardClick(card.id)}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ 
+                        opacity: 1, 
+                        y: 0,
+                        rotate: alternateRotation
+                      }}
+                      exit={{ 
+                        opacity: 0,
+                        scale: 0.5,
+                        transition: { duration: 0.3 }
+                      }}
+                      whileTap={{ 
+                        scale: 0.95,
+                        transition: { duration: 0.1 }
+                      }}
+                      transition={{ delay: 0.4 + index * 0.1 }}
+                      className="w-[263px] h-[266px] rounded-[44px] border border-white cursor-pointer active:scale-95"
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.30)',
+                        backdropFilter: 'blur(20px)',
+                        WebkitBackdropFilter: 'blur(20px)',
+                        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)'
+                      }}
+                    >
+                      {/* Card Title */}
+                      <div 
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          padding: '20px 24px',
+                          zIndex: 10
+                        }}
+                      >
+                        <p 
+                          style={{
+                            color: 'white',
+                            fontSize: '14px',
+                            fontFamily: 'Nexa, system-ui, sans-serif',
+                            fontWeight: '400',
+                            wordWrap: 'break-word'
+                          }}
+                        >
+                          {card.title}
+                        </p>
+                      </div>
+
+                      {/* Card Image */}
+                      <div 
+                        style={{
+                          width: '100%',
+                          height: 'calc(100% - 60px)',
+                          position: 'absolute',
+                          bottom: 0,
+                          left: 0,
+                          borderRadius: '20px 20px 44px 44px',
+                          overflow: 'hidden'
+                        }}
+                      >
+                        <img 
+                          src={card.image} 
+                          alt={card.title}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            objectPosition: 'center'
+                          }}
+                          draggable={false}
+                        />
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
+          )}
         </div>
       </div>
 
@@ -1270,7 +1586,8 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           justifyContent: 'flex-start',
           alignItems: 'center',
           gap: '20px',
-          marginTop: '220px'
+          marginTop: isMobile ? '60px' : '220px',
+          marginBottom: isMobile ? '100px' : '0'
         }}
       >
         {/* Top Section - Title */}
@@ -1287,7 +1604,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             style={{
               textAlign: 'center',
               color: '#9F94AD',
-              fontSize: '44px',
+              fontSize: isMobile ? '20px' : '44px',
               fontFamily: 'Neulis Cursive, cursive',
               fontStyle: 'italic',
               fontWeight: '500',
@@ -1299,11 +1616,13 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           <div 
             style={{
               color: 'white',
-              fontSize: '200px',
+              fontSize: isMobile ? '100px' : '200px',
               fontFamily: 'Neulis Cursive, cursive',
               fontWeight: '500',
-              lineHeight: '200px',
-              wordWrap: 'break-word'
+              lineHeight: isMobile ? 'normal' : '200px',
+              wordWrap: 'break-word',
+              width: isMobile ? '242px' : 'auto',
+              height: isMobile ? '113px' : 'auto'
             }}
           >
             raks
@@ -1314,18 +1633,23 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
         <div 
           style={{
             display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
             justifyContent: 'flex-start',
-            alignItems: 'flex-end',
-            gap: '80px'
+            alignItems: isMobile ? 'center' : 'flex-end',
+            gap: isMobile ? '40px' : '80px',
+            alignSelf: 'stretch'
           }}
         >
           {/* Social Links */}
           <div 
             style={{
-              width: '463px',
+              width: isMobile ? 'auto' : '463px',
               display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
+              flexDirection: isMobile ? 'column' : 'row',
+              justifyContent: isMobile ? 'center' : 'space-between',
+              alignItems: 'center',
+              gap: isMobile ? '20px' : '0',
+              height: isMobile ? '122px' : 'auto'
             }}
           >
             <a 
@@ -1335,7 +1659,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               style={{
                 textAlign: 'center',
                 color: '#9F94AD',
-                fontSize: '14px',
+                fontSize: isMobile ? '12px' : '14px',
                 fontFamily: 'Geist Mono, monospace',
                 fontWeight: '500',
                 textDecoration: 'underline',
@@ -1352,7 +1676,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               style={{
                 textAlign: 'center',
                 color: '#9F94AD',
-                fontSize: '14px',
+                fontSize: isMobile ? '12px' : '14px',
                 fontFamily: 'Geist Mono, monospace',
                 fontWeight: '500',
                 textDecoration: 'underline',
@@ -1369,7 +1693,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               style={{
                 textAlign: 'center',
                 color: '#9F94AD',
-                fontSize: '14px',
+                fontSize: isMobile ? '12px' : '14px',
                 fontFamily: 'Geist Mono, monospace',
                 fontWeight: '500',
                 textDecoration: 'underline',
@@ -1386,7 +1710,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               style={{
                 textAlign: 'center',
                 color: '#9F94AD',
-                fontSize: '14px',
+                fontSize: isMobile ? '12px' : '14px',
                 fontFamily: 'Geist Mono, monospace',
                 fontWeight: '500',
                 textDecoration: 'underline',
@@ -1401,7 +1725,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               style={{
                 textAlign: 'center',
                 color: '#9F94AD',
-                fontSize: '14px',
+                fontSize: isMobile ? '12px' : '14px',
                 fontFamily: 'Geist Mono, monospace',
                 fontWeight: '500',
                 textDecoration: 'underline',
@@ -1414,23 +1738,23 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           </div>
 
           {/* Credits */}
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center', alignSelf: isMobile ? 'stretch' : 'auto' }}>
             <span 
               style={{
                 color: '#A599B6',
-                fontSize: '14px',
+                fontSize: isMobile ? '12px' : '14px',
                 fontFamily: 'Geist Mono, monospace',
                 fontWeight: '500',
                 wordWrap: 'break-word'
               }}
             >
-              Designed and coded by me and cursor → 
+              Designed and coded by me and cursor{isMobile && <br />} → 
             </span>
             <a 
               href="#" 
               style={{
                 color: '#A599B6',
-                fontSize: '14px',
+                fontSize: isMobile ? '12px' : '14px',
                 fontFamily: 'Geist Mono, monospace',
                 fontWeight: '500',
                 textDecoration: 'underline',
@@ -1438,7 +1762,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                 cursor: 'pointer'
               }}
             >
-              View process
+              View process 
             </a>
           </div>
         </div>
