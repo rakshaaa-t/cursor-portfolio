@@ -711,7 +711,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
           <div className="relative h-full">
             {/* Top Transparent Blur Overlay */}
             <div 
-              className="absolute left-[80px] w-[640px] top-0 h-[40px] pointer-events-none z-10"
+              className="absolute left-[46px] w-[560px] top-0 h-[40px] pointer-events-none z-10"
               style={{
                 background: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0))'
               }}
@@ -719,7 +719,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             
             {/* Chat Messages Container - Scrollable */}
             <div 
-              className="absolute left-[80px] w-[640px] top-[40px] h-[320px] flex flex-col"
+              className="absolute left-[46px] w-[560px] top-[32px] h-[320px] flex flex-col"
             >
               <div 
                 ref={chatContainerRef}
@@ -788,10 +788,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       </div>
 
             {/* Bottom Section - Input + Suggestions */}
-            <div className="absolute w-[640px] left-[80px] bottom-[40px] flex flex-col items-center gap-[12px]">
+            <div className="absolute w-[560px] left-[46px] bottom-[40px] flex flex-col items-center gap-[12px]">
               {/* Input Bar with Backdrop Blur */}
               <div
-                className="w-[640px] h-[56px] flex items-center justify-center px-[22px] py-[4px] rounded-[100px] border border-white/40 backdrop-blur-xl"
+                className="w-full h-[56px] flex items-center justify-center px-[22px] py-[4px] rounded-[100px] border border-white/40 backdrop-blur-xl"
                 style={{
                   background: 'rgba(255, 255, 255, 0.15)',
                   backdropFilter: 'blur(20px)',
@@ -942,10 +942,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                   dragMomentum={false}
                   dragElastic={0.1}
                   dragConstraints={{
-                    top: 0,
-                    left: -100,
-                    right: 100,
-                    bottom: 200
+                    top: -180,
+                    left: -150,
+                    right: 150,
+                    bottom: 300
                   }}
                   onDragStart={() => {
                     setIsDraggingCard(card.id);
