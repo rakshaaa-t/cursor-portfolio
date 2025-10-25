@@ -486,17 +486,18 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       {/* White blur behind chatbox */}
       <div className="absolute w-[800px] h-[600px] left-1/2 -translate-x-1/2 top-[350px] bg-white rounded-[4444px] blur-[100px] pointer-events-none z-[-1]" />
 
-      {/* Nav Background Blur Area - seamless blur */}
-      <div 
-        className="fixed top-0 left-0 right-0 z-40 pointer-events-none"
-        style={{
-          height: isMobile ? '80px' : '108px',
-          backdropFilter: isMobile ? 'blur(10px)' : 'blur(20px)',
-          WebkitBackdropFilter: isMobile ? 'blur(10px)' : 'blur(20px)',
-          background: 'transparent',
-          willChange: 'auto'
-        }}
-      />
+      {/* Nav Background Blur Area - seamless blur (desktop only for performance) */}
+      {!isMobile && (
+        <div 
+          className="fixed top-0 left-0 right-0 z-40 pointer-events-none"
+          style={{
+            height: '108px',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            background: 'transparent'
+          }}
+        />
+      )}
 
       {/* Navigation */}
       {isMobile ? (
@@ -969,10 +970,10 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
       <div className={`relative w-full mx-auto ${isMobile ? 'px-4 pt-24' : 'max-w-[1440px] px-8 pt-36'}`}>
         {/* Main Heading */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.1 }}
-          className="text-center mx-auto"
+          initial={isMobile ? false : { opacity: 0, scale: 0.98 }}
+          animate={isMobile ? false : { opacity: 1, scale: 1 }}
+          transition={isMobile ? undefined : { delay: 0.1 }}
+          className={isMobile ? 'text-center mx-auto' : 'text-left'}
           style={{
             width: isMobile ? '100%' : '733px',
             maxWidth: isMobile ? '100%' : '733px',
@@ -1479,27 +1480,16 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
                     <motion.div
                       key={card.id}
                       onClick={() => handleCardClick(card.id)}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ 
-          opacity: 1,
-                        y: 0,
-                        rotate: alternateRotation
-                      }}
-                      exit={{ 
-                        opacity: 0,
-                        scale: 0.8,
-                        transition: { duration: 0.2 }
-                      }}
-                      whileTap={{ 
-                        scale: 0.95,
-                        transition: { duration: 0.1 }
-                      }}
-                      transition={{ delay: 0.2 + index * 0.1 }}
+                      initial={false}
+                      animate={{ rotate: alternateRotation }}
+                      exit={false}
+                      whileTap={false}
+                      transition={{ duration: 0 }}
                       className="w-[263px] h-[266px] rounded-[44px] border border-white cursor-pointer"
                       style={{
                         background: 'rgba(255, 255, 255, 0.30)',
-                        backdropFilter: 'blur(20px)',
-                        WebkitBackdropFilter: 'blur(20px)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
                         boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)'
                       }}
                     >
