@@ -1097,7 +1097,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             >
               <div 
                 ref={chatContainerRef}
-                className="overflow-y-auto flex flex-col gap-3 pr-3 pb-20 custom-scrollbar flex-1"
+                className={`overflow-y-auto flex flex-col gap-3 pr-3 custom-scrollbar flex-1 ${isMobile ? 'pb-4' : 'pb-20'}`}
                 style={{ 
                   scrollPaddingBottom: '20px'
                 }}
