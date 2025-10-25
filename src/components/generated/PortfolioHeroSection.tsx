@@ -1062,7 +1062,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
               borderRadius: '44px',
               outline: '2px white solid',
               outlineOffset: '-2px',
-              height: '420px',
+              height: '483px',
               position: 'relative'
             } : {
               left: '203.2px',
@@ -1106,7 +1106,7 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             
             {/* Chat Messages Container - Scrollable */}
             <div 
-              className={`absolute left-1/2 -translate-x-1/2 top-[32px] flex flex-col ${isMobile ? 'w-[304px] h-[240px]' : 'w-[560px] h-[320px]'}`}
+              className={`absolute left-1/2 -translate-x-1/2 top-[32px] flex flex-col ${isMobile ? 'w-[304px] h-[320px]' : 'w-[560px] h-[320px]'}`}
             >
               <div 
                 ref={chatContainerRef}
