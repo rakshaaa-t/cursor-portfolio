@@ -682,15 +682,18 @@ export const PortfolioHeroSection: React.FC<RakshaPortfolioProps> = (props: Raks
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="absolute rounded-[44px] overflow-visible z-20"
+            className="absolute overflow-hidden z-20"
             style={{
               left: '254px',
               top: '29px',
               width: '754px',
               height: '544px',
+              position: 'absolute',
               background: 'linear-gradient(180deg, #E9E8FF 0%, #EFF4EC 100%)',
               boxShadow: '0px 30px 66px rgba(0, 0, 0, 0.04)',
-              border: '2px solid white'
+              borderRadius: '44px',
+              outline: '2px white solid',
+              outlineOffset: '-2px'
             }}
           >
           {/* Drop Zone Overlay - Shows when dragging a card */}
