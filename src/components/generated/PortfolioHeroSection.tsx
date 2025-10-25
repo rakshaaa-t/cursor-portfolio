@@ -50,6 +50,29 @@ const formatMessageText = (text: string) => {
   });
 };
 
+// Chunky text reveal component - reveals text in word chunks
+const ChunkyText = ({ content }: { content: string }) => {
+  const [visibleLength, setVisibleLength] = React.useState(0);
+  const chunkSize = 15; // Show ~15 characters at a time (roughly 2-3 words)
+
+  React.useEffect(() => {
+    if (visibleLength < content.length) {
+      const timer = setTimeout(() => {
+        setVisibleLength(prev => Math.min(prev + chunkSize, content.length));
+      }, 60); // Show each chunk quickly (60ms)
+      return () => clearTimeout(timer);
+    }
+  }, [visibleLength, content.length]);
+
+  const visibleContent = content.slice(0, visibleLength);
+
+  return (
+    <>
+      {formatMessageText(visibleContent)}
+    </>
+  );
+};
+
 // Memoized message component to prevent re-renders
 const MessageBubble = React.memo(({ msg }: { msg: ChatMessage }) => {
   if (msg.sender === 'ai') {
@@ -70,7 +93,7 @@ const MessageBubble = React.memo(({ msg }: { msg: ChatMessage }) => {
           }}
         >
           <div className="text-[14px] leading-[21px] font-extralight" style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}>
-            {formatMessageText(msg.content || '')}
+            <ChunkyText content={msg.content || ''} />
           </div>
         </div>
       </div>
