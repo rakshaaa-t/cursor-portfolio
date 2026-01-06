@@ -7,44 +7,26 @@ import { GreexCaseStudy } from './components/generated/GreexCaseStudy'
 import { OvaCaseStudy } from './components/generated/OvaCaseStudy'
 import { IOCCaseStudy } from './components/generated/IOCCaseStudy'
 import { DealdocCaseStudy } from './components/generated/DealdocCaseStudy'
+import { AIPortfolioCaseStudy } from './components/generated/AIPortfolioCaseStudy'
 import { ShadcnExample } from './components/ui/example'
 import { MotionTest } from './components/test/MotionTest'
-import { LoadingScreen } from './components/LoadingScreen'
 
 let theme: Theme = 'light';
 // only use 'centered' container for standalone components, never for full page apps or websites.
 let container: Container = 'none';
 
 function AppContent() {
-  const location = useLocation();
-  const [isLoading, setIsLoading] = useState(location.pathname === '/');
-
-  useEffect(() => {
-    // Only show loading on home page
-    if (location.pathname === '/') {
-      setIsLoading(true);
-    } else {
-      setIsLoading(false);
-    }
-  }, [location.pathname]);
-
-  const handleLoadingComplete = () => {
-    setIsLoading(false);
-  };
-
   return (
-    <>
-      {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
-      <Routes>
-        <Route path="/" element={<PortfolioHeroSection />} />
-        <Route path="/greex" element={<GreexCaseStudy />} />
-        <Route path="/ova" element={<OvaCaseStudy />} />
-        <Route path="/ioc" element={<IOCCaseStudy />} />
-        <Route path="/dealdoc" element={<DealdocCaseStudy />} />
-        <Route path="/examples" element={<ShadcnExample />} />
-        <Route path="/motion-test" element={<MotionTest />} />
-      </Routes>
-    </>
+    <Routes>
+      <Route path="/" element={<PortfolioHeroSection />} />
+      <Route path="/greex" element={<GreexCaseStudy />} />
+      <Route path="/ova" element={<OvaCaseStudy />} />
+      <Route path="/ioc" element={<IOCCaseStudy />} />
+      <Route path="/dealdoc" element={<DealdocCaseStudy />} />
+      <Route path="/ai-portfolio" element={<AIPortfolioCaseStudy />} />
+      <Route path="/examples" element={<ShadcnExample />} />
+      <Route path="/motion-test" element={<MotionTest />} />
+    </Routes>
   );
 }
 

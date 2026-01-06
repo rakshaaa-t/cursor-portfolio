@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
-export const DealdocCaseStudy: React.FC = () => {
+export const AIPortfolioCaseStudy: React.FC = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = React.useState("Overview");
 
@@ -15,7 +15,7 @@ export const DealdocCaseStudy: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative w-full min-h-screen overflow-x-hidden" style={{ background: 'linear-gradient(180deg, #E8EEF4 0%, #D4E0EC 50%, #C5D5E8 100%)' }}>
+    <div className="relative w-full min-h-screen overflow-x-hidden" style={{ background: 'linear-gradient(180deg, #D8D4F0 0%, #C8C0E8 50%, #B8B0E0 100%)' }}>
       {/* Navigation */}
       <nav className="fixed left-0 right-0 top-0 z-50 w-full">
         <div className="absolute inset-0 z-[-1] backdrop-blur-[11px] [mask-image:linear-gradient(to_top,transparent,black_65%)]"
@@ -51,29 +51,78 @@ export const DealdocCaseStudy: React.FC = () => {
           className="w-full max-w-[1200px] flex flex-col gap-4 items-start mb-8"
         >
           <h1 className="text-xl md:text-2xl font-bold text-[#1a1a1a]" style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}>
-            Dealdoc : Deal Management Platform
+            Raksha's AI Portfolio
           </h1>
           <p className="text-sm md:text-base text-[#1a1a1a]/70 leading-relaxed max-w-[900px]" style={{ fontFamily: 'Outfit, system-ui, sans-serif' }}>
             Greex was an interesting case study because this was my stepping stone in the world of crypto. Intended to be a defi trading platform for options and futures. The USP was that they were looking to add pre built strategies within the platform that users could apply to their trades and get insights on which trade would bring what kind of impact. This was directed towards users that needed help with understanding aspects of trading options and futures and the probabilities that come with each trade.
           </p>
         </motion.div>
 
-        {/* Hero Image with Laptop Mockup */}
+        {/* Hero Image with Chat Interface */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
           className="relative w-full max-w-[1200px] rounded-2xl overflow-hidden mb-10"
-          style={{ background: 'linear-gradient(135deg, #E8EEF4 0%, #D4E8F4 50%, #C5D5E8 100%)' }}
+          style={{ background: 'linear-gradient(135deg, #D8D4F0 0%, #E0DCF8 50%, #C8C0E8 100%)' }}
         >
           <div className="relative w-full aspect-[16/9] flex items-center justify-center py-8">
-            {/* Laptop Mockup */}
-            <div className="relative w-[90%] max-w-[900px]">
-              <img
-                src="https://res.cloudinary.com/dky01erho/image/upload/v1761388291/656_3x_shots_so_qced29.png"
-                alt="Dealdoc Dashboard"
-                className="w-full h-auto object-contain drop-shadow-2xl rounded-lg"
-              />
+            {/* Chat Interface Container */}
+            <div className="relative w-[90%] max-w-[800px] bg-white rounded-2xl shadow-xl overflow-hidden">
+              {/* Browser Header */}
+              <div className="flex items-center gap-2 px-4 py-3 bg-[#F5F5F5] border-b border-gray-200">
+                <div className="flex gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                </div>
+                <div className="flex-1 flex justify-center">
+                  <div className="px-4 py-1 bg-white rounded-full text-xs text-gray-500">rakshaportfolio.com</div>
+                </div>
+              </div>
+
+              {/* Chat Content */}
+              <div className="p-6 bg-[#F8F8FC]">
+                {/* AI Avatar and Name */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
+                    <span className="text-white text-lg font-bold">R</span>
+                  </div>
+                  <div>
+                    <div className="font-semibold text-[#1a1a1a]" style={{ fontFamily: 'Nexa, system-ui, sans-serif' }}>Raksha T</div>
+                    <div className="text-xs text-gray-500">• Product Designer</div>
+                  </div>
+                </div>
+
+                {/* Chat Messages */}
+                <div className="space-y-4">
+                  <div className="bg-white rounded-xl p-4 shadow-sm max-w-[80%]">
+                    <p className="text-sm text-[#1a1a1a]" style={{ fontFamily: 'Outfit, system-ui, sans-serif' }}>
+                      Hey raks – product designer who builds products that work, look great and make your headcount count
+                    </p>
+                    <p className="text-xs text-gray-400 mt-2">3+ years of design • 4+ years in product</p>
+                  </div>
+
+                  <div className="bg-white rounded-xl p-4 shadow-sm max-w-[80%]">
+                    <p className="text-sm text-[#1a1a1a]" style={{ fontFamily: 'Outfit, system-ui, sans-serif' }}>
+                      Can you tell me more about my design process? Go ask my portfolio (via AI) or get my resume for coffee!
+                    </p>
+                  </div>
+
+                  {/* Product Images Row */}
+                  <div className="flex gap-3 mt-4">
+                    <div className="w-20 h-20 rounded-lg bg-purple-100 flex items-center justify-center overflow-hidden">
+                      <div className="text-3xl">📱</div>
+                    </div>
+                    <div className="w-20 h-20 rounded-lg bg-blue-100 flex items-center justify-center overflow-hidden">
+                      <div className="text-3xl">💻</div>
+                    </div>
+                    <div className="w-20 h-20 rounded-lg bg-green-100 flex items-center justify-center overflow-hidden">
+                      <div className="text-3xl">🎨</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Tabs at bottom of hero */}
